@@ -1,4 +1,4 @@
-#Tue Nov 28 23:24:50 BRT 2017
-base.0=C\:\\Users\\Douglas\\Documents\\Disciplinas\\Sala de Cirurgia\\Guia-bcc-ufrpe-master\\Guia-BCC\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+#Thu Nov 30 02:35:24 BRT 2017
+base.0=C\:\\Users\\Douglas\\Documents\\Disciplinas\\Sala de Cirurgia\\Guia-bcc-ufrpe-master\\Guia-BCC\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\19
 path.0=classes.dex
 renamed.0=classes.dex
