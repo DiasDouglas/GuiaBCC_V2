@@ -1,0 +1,20 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+
+    <!-- Dimensões referentes a os itens da lista de disciplinas -->
+    <dimen name="lvItemNomeDisciplina">20.3dp</dimen>
+    <dimen name="lvItemNomeProfessor">15.5dp</dimen>
+    <dimen name="lvItemNotaDisciplina">15.5dp</dimen>
+
+
+    <!--Dimensões referentes a view de selecionar tipo de avaliacao -->
+    <dimen name="dimTxtNomeDisciplina">35dp</dimen>
+    <dimen name="dimPrimeiroBotaoMarginTop">74dp</dimen>
+    <dimen name="dimUltimoBotaoMarginTop">30dp</dimen>
+
+
+</resources>

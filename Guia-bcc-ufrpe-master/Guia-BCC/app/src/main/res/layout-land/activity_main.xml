@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ufrpe.bcc.guia_bcc.MainActivity">
+        <LinearLayout
+            android:layout_width="550dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:text="Login"
+                android:textSize="15pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:id="@+id/tvLogin" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="@string/txtNome"
+                android:ems="10"
+                android:layout_below="@+id/tvLogin"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="36dp"
+                android:id="@+id/edtNome" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="@string/txtSenha"
+                android:ems="10"
+                android:id="@+id/edtSenha"
+                android:layout_below="@+id/edtNome"
+                android:layout_alignLeft="@+id/edtNome"
+                android:layout_alignStart="@+id/edtNome"
+                android:layout_marginTop="15dp" />
+
+            <Button
+                android:text="@string/textoBtnLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnEntrar"
+                android:layout_below="@+id/edtSenha"
+                android:layout_alignLeft="@+id/edtSenha"
+                android:layout_alignStart="@+id/edtSenha"
+                android:layout_marginTop="26dp"
+                android:layout_alignRight="@+id/edtSenha"
+                android:layout_alignEnd="@+id/edtSenha" />
+
+            <Button
+                android:text="@string/textoBtnEsqueciSenha"
+                android:textSize="4pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnEsqueciSenha"
+                android:layout_below="@+id/btnEntrar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="21dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

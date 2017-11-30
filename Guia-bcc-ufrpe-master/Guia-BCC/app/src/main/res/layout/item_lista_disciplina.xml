@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvNomeDisciplina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:text="Nome da disciplina cursada"
+        android:textColor="@color/pureDark"
+        android:textSize="@dimen/lvItemNomeDisciplina" />
+
+
+    <TextView
+        android:id="@+id/tvNomeProfessor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvNomeDisciplina"
+        android:layout_alignStart="@+id/tvNomeDisciplina"
+        android:layout_below="@+id/tvNomeDisciplina"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:text="@string/txtProfessor"
+        android:textSize="@dimen/lvItemNomeProfessor" />
+
+    <TextView
+        android:id="@+id/tvNotaDisciplina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvNomeProfessor"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:text="@string/txtProxAvaliacao"
+        android:textSize="@dimen/lvItemNotaDisciplina" />
+
+    <TextView
+        android:id="@+id/nomeProfessor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvNomeProfessor"
+        android:layout_alignBottom="@+id/tvNomeProfessor"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/tvNomeProfessor"
+        android:layout_toRightOf="@+id/tvNomeProfessor"
+        android:text="Professor X"
+        android:textSize="@dimen/lvItemNomeProfessor" />
+
+    <TextView
+        android:id="@+id/proxAvaliacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvNotaDisciplina"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/tvNotaDisciplina"
+        android:layout_toRightOf="@+id/tvNotaDisciplina"
+        android:text="TextView"
+        android:textSize="@dimen/lvItemNotaDisciplina" />
+
+</RelativeLayout>

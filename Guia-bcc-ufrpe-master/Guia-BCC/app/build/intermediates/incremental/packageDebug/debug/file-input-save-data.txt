@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Wed Nov 29 23:59:59 BRT 2017
+0.baseType=DIRECTORY
+0.base=C\:\\Users\\Douglas\\Documents\\Disciplinas\\Sala de Cirurgia\\Guia-bcc-ufrpe-master\\Guia-BCC\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\18
+0.path=classes.dex
+0.set=DEX
+count=1

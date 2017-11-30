@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Guia - BCC</string>
+    <!--Valores string das views da tela de login -->
+    <string name="txtNome">Nome de usuario</string>
+    <string name="txtSenha">Senha</string>
+    <string name="textoBtnLogin">Entrar</string>
+    <string name="textoBtnEsqueciSenha">Esqueci minha senha</string>
+
+
+    <!-- Textos do dos fragmentos TabLayout  -->
+    <!--Strings referentes à view da tela inicial-->
+    <string name="boas_vindas"> Bem vindo </string>
+    <string name="txtProximasAulas">Suas próximas aulas serão:</string>
+
+    <!--Strings referentes às views da tela avaliações-->
+    <string name="txtProxAvaliacao">Próxima avaliação:</string>
+    <string name="txtProfessor">Professor:</string>
+
+
+    <!--Strings referentes às views da tela Questões-->
+    <string name="txtBanco">Banco de Questões</string>
+    <string name="txtBancoSub">Acesse aos arquivos disponíveis das disciplinas dos semestres anteriores</string>
+    <string name="txtUltimaAtt">Última atualização: </string>
+    <!--essa string aqui vai mudar quando o professor disponibilizar o código e eu ver como ele
+    fez pra mudar a sring de acordo com a quantidade-->
+    <string name="txtQtdItensOne">item disponível</string>
+    <string name="txtQtdItensMore">itens disponíveis</string>
+    <string name="txtAvaliacaoGeral">Avaliação geral:</string>
+    <string name="txtAvaliacaoOtima">Ótima</string>
+    <string name="txtAvaliacaoBoa">Boa</string>
+    <string name="txtAvaliacaoRegular">Regular</string>
+    <string name="txtAvaliacaoRuim">Ruim</string>
+
+    <!-- Strings referentes aos botões das view "frag_selecionar_avaliacao" -->
+    <string name="txtBtnAvaliarDisciplina">Avaliar disciplina</string>
+    <string name="txtBtnAvliarProfessor">Avaliar professor</string>
+    <string name="txtBtnVerQuestoesAnteriores">Acessar banco de questões</string>
+    <string name="txtBtnVoltar">voltar</string>
+    <string name="lblDescricao">Descrição:</string>
+
+
+</resources>

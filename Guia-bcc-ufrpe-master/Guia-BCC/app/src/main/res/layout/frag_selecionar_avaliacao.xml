@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:visibility="visible">
+
+
+    <TextView
+        android:id="@+id/frag_selecionar_avaliacao_nome_disciplina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Aqui vem nome da disciplina"
+        android:textAlignment="center"
+        android:textColor="@color/pureDark"
+        android:textSize="@dimen/dimTxtNomeDisciplina" />
+
+
+    <TextView
+        android:id="@+id/frag_selecionar_avaliacao_nome_professor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frag_selecionar_avaliacao_nome_disciplina"
+        android:layout_centerHorizontal="true"
+        android:text="Nome do professor da Silva Sauro"
+        android:textAlignment="center" />
+
+
+    <TextView
+        android:id="@+id/frag_selecionar_avaliacao_lbl_descricao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/frag_selecionar_avaliacao_nome_professor"
+        android:text="@string/lblDescricao" />
+
+    <TextView
+        android:id="@+id/frag_selecionar_avaliacao_desc_disciplina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/frag_selecionar_avaliacao_lbl_descricao"
+        android:text="Aqui vem a descrição da disciplina para o usuário"
+        android:textAlignment="gravity" />
+
+    <Button
+        android:id="@+id/btnAvaliarDisciplina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frag_selecionar_avaliacao_desc_disciplina"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp"
+        android:text="@string/txtBtnAvaliarDisciplina" />
+
+
+    <Button
+        android:id="@+id/btnAvaliarProfessor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAvaliarDisciplina"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="@string/txtBtnAvliarProfessor" />
+
+    <Button
+        android:id="@+id/btnVerQuestoesAnteriores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAvaliarProfessor"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="@string/txtBtnVerQuestoesAnteriores" />
+
+    <Button
+        android:id="@+id/frag_selecionar_avaliacao_btnVoltar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnVerQuestoesAnteriores"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimUltimoBotaoMarginTop"
+        android:text="@string/txtBtnVoltar" />
+
+
+</RelativeLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/item_lista_questoes">
+
+
+    <TextView
+        android:id="@+id/nomeDisciplina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:text="Desenvolvimento de aplicações móveis"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/qtdItens"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtQtdItem"
+        android:layout_alignBottom="@+id/txtQtdItem"
+        android:text="9"
+        android:textSize="15sp"
+        android:layout_alignLeft="@+id/nomeDisciplina"
+        android:layout_alignStart="@+id/nomeDisciplina" />
+
+    <TextView
+        android:id="@+id/txtQtdItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nomeDisciplina"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/qtdItens"
+        android:layout_toRightOf="@+id/qtdItens"
+        android:text="@string/txtQtdItensMore"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/avaliacaoGeral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtAvaliacaoRegular"
+        android:textSize="15sp"
+        android:layout_alignBaseline="@+id/textView12"
+        android:layout_alignBottom="@+id/textView12"
+        android:layout_toRightOf="@+id/textView12"
+        android:layout_toEndOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nomeDisciplina"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@id/txtQtdItem"
+        android:layout_toRightOf="@id/txtQtdItem"
+        android:text="@string/txtAvaliacaoGeral"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/qtdItens"
+        android:layout_alignStart="@+id/qtdItens"
+        android:layout_below="@+id/qtdItens"
+        android:layout_marginTop="2dp"
+        android:text="@string/txtUltimaAtt"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/dataUltimaAtt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView12"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/textView14"
+        android:layout_toRightOf="@+id/textView14"
+        android:text="23/11/2017"
+        android:textSize="15sp" />
+
+</RelativeLayout>
