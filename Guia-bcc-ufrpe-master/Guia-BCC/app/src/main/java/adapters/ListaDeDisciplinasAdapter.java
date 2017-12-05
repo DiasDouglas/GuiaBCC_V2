@@ -1,7 +1,9 @@
 package adapters;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -56,38 +58,68 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View myView =  act.getLayoutInflater(savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
-
+        //View myView =  act.getLayoutInflater(savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
+        View myView;
+        ViewHolder holder;
+        TextView nomeDisciplina;
+        TextView qtdItens;
+        TextView dataUltimaAtt;
+        TextView avaliacaoGeral;
+        TextView txtQtdItens;
         Disciplina disc = listaDisciplinas.get(position);
 
-        TextView nomeDisciplina = (TextView) myView.findViewById(R.id.nomeDisciplina);
-        TextView qtdItens = (TextView) myView.findViewById(R.id.qtdItens);
-        TextView dataUltimaAtt = (TextView) myView.findViewById(R.id.dataUltimaAtt);
-        TextView avaliacaoGeral = (TextView) myView.findViewById(R.id.avaliacaoGeral);
-        TextView txtQtdItens = (TextView) myView.findViewById(R.id.txtQtdItem);
+        if(convertView == null){
+            myView  = this.act.getLayoutInflater(this.savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
+            holder = new ViewHolder(myView);
+            myView.setTag(holder);
 
-        nomeDisciplina.setText(disc.getNomeDisciplina());
-        qtdItens.setText(disc.getQtdItens()+"");
-        dataUltimaAtt.setText(disc.getUltimaAtt());
+            holder.nomeDisciplina.setText(disc.getNomeDisciplina());
+            holder.qtdItens.setText(disc.getQtdItens() + "");
+            holder.dataUltimaAtt.setText(disc.getUltimaAtt());
+        }
+        else {
+            myView = convertView;
+            holder = (ViewHolder) myView.getTag();
+        }
 
         float avGeral = disc.getAvaliacaoGeral();
         String txtAvGeral;
-        if(avGeral > 75){
+        if (avGeral > 75) {
             txtAvGeral = "Ótima";
-        }else if(avGeral > 50){
+        } else if (avGeral > 50) {
             txtAvGeral = "Boa";
-        }else if(avGeral > 25){
+        } else if (avGeral > 25) {
             txtAvGeral = "Regular";
-        }else{
+        } else {
             txtAvGeral = "Ruim";
         }
-        avaliacaoGeral.setText(txtAvGeral);
-        txtQtdItens.setText(disc.getQtdItens() > 1 ? "itens disponíveis" : "item disponível");
+        holder.avaliacaoGeral.setText(txtAvGeral);
+        holder.txtQtdItens.setText(disc.getQtdItens() > 1 ? "itens disponíveis" : "item disponível");
+
 
         return myView;
     }
 }
 
+class ViewHolder{
+
+    TextView nomeDisciplina;
+    TextView qtdItens;
+    TextView dataUltimaAtt;
+    TextView avaliacaoGeral;
+    TextView txtQtdItens;
+
+    ViewHolder(View myView){
+        nomeDisciplina = (TextView) myView.findViewById(R.id.nomeDisciplina);
+        qtdItens =  (TextView) myView.findViewById(R.id.qtdItens);
+        dataUltimaAtt = (TextView) myView.findViewById(R.id.dataUltimaAtt);
+        avaliacaoGeral = (TextView) myView.findViewById(R.id.avaliacaoGeral);
+        txtQtdItens = (TextView) myView.findViewById(R.id.txtQtdItem);
+    }
+
+
+}
