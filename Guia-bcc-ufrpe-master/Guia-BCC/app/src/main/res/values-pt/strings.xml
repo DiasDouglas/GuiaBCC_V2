@@ -31,12 +31,27 @@
     <string name="txtAvaliacaoRegular">Regular</string>
     <string name="txtAvaliacaoRuim">Ruim</string>
 
+
     <!-- Strings referentes aos botões das view "frag_selecionar_avaliacao" -->
     <string name="txtBtnAvaliarDisciplina">Avaliar disciplina</string>
     <string name="txtBtnAvliarProfessor">Avaliar professor</string>
     <string name="txtBtnVerQuestoesAnteriores">Acessar banco de questões</string>
     <string name="txtBtnVoltar">voltar</string>
     <string name="lblDescricao">Descrição:</string>
+
+
+    <!-- Strings referentes às Avaliações-->
+    <string name="titulo_tela">Avaliação</string>
+    <string name="tipo_avaliacao">Tipo de Avaliação</string>
+    <string name="numero_questao">1.</string>
+    <string name="pergunta_exemplo">A disciplina seguiu de acordo com o que havia na ementa?</string>
+    <string name="resposta_exemplo">Sim, sempre.</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="continuar">Continuar</string>
+    <string name="nenhuma_opcao_selecionada">Nenhuma resposta selecionada</string>
+    <string name="obrigado">Obrigado!</string>
+    <string name="obg_contribuicao">Sua contribuição é muito importante!</string>
+    <string name="finalizar">Finalizar</string>
 
 
 </resources>
