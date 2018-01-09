@@ -17,6 +17,7 @@ import java.util.List;
 
 import beans.Disciplina;
 import beans.DisciplinaCursada;
+import beans.DisciplinaDTO;
 import butterknife.BindView;
 
 /**
@@ -26,7 +27,7 @@ import butterknife.BindView;
 
 public class ListaDeDisciplinasAdapter extends BaseAdapter {
 
-    private List<Disciplina> listaDisciplinas;
+    private List<DisciplinaDTO> listaDisciplinas;
     private Fragment act;
     private Bundle savedInstanceState;
 /*
@@ -37,7 +38,7 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
     @BindView(R.id.avaliacaoGeral) TextView avaliacaoGeral;
     @BindView(R.id.dataUltimaAtt) TextView dataUltimaAtt;*/
 
-    public ListaDeDisciplinasAdapter(List<Disciplina> listaDisciplinas, Fragment act, Bundle savedInstanceState ){
+    public ListaDeDisciplinasAdapter(List<DisciplinaDTO> listaDisciplinas, Fragment act, Bundle savedInstanceState ){
         this.listaDisciplinas = listaDisciplinas;
         this.savedInstanceState = savedInstanceState;
         this.act = act;
@@ -70,14 +71,14 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
         TextView dataUltimaAtt;
         TextView avaliacaoGeral;
         TextView txtQtdItens;
-        Disciplina disc = listaDisciplinas.get(position);
+        DisciplinaDTO disc = listaDisciplinas.get(position);
 
         if(convertView == null){
             myView  = this.act.getLayoutInflater(this.savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
             holder = new ViewHolder(myView);
             myView.setTag(holder);
 
-            holder.nomeDisciplina.setText(disc.getNomeDisciplina());
+            holder.nomeDisciplina.setText(disc.getNome());
             holder.qtdItens.setText(disc.getQtdItens() + "");
             holder.dataUltimaAtt.setText(disc.getUltimaAtt());
         }
