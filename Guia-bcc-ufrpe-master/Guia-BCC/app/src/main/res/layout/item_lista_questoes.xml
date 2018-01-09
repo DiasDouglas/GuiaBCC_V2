@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/nomeDisciplina"
+        android:id="@+id/tvNomeDisciplina"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -27,14 +27,14 @@
         android:layout_alignBottom="@+id/txtQtdItem"
         android:text="9"
         android:textSize="15sp"
-        android:layout_alignLeft="@+id/nomeDisciplina"
-        android:layout_alignStart="@+id/nomeDisciplina" />
+        android:layout_alignLeft="@+id/tvNomeDisciplina"
+        android:layout_alignStart="@+id/tvNomeDisciplina" />
 
     <TextView
         android:id="@+id/txtQtdItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nomeDisciplina"
+        android:layout_below="@+id/tvNomeDisciplina"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/qtdItens"
@@ -57,7 +57,7 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nomeDisciplina"
+        android:layout_below="@+id/tvNomeDisciplina"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="2dp"

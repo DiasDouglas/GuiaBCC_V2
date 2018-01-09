@@ -1,13 +1,8 @@
 package com.ufrpe.bcc.guia_bcc;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +22,7 @@ public class Avaliacoes extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable final ViewGroup container , @Nullable final Bundle savedInstanceState){
-        View  myView = getLayoutInflater(savedInstanceState).inflate(R.layout.tab_avaliacoes,container,false);
+        View  myView = lif.inflate(R.layout.tab_avaliacoes,container,false);
 
         ListView lvListaDisciplinasGeral = (ListView) myView.findViewById(R.id.lvListaDisciplinasGeral);
 
@@ -51,7 +46,7 @@ public class Avaliacoes extends Fragment {
 
 
                 // Create fragment and give it an argument specifying the article it should show
-                DetalheDisciplina newFragment = new DetalheDisciplina();
+                DetalheDisciplinaCursada newFragment = new DetalheDisciplinaCursada();
                 Bundle args = new Bundle();
                 DisciplinaCursada disciplina = (DisciplinaCursada)adapterView.getItemAtPosition(posicao);
                 args.putString("disciplina", disciplina.getNomeDisciplina());

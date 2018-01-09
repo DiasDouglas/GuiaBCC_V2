@@ -20,7 +20,7 @@
     <string name="txtBanco">Questions database</string>
     <string name="txtBancoSub">Access the files available from later semesters</string>
     <string name="txtUltimaAtt">Last update: </string>
-       <!--essa string aqui vai mudar quando o professor disponibilizar o código e eu ver como ele
+    <!--essa string aqui vai mudar quando o professor disponibilizar o código e eu ver como ele
        fez pra mudar a sring de acordo com a quantidade-->
     <string name="txtQtdItensOne">Available items</string>
     <string name="txtQtdItensMore">Available items</string>
@@ -46,15 +46,28 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- Strings referentes às Avaliações-->
-    <string name="titulo_tela">Appraisal</string>
-    <string name="tipo_avaliacao">Appraisal Type</string>
+    <string name="titulo_tela">Avaliação</string>
+    <string name="tipo_avaliacao">Tipo de Avaliação</string>
     <string name="numero_questao">1.</string>
     <string name="pergunta_exemplo">A disciplina seguiu de acordo com o que havia na ementa?</string>
-    <string name="resposta_exemplo">Yes, always.</string>
-    <string name="cancelar">Cancel</string>
-    <string name="continuar">Continue</string>
-    <string name="nenhuma_opcao_selecionada">No answer was selected</string>
-    <string name="obrigado">Thank you!</string>
-    <string name="obg_contribuicao">Your contribuition is very inportant!</string>
-    <string name="finalizar">Finalize</string>
+    <string name="resposta_exemplo">Sim, sempre.</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="continuar">Continuar</string>
+    <string name="nenhuma_opcao_selecionada">Nenhuma resposta selecionada</string>
+    <string name="obrigado">Obrigado!</string>
+    <string name="obg_contribuicao">Sua contribuição é muito importante!</string>
+    <string name="finalizar">Finalizar</string>
+
+
+    <!--- Strings referentes ao fragmento de detalhe da disciplina -->
+    <string name="txtQtdMediaAlunos">Quantidade média de alunos:</string>
+    <string name="txtUltimoSemestre">Último semestre lecionada:</string>
+    <string name="txtAvaliacaoProfessores">Ver avaliação individual dos professores</string>
+    <string name="palavraAvaliacao">Avaliação</string>
+    <string name="palavraClareza">Clareza</string>
+    <string name="palavraDificuldade">Dificuldade</string>
+    <string name="palavraEsforco">Esforço</string>
+    <string name="palavraConteudo">Conteudo</string>
+    <string name="txtBancoQuestoes">Visualizar banco de conteúdo</string>
+
 </resources>
