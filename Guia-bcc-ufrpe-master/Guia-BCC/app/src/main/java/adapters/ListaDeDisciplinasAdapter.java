@@ -12,7 +12,6 @@ import com.ufrpe.bcc.guia_bcc.R;
 
 import java.util.List;
 
-import beans.Disciplina;
 import beans.DisciplinaDTO;
 
 /**

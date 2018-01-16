@@ -24,7 +24,7 @@ public class Inicio extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable ViewGroup container , @Nullable Bundle savedInstanceState){
-        View  myView = getLayoutInflater(savedInstanceState).inflate(R.layout.tab_inicio,container,false);
+        View  myView = lif.inflate(R.layout.tab_inicio,container,false);
 
 
         Aluno aluno = new Aluno("Ismael",getCursos());

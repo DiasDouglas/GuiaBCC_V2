@@ -22,7 +22,7 @@ public class Avaliacoes extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable final ViewGroup container , @Nullable final Bundle savedInstanceState){
-        View  myView = getLayoutInflater(savedInstanceState).inflate(R.layout.tab_avaliacoes,container,false);
+        View  myView = lif.inflate(R.layout.tab_avaliacoes,container,false);
 
         ListView lvListaDisciplinasGeral = (ListView) myView.findViewById(R.id.lvListaDisciplinasGeral);
 

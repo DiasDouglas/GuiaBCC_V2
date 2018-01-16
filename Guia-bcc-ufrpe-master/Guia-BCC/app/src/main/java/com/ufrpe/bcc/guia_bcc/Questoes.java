@@ -28,7 +28,7 @@ public class Questoes extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable ViewGroup container , @Nullable Bundle savedInstanceState){
-        View  myView = getLayoutInflater(savedInstanceState).inflate(R.layout.tab_questoes,container,false);
+        View  myView = lif.inflate(R.layout.tab_questoes,container,false);
 
         ListView disciplinas = (ListView) myView.findViewById(R.id.lvListaDisciplinasBanco);
 

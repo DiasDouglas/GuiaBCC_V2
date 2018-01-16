@@ -38,7 +38,6 @@
     <string name="txtBtnVoltar">voltar</string>
     <string name="lblDescricao">Descrição:</string>
 
-
     <!--- Strings referentes ao fragmento de detalhe da disciplina -->
     <string name="txtQtdMediaAlunos">Quantidade média de alunos:</string>
     <string name="txtUltimoSemestre">Último semestre lecionada:</string>
@@ -50,5 +49,17 @@
     <string name="palavraConteudo">Conteúdo</string>
     <string name="txtBancoQuestoes">Visualizar banco de conteúdo</string>
 
+    <!-- Strings referentes às Avaliações-->
+    <string name="titulo_tela">Avaliação</string>
+    <string name="tipo_avaliacao">Tipo de Avaliação</string>
+    <string name="numero_questao">1.</string>
+    <string name="pergunta_exemplo">A disciplina seguiu de acordo com o que havia na ementa?</string>
+    <string name="resposta_exemplo">Sim, sempre.</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="continuar">Continuar</string>
+    <string name="nenhuma_opcao_selecionada">Nenhuma resposta selecionada</string>
+    <string name="obrigado">Obrigado!</string>
+    <string name="obg_contribuicao">Sua contribuição é muito importante!</string>
+    <string name="finalizar">Finalizar</string>
 
 </resources>

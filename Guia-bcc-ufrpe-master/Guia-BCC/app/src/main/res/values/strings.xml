@@ -46,28 +46,27 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- Strings referentes às Avaliações-->
-    <string name="titulo_tela">Avaliação</string>
-    <string name="tipo_avaliacao">Tipo de Avaliação</string>
+    <string name="titulo_tela">Appraisal</string>
+    <string name="tipo_avaliacao">Type of appraisal</string>
     <string name="numero_questao">1.</string>
-    <string name="pergunta_exemplo">A disciplina seguiu de acordo com o que havia na ementa?</string>
-    <string name="resposta_exemplo">Sim, sempre.</string>
-    <string name="cancelar">Cancelar</string>
-    <string name="continuar">Continuar</string>
-    <string name="nenhuma_opcao_selecionada">Nenhuma resposta selecionada</string>
-    <string name="obrigado">Obrigado!</string>
-    <string name="obg_contribuicao">Sua contribuição é muito importante!</string>
-    <string name="finalizar">Finalizar</string>
+    <string name="pergunta_exemplo">Have the lectures been given according to the schedule?</string>
+    <string name="resposta_exemplo">Yes, always.</string>
+    <string name="cancelar">Cancel</string>
+    <string name="continuar">Continue</string>
+    <string name="nenhuma_opcao_selecionada">No answer selected</string>
+    <string name="obrigado">Thank you!</string>
+    <string name="obg_contribuicao">Your contribuition in very inportant!</string>
+    <string name="finalizar">Finalize</string>
 
 
     <!--- Strings referentes ao fragmento de detalhe da disciplina -->
-    <string name="txtQtdMediaAlunos">Quantidade média de alunos:</string>
-    <string name="txtUltimoSemestre">Último semestre lecionada:</string>
-    <string name="txtAvaliacaoProfessores">Ver avaliação individual dos professores</string>
-    <string name="palavraAvaliacao">Avaliação</string>
-    <string name="palavraClareza">Clareza</string>
-    <string name="palavraDificuldade">Dificuldade</string>
-    <string name="palavraEsforco">Esforço</string>
-    <string name="palavraConteudo">Conteudo</string>
-    <string name="txtBancoQuestoes">Visualizar banco de conteúdo</string>
-
+    <string name="txtQtdMediaAlunos">Mean quantity of students:</string>
+    <string name="txtUltimoSemestre">Last semester taught:</string>
+    <string name="txtAvaliacaoProfessores">See individual appraisal of professors</string>
+    <string name="palavraAvaliacao">Tests</string>
+    <string name="palavraClareza">Clarity</string>
+    <string name="palavraDificuldade">Dificulty</string>
+    <string name="palavraEsforco">Effort</string>
+    <string name="palavraConteudo">Content</string>
+    <string name="txtBancoQuestoes">Visualise the content database</string>
 </resources>
