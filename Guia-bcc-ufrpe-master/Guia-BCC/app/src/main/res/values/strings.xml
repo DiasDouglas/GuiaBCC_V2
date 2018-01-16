@@ -20,7 +20,7 @@
     <string name="txtBanco">Questions database</string>
     <string name="txtBancoSub">Access the files available from later semesters</string>
     <string name="txtUltimaAtt">Last update: </string>
-       <!--essa string aqui vai mudar quando o professor disponibilizar o código e eu ver como ele
+    <!--essa string aqui vai mudar quando o professor disponibilizar o código e eu ver como ele
        fez pra mudar a sring de acordo com a quantidade-->
     <string name="txtQtdItensOne">Available items</string>
     <string name="txtQtdItensMore">Available items</string>
@@ -57,4 +57,17 @@
     <string name="obrigado">Obrigado!</string>
     <string name="obg_contribuicao">Sua contribuição é muito importante!</string>
     <string name="finalizar">Finalizar</string>
+
+
+    <!--- Strings referentes ao fragmento de detalhe da disciplina -->
+    <string name="txtQtdMediaAlunos">Quantidade média de alunos:</string>
+    <string name="txtUltimoSemestre">Último semestre lecionada:</string>
+    <string name="txtAvaliacaoProfessores">Ver avaliação individual dos professores</string>
+    <string name="palavraAvaliacao">Avaliação</string>
+    <string name="palavraClareza">Clareza</string>
+    <string name="palavraDificuldade">Dificuldade</string>
+    <string name="palavraEsforco">Esforço</string>
+    <string name="palavraConteudo">Conteudo</string>
+    <string name="txtBancoQuestoes">Visualizar banco de conteúdo</string>
+
 </resources>

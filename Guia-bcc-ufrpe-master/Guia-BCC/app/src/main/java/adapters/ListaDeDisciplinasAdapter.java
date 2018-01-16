@@ -3,7 +3,6 @@ package adapters;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,13 +10,10 @@ import android.widget.TextView;
 
 import com.ufrpe.bcc.guia_bcc.R;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import beans.Disciplina;
-import beans.DisciplinaCursada;
-import butterknife.BindView;
+import beans.DisciplinaDTO;
 
 /**
  * Created by Ismael on 21/11/2017.
@@ -26,7 +22,7 @@ import butterknife.BindView;
 
 public class ListaDeDisciplinasAdapter extends BaseAdapter {
 
-    private List<Disciplina> listaDisciplinas;
+    private List<DisciplinaDTO> listaDisciplinas;
     private Fragment act;
     private Bundle savedInstanceState;
 /*
@@ -37,7 +33,7 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
     @BindView(R.id.avaliacaoGeral) TextView avaliacaoGeral;
     @BindView(R.id.dataUltimaAtt) TextView dataUltimaAtt;*/
 
-    public ListaDeDisciplinasAdapter(List<Disciplina> listaDisciplinas, Fragment act, Bundle savedInstanceState ){
+    public ListaDeDisciplinasAdapter(List<DisciplinaDTO> listaDisciplinas, Fragment act, Bundle savedInstanceState ){
         this.listaDisciplinas = listaDisciplinas;
         this.savedInstanceState = savedInstanceState;
         this.act = act;
@@ -65,19 +61,14 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
         //View myView =  act.getLayoutInflater(savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
         View myView;
         ViewHolder holder;
-        TextView nomeDisciplina;
-        TextView qtdItens;
-        TextView dataUltimaAtt;
-        TextView avaliacaoGeral;
-        TextView txtQtdItens;
-        Disciplina disc = listaDisciplinas.get(position);
+        DisciplinaDTO disc = listaDisciplinas.get(position);
 
         if(convertView == null){
             myView  = this.act.getLayoutInflater(this.savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
             holder = new ViewHolder(myView);
             myView.setTag(holder);
 
-            holder.nomeDisciplina.setText(disc.getNomeDisciplina());
+            holder.nomeDisciplina.setText(disc.getNome());
             holder.qtdItens.setText(disc.getQtdItens() + "");
             holder.dataUltimaAtt.setText(disc.getUltimaAtt());
         }
@@ -114,12 +105,10 @@ class ViewHolder{
     TextView txtQtdItens;
 
     ViewHolder(View myView){
-        nomeDisciplina = (TextView) myView.findViewById(R.id.nomeDisciplina);
+        nomeDisciplina = (TextView) myView.findViewById(R.id.tvNomeDisciplina);
         qtdItens =  (TextView) myView.findViewById(R.id.qtdItens);
         dataUltimaAtt = (TextView) myView.findViewById(R.id.dataUltimaAtt);
         avaliacaoGeral = (TextView) myView.findViewById(R.id.avaliacaoGeral);
         txtQtdItens = (TextView) myView.findViewById(R.id.txtQtdItem);
     }
-
-
 }

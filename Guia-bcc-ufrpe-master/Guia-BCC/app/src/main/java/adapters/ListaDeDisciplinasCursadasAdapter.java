@@ -1,6 +1,5 @@
 package adapters;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -56,7 +55,7 @@ public class ListaDeDisciplinasCursadasAdapter extends BaseAdapter {
         DisciplinaCursada disc = listaDisciplinas.get(position);
 
         TextView tvNomeDisciplina = (TextView) myView.findViewById(R.id.tvNomeDisciplina);
-        TextView nomeProfessor = (TextView) myView.findViewById(R.id.nomeProfessor);
+        TextView nomeProfessor = (TextView) myView.findViewById(R.id.tvNomeProf);
         TextView proxAvaliacao = (TextView) myView.findViewById(R.id.proxAvaliacao);
 
         tvNomeDisciplina.setText(disc.getNomeDisciplina());

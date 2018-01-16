@@ -39,4 +39,16 @@
     <string name="lblDescricao">Descrição:</string>
 
 
+    <!--- Strings referentes ao fragmento de detalhe da disciplina -->
+    <string name="txtQtdMediaAlunos">Quantidade média de alunos:</string>
+    <string name="txtUltimoSemestre">Último semestre lecionada:</string>
+    <string name="txtAvaliacaoProfessores">Ver avaliação individual dos professores</string>
+    <string name="palavraAvaliacao">Avaliação</string>
+    <string name="palavraClareza">Clareza</string>
+    <string name="palavraDificuldade">Dificuldade</string>
+    <string name="palavraEsforco">Esforço</string>
+    <string name="palavraConteudo">Conteúdo</string>
+    <string name="txtBancoQuestoes">Visualizar banco de conteúdo</string>
+
+
 </resources>

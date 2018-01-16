@@ -1,5 +1,9 @@
 package beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -8,10 +12,11 @@ import java.util.ArrayList;
  * Classe básica que representa as disciplinas
  */
 
-public class Disciplina {
+public class Disciplina{
 
+    private long ID;
     private String nomeDisciplina;
-    private ArrayList<String> professoresAnteriores;
+    private ArrayList<Professor> professoresAnteriores;
     private int qtdMediaAlunos;
     private String ultimoSemestre;//ultimo semestre que foi lecionada
     private float avaliacaoGeral;
@@ -24,10 +29,11 @@ public class Disciplina {
 
     public Disciplina(){}
 
-    public Disciplina(String nomeDisciplina, ArrayList<String> professoresAnteriores, int qtdMediaAlunos,
+    public Disciplina(long ID, String nomeDisciplina, ArrayList<Professor> professoresAnteriores, int qtdMediaAlunos,
                       String ultimoSemestre, float avaliacaoDificuldade,
                       float avaliacaoClareza, float avaliacaoEsforco, float avaliacaoConteudo,
                       int qtdItens, String ultimaAtt){
+        this.setID(ID);
         this.setAvaliacaoClareza(avaliacaoClareza);
         this.setAvaliacaoConteudo(avaliacaoConteudo);
         this.setAvaliacaoDificuldade(avaliacaoDificuldade);
@@ -38,6 +44,19 @@ public class Disciplina {
         this.setUltimoSemestre(ultimoSemestre);
         this.setQtdItens(qtdItens);
         this.calcularAvaliacaoGeral();
+        this.setQtdMediaAlunos(qtdMediaAlunos);
+    }
+
+    public long getID() {
+        return ID;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
+    }
+
+    public void setAvaliacaoGeral(float avaliacaoGeral) {
+        this.avaliacaoGeral = avaliacaoGeral;
     }
 
     public String getNomeDisciplina() {
@@ -51,11 +70,11 @@ public class Disciplina {
             throw new IllegalArgumentException("Nome da disciplina inválido.");
     }
 
-    public ArrayList<String> getProfessoresAnteriores() {
+    public ArrayList<Professor> getProfessoresAnteriores() {
         return professoresAnteriores;
     }
 
-    public void setProfessoresAnteriores(ArrayList<String> professoresAnteriores) {
+    public void setProfessoresAnteriores(ArrayList<Professor> professoresAnteriores) {
         if(professoresAnteriores != null)
             this.professoresAnteriores = professoresAnteriores;
         else

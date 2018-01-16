@@ -82,9 +82,7 @@ public class Pergunta {
 
     public boolean equals(Pergunta b){
         boolean retorno = false;
-        if(this.codigo_pergunta == b.codigo_pergunta && this.questao.equals(b.getQuestao()) &&
-                this.Resposta_1.equals(b.getResposta_1()) && this.Resposta_2.equals(b.getResposta_2()) &&
-                this.Resposta_3.equals(b.getResposta_3()) && this.Resposta_4.equals(b.getResposta_4())){
+        if(b != null && this.codigo_pergunta == b.codigo_pergunta){
             retorno = true;
         }
         return retorno;
