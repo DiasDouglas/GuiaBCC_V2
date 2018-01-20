@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     EditText edtSenha;
     Button btnEntrar;
     Button btnEsqueciSenha;
-
+    CheckBox cbLembrarUsuario;
 
 
     @Override
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
         btnEsqueciSenha = (Button) findViewById(R.id.btnEsqueciSenha);
 
+        cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);
 
         if(savedInstanceState != null){
             /*Os seguintes testes evitam null pointer exception na hora de  setar os textos*/

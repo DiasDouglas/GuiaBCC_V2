@@ -5,7 +5,7 @@
     <string name="txtSenha">Senha</string>
     <string name="textoBtnLogin">Entrar</string>
     <string name="textoBtnEsqueciSenha">Esqueci minha senha</string>
-
+    <string name="cbLembarUsuario">lembrar usuario</string>
 
     <!-- Textos do dos fragmentos TabLayout  -->
     <!--Strings referentes à view da tela inicial-->
