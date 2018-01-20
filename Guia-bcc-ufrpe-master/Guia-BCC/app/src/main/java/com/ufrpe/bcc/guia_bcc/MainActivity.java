@@ -14,11 +14,13 @@ import com.google.gson.Gson;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import beans.Aluno;
 import beans.DadosDoAVA;
+import beans.connections.Token;
 import beans.Usuario;
 
 
@@ -49,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         edtNomeUsuario = (EditText) findViewById(R.id.edtNome);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
 
+        //=============valores padrão============
+        edtNomeUsuario.setText("usuario");
+        edtSenha.setText("senha");
+        //==================================
+
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
 
         cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);
@@ -69,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!edtNomeUsuario.getText().toString().equals("") && !edtSenha.getText().toString().equals("")){
                     new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString()).execute();
 
-                    startActivity(myIntent);
+                    //startActivity(myIntent);
                 }
 
             }
@@ -129,19 +136,28 @@ public class MainActivity extends AppCompatActivity {
         protected Aluno doInBackground(Void... voids) {
             Aluno aluno = null;
             try {
+                //+"?username="+username+"&"+"password="+password+"&service="+SERVICE - - x-www-form-urlencoded
                 URL url = new URL(URL_TOKEN);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                connection.addRequestProperty("username",username);
-                connection.addRequestProperty("password",password);
-                connection.addRequestProperty("service",SERVICE);
+                connection.addRequestProperty("Content-Type","multipart/form-data");
+                //connection.addRequestProperty("Cash-Control","no-cache");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                OutputStream os = connection.getOutputStream();
+                os.write(("{\"username\":"+"\""+this.username+"\""+
+                        "{\"password\":"+"\""+this.password+"\""+
+                        "{\"service\":"+"\""+SERVICE+"\"").getBytes());
                 connection.connect();
 
                 InputStream is = connection.getInputStream();
 
                 Gson gson = new Gson();
 
-                this.token = gson.fromJson(new InputStreamReader(is), String.class);
+                Object token = gson.fromJson(new InputStreamReader(is), Object.class);
+
+                if(token instanceof  Token){
+                }
 
                 aluno = this.gettingDataFromAva(url,connection,gson);
 
@@ -149,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             }
             catch(Exception e){
                 e.printStackTrace();
+
             }
             return aluno;
         }
