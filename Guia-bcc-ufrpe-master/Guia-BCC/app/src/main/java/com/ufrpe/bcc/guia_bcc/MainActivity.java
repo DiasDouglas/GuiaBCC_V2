@@ -1,14 +1,25 @@
 package com.ufrpe.bcc.guia_bcc;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import beans.Aluno;
+import beans.DadosDoAVA;
+import beans.Usuario;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
     Button btnEsqueciSenha;
     CheckBox cbLembrarUsuario;
 
+
+    //Atributos nome de usuario e senha salvos pelo usuario
+    private String username;
+    private String password;
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +66,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent myIntent = new Intent(MainActivity.this,CamposUsuario.class);
-                if(edtNomeUsuario.getText().toString() != null)
-                    myIntent.putExtra("nome_usuario", edtNomeUsuario.getText().toString() );
+                if(edtNomeUsuario.getText().toString() != null && edtSenha.getText().toString()!= null){
+
+
+
+                }
                 startActivity(myIntent);
             }
         });
 
+        /**
+         * Setando ouvinte de checkbox caso o usuário opte por salvar o usuario e  a senha
+         * */
+        cbLembrarUsuario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                }
+                else {
+
+                }
+            }
+        });
 
     }
 
@@ -69,4 +108,51 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    class ConectarAva extends AsyncTask<Void,Void, Aluno>{
+
+        public static final String URL_TO_CONNECT = "http://ava.ufrpe.br/login/token.php";
+        public static final String SERVICE = "moodle_mobile_app";
+
+        @Override
+        protected Aluno doInBackground(Void... voids) {
+            Aluno aluno = null;
+            try {
+                URL url = new URL(URL_TO_CONNECT);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.addRequestProperty("username",edtNomeUsuario.getText().toString());
+                connection.addRequestProperty("password",edtNomeUsuario.getText().toString());
+                connection.addRequestProperty("service",SERVICE);
+                connection.connect();
+
+                InputStream is = connection.getInputStream();
+
+                Gson gson = new Gson();
+
+                DadosDoAVA dados = gson.fromJson(new InputStreamReader(is), DadosDoAVA.class);
+
+                if(dados != null){
+                    aluno = new Aluno();
+                    aluno.setNomeAluno(dados.getFirstaname()+ " " +dados.getLastname());
+                    aluno.setUsuario(new Usuario(dados.getUsername(),edtSenha.getText().toString()));
+                }
+                else {
+                    throw new NullPointerException("Dados do ava não foram retornados");
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            return aluno;
+        }
+
+        @Override
+        protected void onPostExecute(Aluno usuario){
+
+        }
+
+    }
+
 }
