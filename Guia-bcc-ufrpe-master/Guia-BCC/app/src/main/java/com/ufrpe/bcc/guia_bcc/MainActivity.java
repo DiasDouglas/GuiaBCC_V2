@@ -110,8 +110,10 @@ public class MainActivity extends AppCompatActivity {
 
     static class ConectarAva extends AsyncTask<Void,Void, Aluno>{
 
-        public static final String URL_TO_CONNECT = "http://ava.ufrpe.br/login/token.php";
-        public static final String SERVICE = "moodle_mobile_app";
+        private static final String URL_TOKEN = "http://ava.ufrpe.br/login/token.php";
+        private static final String URL_TO_CONNECT = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
+        private static final String SERVICE = "moodle_mobile_app";
+        private static String token;
 
         private String username;
         private String password;
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         protected Aluno doInBackground(Void... voids) {
             Aluno aluno = null;
             try {
-                URL url = new URL(URL_TO_CONNECT);
+                URL url = new URL(URL_TOKEN);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.addRequestProperty("username",username);
@@ -137,16 +139,10 @@ public class MainActivity extends AppCompatActivity {
 
                 Gson gson = new Gson();
 
-                DadosDoAVA dados = gson.fromJson(new InputStreamReader(is), DadosDoAVA.class);
+                this.token = gson.fromJson(new InputStreamReader(is), String.class);
 
-                if(dados != null){
-                    aluno = new Aluno();
-                    aluno.setNomeAluno(dados.getFirstaname()+ " " +dados.getLastname());
-                    aluno.setUsuario(new Usuario(dados.getUsername(),this.password));
-                }
-                else {
-                    throw new NullPointerException("Dados do ava não foram retornados");
-                }
+                aluno = this.gettingDataFromAva(url,connection,gson);
+
 
             }
             catch(Exception e){
@@ -158,6 +154,48 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Aluno usuario){
 
+        }
+
+        /**
+         * Author: Ismael 20/01/2018
+         * @param url
+         * @param connection
+         * @param gson
+         * @return Aluno
+         * @throws Exception
+         * O código a seguir pega os objetos URL http URLConnection e gson
+         * para utilizar o token retornado no doInBackground para requisitar os dados
+         * de usuario e construir o objeto aluno
+         */
+        private Aluno gettingDataFromAva(URL url,HttpURLConnection connection, Gson gson)throws Exception{
+
+              Aluno aluno = null;
+
+              if(this.token != null) {
+                  url = new URL(URL_TO_CONNECT);
+                  connection = (HttpURLConnection) url.openConnection();
+                  connection.setRequestMethod("POST");
+                  connection.setRequestProperty("wsfunction", "core_webservice_get_site_info");
+                  connection.setRequestProperty("wstoken",this.token);
+
+                  InputStream is = connection.getInputStream();
+
+                  DadosDoAVA dados = gson.fromJson(new InputStreamReader(is),DadosDoAVA.class);
+
+
+                  if (dados != null) {
+                      aluno = new Aluno();
+                      aluno.setNomeAluno(dados.getFirstaname() + " " + dados.getLastname());
+                      aluno.setUsuario(new Usuario(dados.getUsername(), this.password));
+                  } else {
+                      throw new NullPointerException("Dados do ava não foram retornados");
+                  }
+              }
+              else{
+                  throw new NullPointerException("Token está nulo");
+              }
+
+            return aluno;
         }
 
         public String getUsername() {
