@@ -66,10 +66,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent myIntent = new Intent(MainActivity.this,CamposUsuario.class);
+
                 if(edtNomeUsuario.getText().toString() != null && edtSenha.getText().toString()!= null){
-
-
-
+                    new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString()).execute();
                 }
                 startActivity(myIntent);
             }
@@ -109,10 +108,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class ConectarAva extends AsyncTask<Void,Void, Aluno>{
+    static class ConectarAva extends AsyncTask<Void,Void, Aluno>{
 
         public static final String URL_TO_CONNECT = "http://ava.ufrpe.br/login/token.php";
         public static final String SERVICE = "moodle_mobile_app";
+
+        private String username;
+        private String password;
+
+        public ConectarAva(String username,String password){
+            this.setUsername(username);
+            this.setPassword(password);
+        }
 
         @Override
         protected Aluno doInBackground(Void... voids) {
@@ -121,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
                 URL url = new URL(URL_TO_CONNECT);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                connection.addRequestProperty("username",edtNomeUsuario.getText().toString());
-                connection.addRequestProperty("password",edtNomeUsuario.getText().toString());
+                connection.addRequestProperty("username",username);
+                connection.addRequestProperty("password",password);
                 connection.addRequestProperty("service",SERVICE);
                 connection.connect();
 
@@ -135,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 if(dados != null){
                     aluno = new Aluno();
                     aluno.setNomeAluno(dados.getFirstaname()+ " " +dados.getLastname());
-                    aluno.setUsuario(new Usuario(dados.getUsername(),edtSenha.getText().toString()));
+                    aluno.setUsuario(new Usuario(dados.getUsername(),this.password));
                 }
                 else {
                     throw new NullPointerException("Dados do ava não foram retornados");
@@ -153,6 +160,29 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            if(username != null)
+                this.username = username;
+            else
+                throw new NullPointerException("Nome de usuario nulo");
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            if(username != null)
+                this.password = password;
+            else
+                throw new NullPointerException("Nome de usuario nulo");
+
+        }
     }
+
 
 }
