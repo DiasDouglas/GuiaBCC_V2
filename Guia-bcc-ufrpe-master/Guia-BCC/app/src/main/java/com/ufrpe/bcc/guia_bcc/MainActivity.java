@@ -47,10 +47,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         edtNomeUsuario = (EditText) findViewById(R.id.edtNome);
-        edtNomeUsuario = (EditText) findViewById(R.id.edtSenha);
+        edtSenha = (EditText) findViewById(R.id.edtSenha);
 
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
-        btnEsqueciSenha = (Button) findViewById(R.id.btnEsqueciSenha);
 
         cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);
 
@@ -67,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent myIntent = new Intent(MainActivity.this,CamposUsuario.class);
 
-                if(edtNomeUsuario.getText().toString() != null && edtSenha.getText().toString()!= null){
+                if(!edtNomeUsuario.getText().toString().equals("") && !edtSenha.getText().toString().equals("")){
                     new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString()).execute();
+
+                    startActivity(myIntent);
                 }
-                startActivity(myIntent);
+
             }
         });
 
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         private static final String URL_TOKEN = "http://ava.ufrpe.br/login/token.php";
         private static final String URL_TO_CONNECT = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
         private static final String SERVICE = "moodle_mobile_app";
+        private static final String CORE_SITE_INFO = "core_webservice_get_site_info";
         private static String token;
 
         private String username;
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                   url = new URL(URL_TO_CONNECT);
                   connection = (HttpURLConnection) url.openConnection();
                   connection.setRequestMethod("POST");
-                  connection.setRequestProperty("wsfunction", "core_webservice_get_site_info");
+                  connection.setRequestProperty("wsfunction", CORE_SITE_INFO);
                   connection.setRequestProperty("wstoken",this.token);
 
                   InputStream is = connection.getInputStream();
