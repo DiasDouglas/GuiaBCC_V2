@@ -12,17 +12,98 @@ public class DadosDoAVA {
 
     private String sitename;
     private String username;
-    private String firstaname;
+    private String firstname;
     private String lastname;
-    private String fullName;
+    private String fullname;
     private String lang;
     private String userid;
     private String siteurl;
     private String userpictureurl;
-    private WSFunctions []functions;
+    private WSFunctions functions[];
+    private String downloadfiles;
+    private String uploadfiles;
+    private String release;
+    private String version;
+    private String mobilecssurl;
+    private AdvancedFeatures advancedfeatures[];
+    private String usercanmanageownfiles;
+    private String userquota;
+    private String usermaxuploadfilesize;
 
     public DadosDoAVA(){
 
+    }
+
+    public String getDownloadfiles() {
+        return downloadfiles;
+    }
+
+    public void setDownloadfiles(String downloadfiles) {
+        this.downloadfiles = downloadfiles;
+    }
+
+    public String getUploadfiles() {
+        return uploadfiles;
+    }
+
+    public void setUploadfiles(String uploadfiles) {
+        this.uploadfiles = uploadfiles;
+    }
+
+    public String getRelease() {
+        return release;
+    }
+
+    public void setRelease(String release) {
+        this.release = release;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getMobilecssurl() {
+        return mobilecssurl;
+    }
+
+    public void setMobilecssurl(String mobilecssurl) {
+        this.mobilecssurl = mobilecssurl;
+    }
+
+    public AdvancedFeatures[] getAdvancedfeatures() {
+        return advancedfeatures;
+    }
+
+    public void setAdvancedfeatures(AdvancedFeatures[] advancedfeatures) {
+        this.advancedfeatures = advancedfeatures;
+    }
+
+    public String getUsercanmanageownfiles() {
+        return usercanmanageownfiles;
+    }
+
+    public void setUsercanmanageownfiles(String usercanmanageownfiles) {
+        this.usercanmanageownfiles = usercanmanageownfiles;
+    }
+
+    public String getUserquota() {
+        return userquota;
+    }
+
+    public void setUserquota(String userquota) {
+        this.userquota = userquota;
+    }
+
+    public String getUsermaxuploadfilesize() {
+        return usermaxuploadfilesize;
+    }
+
+    public void setUsermaxuploadfilesize(String usermaxuploadfilesize) {
+        this.usermaxuploadfilesize = usermaxuploadfilesize;
     }
 
     public String getSitename() {
@@ -41,12 +122,12 @@ public class DadosDoAVA {
         this.username = username;
     }
 
-    public String getFirstaname() {
-        return firstaname;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstaname(String firstaname) {
-        this.firstaname = firstaname;
+    public void setFirstname(String firstaname) {
+        this.firstname = firstaname;
     }
 
     public String getLastname() {
@@ -58,11 +139,11 @@ public class DadosDoAVA {
     }
 
     public String getFullName() {
-        return fullName;
+        return fullname;
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.fullname = fullName;
     }
 
     public String getLang() {

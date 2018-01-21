@@ -7,6 +7,10 @@
     <string name="textoBtnEsqueciSenha">Esqueci minha senha</string>
     <string name="cbLembarUsuario">lembrar usuario</string>
 
+    <!--Textos referentes a tentativa de conexão com o AVA -->
+    <string name="dadosUsuarioInvalidos">dados de usuario inválidos</string>
+    <string name="erroConexao">houve um problema ao tentar conectar</string>
+
     <!-- Textos do dos fragmentos TabLayout  -->
     <!--Strings referentes à view da tela inicial-->
     <string name="boas_vindas"> Bem vindo </string>
