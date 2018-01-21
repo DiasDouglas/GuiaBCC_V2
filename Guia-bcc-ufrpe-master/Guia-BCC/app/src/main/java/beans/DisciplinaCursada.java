@@ -1,5 +1,6 @@
 package beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * Classe básica que representa as disciplinas cursada pelo aluno
  */
 
-public class DisciplinaCursada {
+public class DisciplinaCursada implements Serializable{
 
     private String nomeDisciplina;
     private String nomeProfessor;

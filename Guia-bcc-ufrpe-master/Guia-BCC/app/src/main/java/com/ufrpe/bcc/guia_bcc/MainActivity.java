@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         edtSenha = (EditText) findViewById(R.id.edtSenha);
 
         //=============valores padrão============
+        //(Pra quando for testar não precisar digiter usuário e senha toda vez )
         edtNomeUsuario.setText("usuario");
         edtSenha.setText("senha");
         //==================================
@@ -87,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if(!edtNomeUsuario.getText().toString().equals("") && !edtSenha.getText().toString().equals("")){
                    new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString()).execute();
-
                 }
 
             }
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void alertaConexao(){
-        Toast alertaConexao = Toast.makeText(MainActivity.this,"Problema ao conectar",Toast.LENGTH_SHORT);
+        Toast alertaConexao = Toast.makeText(MainActivity.this,getString(R.string.erroConexao),Toast.LENGTH_SHORT);
         alertaConexao.show();
     }
 
@@ -138,11 +139,15 @@ public class MainActivity extends AppCompatActivity {
         private static final String URL_TO_CONNECT = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
         private static final String SERVICE = "moodle_mobile_app";
         private static final String CORE_SITE_INFO = "core_webservice_get_site_info";
-        //private static String token;
+        private DadosDoAVA dadosDoAVA;
 
         private String username;
         private String password;
 
+        /**
+         *Passando como argumentos do construtor usuario e senha para estabelecer conexão e
+         *recuperar o token
+         * */
         public ConectarAva(String username,String password){
             this.setUsername(username);
             this.setPassword(password);
@@ -154,6 +159,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 //+"?username="+username+"&"+"password="+password+"&service="+SERVICE - - x-www-form-urlencoded
                 //URL url = new URL(URL_TOKEN);
+                /**
+                 * O usuário a senha e o serviço tem de ser passados como parâmetros da URL,
+                 *doutra forma não funcionará
+                 * */
                 URL url = new URL(URL_TOKEN+"?username="+username+"&"+"password="+password+"&service="+SERVICE);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
@@ -161,12 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 connection.addRequestProperty("Content-Type","application/json");
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
-                OutputStream os = connection.getOutputStream();
-                /*
-                os.write(("{\"username\":"+"\""+this.username+"\","+
-                        "\"password\":"+"\""+this.password+"\","+
-                        "\"service\":"+"\""+SERVICE+"\"}").getBytes());
-                        */
                 connection.connect();
 
                 InputStream is = connection.getInputStream();
@@ -175,8 +178,9 @@ public class MainActivity extends AppCompatActivity {
 
                 myToken = gson.fromJson(new InputStreamReader(is), Token.class);
 
-                //Token token = returnTokenFromJson(is,gson);
-
+                /**
+                 * Se o token estiver nulo então os dados fornecido pelo usuario vieram inválidos
+                 * */
                 if(  myToken.getToken() != null){
                     /*this.token = null;
                     myToken = new Token();
@@ -195,11 +199,18 @@ public class MainActivity extends AppCompatActivity {
             return aluno;
         }
 
+        /**
+         * Após executado o doInBackground o programa verifica se usuário retornado veio nulo ou não
+         * se vier nulo, então significa que os  dados fornecidos foram inválidos.
+         * Caso contrário, a aplicação efetua o login
+         * */
         @Override
         protected void onPostExecute(Aluno usuario){
                if(usuario != null) {
                    novoAluno = usuario;
                    Intent myIntent = new Intent(MainActivity.this, CamposUsuario.class);
+                   myIntent.putExtra("aluno_logado", novoAluno);
+                   myIntent.putExtra("dados_ava",dadosDoAVA);
                    startActivity(myIntent);
                }
                else{
@@ -234,13 +245,14 @@ public class MainActivity extends AppCompatActivity {
 
                   InputStream is = connection.getInputStream();
 
-                  DadosDoAVA dados = gson.fromJson(new InputStreamReader(is),DadosDoAVA.class);
+                  //DadosDoAVA dados = gson.fromJson(new InputStreamReader(is),DadosDoAVA.class);
 
+                  dadosDoAVA = gson.fromJson(new InputStreamReader(is),DadosDoAVA.class);
 
-                  if (dados != null) {
+                  if (dadosDoAVA != null) {
                      aluno = new Aluno();
-                     aluno.setNomeAluno(dados.getFirstname() + " " + dados.getLastname());
-                     aluno.setUsuario(new Usuario(dados.getUsername(), this.password));
+                     aluno.setNomeAluno(dadosDoAVA.getFirstname() + " " + dadosDoAVA.getLastname());
+                     aluno.setUsuario(new Usuario(dadosDoAVA.getUsername(), this.password));
                   } else {
                       throw new NullPointerException("Dados do ava não foram retornados");
                   }

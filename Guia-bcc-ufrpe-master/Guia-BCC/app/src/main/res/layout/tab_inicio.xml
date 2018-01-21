@@ -8,7 +8,7 @@
 
     <TextView
         android:text="@string/boas_vindas"
-        android:textSize="15pt"
+        android:textSize="10pt"
         android:textColor="@color/pureDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,5 +33,15 @@
         android:layout_below="@+id/proximasAulas"
         android:id="@+id/lvCursosTelaInicial"
         />
+
+    <TextView
+        android:id="@+id/tvNomeUsuario"
+        android:textSize="13pt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:text="Nomedo usuário" />
 
 </RelativeLayout>

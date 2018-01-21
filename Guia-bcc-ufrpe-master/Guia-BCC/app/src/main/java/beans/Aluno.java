@@ -1,5 +1,9 @@
 package beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +13,7 @@ import java.util.ArrayList;
  * o aluno está cursando
  */
 
-public class Aluno {
+public class Aluno implements  Serializable {
 
     private String nomeAluno;
     private ArrayList<DisciplinaCursada> disciplinasCursadas;
@@ -21,6 +25,7 @@ public class Aluno {
         this.setDisciplinasCursadas(disciplinasCursadas);
         this.setNomeAluno(nomeAluno);
     }
+
 
     public void setNomeAluno(String nomeAluno) {
         if(nomeAluno != null)
@@ -51,4 +56,6 @@ public class Aluno {
     public Usuario getUsuario() {
         return usuario;
     }
+
+
 }

@@ -1,14 +1,15 @@
 package beans;
 
+import java.io.Serializable;
+
 /**
  * Created by Ismael on 20/01/2018.
- *
- * A classe alunos ava serve para reaproveitar dados retornados
+ * A seguinte alunos ava serve para reaproveitar dados retornados
  * do json da integração com o ava, sem que seja necessário alterar
  * qualquer outro módulo do projeto
  */
 
-public class DadosDoAVA {
+public class DadosDoAVA implements Serializable {
 
     private String sitename;
     private String username;

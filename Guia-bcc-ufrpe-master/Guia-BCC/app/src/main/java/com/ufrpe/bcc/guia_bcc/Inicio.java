@@ -1,5 +1,6 @@
 package com.ufrpe.bcc.guia_bcc;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,23 +16,40 @@ import adapters.ListaDeDisciplinasCursadasAdapter;
 import beans.Aluno;
 import beans.DisciplinaCursada;
 
+@SuppressLint("ValidFragment")
 public class Inicio extends Fragment {
 
     private static final String nomeInicial ="Inicio";
 
     private TextView tvNomeUsuario;
+    private Aluno alunoLogado;
+
+    @SuppressLint("ValidFragment")
+    public Inicio(Aluno aluno){
+        this.setAlunoLogado(aluno);
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable ViewGroup container , @Nullable Bundle savedInstanceState){
         View  myView = lif.inflate(R.layout.tab_inicio,container,false);
 
+        tvNomeUsuario = (TextView) myView.findViewById(R.id.tvNomeUsuario);
 
-        Aluno aluno = new Aluno("Ismael",getCursos());
+        //Verificando se o aluno passado como parâmetro veio como nulo
+        if(alunoLogado != null) {
+            //Por enquanto serão utilizadas as disciplinas no arraylist
+            alunoLogado.setDisciplinasCursadas(this.getCursos());
+            tvNomeUsuario.setText(alunoLogado.getNomeAluno());
+        }
+        else {
+            alunoLogado = new Aluno("Ismael", getCursos());
+        }
+
 
         ListView listaDeCurso = (ListView) myView.findViewById(R.id.lvCursosTelaInicial);
 
-        ListaDeDisciplinasCursadasAdapter adapter = new ListaDeDisciplinasCursadasAdapter(aluno.getDisciplinasCursadas(),this,savedInstanceState);
+        ListaDeDisciplinasCursadasAdapter adapter = new ListaDeDisciplinasCursadasAdapter(alunoLogado.getDisciplinasCursadas(),this,savedInstanceState);
 
         listaDeCurso.setAdapter(adapter);
 
@@ -49,4 +67,14 @@ public class Inicio extends Fragment {
         return lista;
     }
 
+    public Aluno getAlunoLogado() {
+        return alunoLogado;
+    }
+
+    public void setAlunoLogado(Aluno alunoLogado) {
+        if(alunoLogado != null)
+            this.alunoLogado = alunoLogado;
+        else
+            throw new NullPointerException("Aluno logado nulo");
+    }
 }

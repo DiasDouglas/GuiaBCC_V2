@@ -1,10 +1,15 @@
 package beans;
 
+import java.io.Serializable;
+
 /**
- * Created by Familia on 20/01/2018.
+ * Created by Ismael on 20/01/2018.
+ * Essa classe representa as fuções do AVA que são retornadas no JSO
+ * quando o usuário faz o login
+ * OBS ela implementa serializable para que possa ser passada como parâmetro em um Extra
  */
 
-public class WSFunctions {
+public class WSFunctions implements Serializable{
     private String name;
     private String version;
 
