@@ -13,37 +13,70 @@
         android:layout_marginRight="5pt"
         android:textColor="@color/pureDark"
         android:layout_marginTop="31dp"
-        android:textSize="10pt"
+        android:textSize="8pt"
         android:text="Nome da disciplina" />
 
-    <TextView
-        android:id="@+id/tvQtdItens"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvNomeDisciplina"
-        android:layout_alignStart="@+id/tvNomeDisciplina"
-        android:layout_below="@+id/tvNomeDisciplina"
-        android:layout_marginTop="12dp"
-        android:text="Quantidade de itens" />
+        android:layout_below="@id/tvNomeDisciplina"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvUltimaAtt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvQtdItens"
-        android:layout_alignBottom="@+id/tvQtdItens"
-        android:layout_alignEnd="@+id/tvNomeDisciplina"
-        android:layout_alignRight="@+id/tvNomeDisciplina"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="41dp"
-        android:text="Ultima atualizacao" />
+            <TextView
+                android:id="@+id/tvQtdItens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="value" />
 
-    <TextView
-        android:id="@+id/tvAvaliacaoGeral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUltimaAtt"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="150dp"
-        android:text="TextView" />
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5pt"
+                android:text="@string/txtQtdItensMore" />
+
+            <TextView
+                android:id="@+id/TextView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10pt"
+                android:layout_weight="1"
+                android:text="@string/txtAvaliacaoGeral" />
+
+            <TextView
+                android:id="@+id/tvAvaliacaoGeral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="value" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvUltimaAttTexto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/txtUltimaAtt" />
+
+            <TextView
+                android:id="@+id/tvUltimaAtt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginLeft="5pt"
+                android:text="@string/txtQtdItensMore" />
+        </LinearLayout>
+    </LinearLayout>
+
+
 </RelativeLayout>
