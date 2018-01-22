@@ -63,8 +63,8 @@ public class ListaDeDisciplinasCursadasAdapter extends BaseAdapter {
 
         tvNomeDisciplina.setText(disc.getNome());
         qtdItens.setText(String.valueOf(disc.getQtdItens()));
-        ultimaAtt.setText("Ultima atualização: "+disc.getUltimaAtt());
-        tvAvaliacaoGeral.setText("Avaliacao geral: "+String.valueOf(disc.getAvaliacaoGeral()));
+        ultimaAtt.setText(disc.getUltimaAtt());
+        tvAvaliacaoGeral.setText(String.valueOf(disc.getAvaliacaoGeral()));
 
         return myView;
     }

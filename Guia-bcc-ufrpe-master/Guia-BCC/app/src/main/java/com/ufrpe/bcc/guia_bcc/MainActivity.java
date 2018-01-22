@@ -2,7 +2,9 @@ package com.ufrpe.bcc.guia_bcc;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +30,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import beans.Aluno;
 import beans.DadosDoAVA;
@@ -39,6 +43,11 @@ import beans.Usuario;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String PREFS_FILE="PREFS_GUIA_BCC";
+    private static final String PREFS_USER_NAME="USER_NAME";
+    private static final String PREFS_USER_PSW="USER_PSW";
+    private static final String PREFS_REMEMBER_USER="REMEMBER_USER";
 
     EditText edtNomeUsuario;
     EditText edtSenha;
@@ -52,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private String password;
     //Objeto aluno, retornado, caso a entrada dada seja válida
     private static Aluno novoAluno;
+
+    private boolean rememberOption = false;
 
     private static Token myToken;
 
@@ -69,13 +80,21 @@ public class MainActivity extends AppCompatActivity {
         edtNomeUsuario = (EditText) findViewById(R.id.edtNome);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
 
-        //====dados padrão=============
-        edtNomeUsuario.setText("usuario");
-        edtSenha.setText("senha");
-        //=============================
-        btnEntrar = (Button) findViewById(R.id.btnEntrar);
 
+        btnEntrar = (Button) findViewById(R.id.btnEntrar);
         cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);
+
+
+        //Pegando valores salvos persistidos no shared preferences
+        SharedPreferences preferences = getSharedPreferences(PREFS_FILE,0);
+        rememberOption = preferences.getBoolean(PREFS_REMEMBER_USER,false);
+
+        if(rememberOption){
+            edtNomeUsuario.setText(preferences.getString(PREFS_USER_NAME,""));
+            edtSenha.setText(preferences.getString(PREFS_USER_PSW,""));
+            cbLembrarUsuario.setChecked(rememberOption);
+        }
+
 
         if(savedInstanceState != null){
             /*Os seguintes testes evitam null pointer exception na hora de  setar os textos*/
@@ -93,22 +112,6 @@ public class MainActivity extends AppCompatActivity {
                    new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString()).execute();
                 }
 
-            }
-        });
-
-        /**
-         * Setando ouvinte de checkbox caso o usuário opte por salvar o usuario e  a senha
-         * */
-        cbLembrarUsuario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-
-                }
-                else {
-
-                }
             }
         });
 
@@ -334,6 +337,28 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Aluno usuario){
                if(usuario != null) {
+
+                   if(cbLembrarUsuario.isChecked()){
+                       rememberOption = true;
+                       SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
+                       SharedPreferences.Editor edt = preferences.edit();
+                       edt.putBoolean(PREFS_REMEMBER_USER, rememberOption);
+                       edt.putString(PREFS_USER_NAME, edtNomeUsuario.getText().toString());
+                       edt.putString(PREFS_USER_PSW, edtSenha.getText().toString());
+                       Log.d("preferencia salva",edtNomeUsuario.getText().toString());
+                       edt.commit();
+                   }
+                   else{
+                       rememberOption = false;
+                       SharedPreferences preferences = getSharedPreferences(PREFS_FILE,0);
+                       SharedPreferences.Editor edt = preferences.edit();
+                       edt.putBoolean(PREFS_REMEMBER_USER,rememberOption);
+                       edt.putString(PREFS_USER_NAME,null);
+                       edt.putString(PREFS_USER_PSW,null);
+                       edt.commit();
+                       Log.d("preferencia removida",preferences.getString(PREFS_USER_NAME,""));
+                   }
+
                    novoAluno = usuario;
                    Intent myIntent = new Intent(MainActivity.this, CamposUsuario.class);
                    myIntent.putExtra("aluno_logado", novoAluno);
