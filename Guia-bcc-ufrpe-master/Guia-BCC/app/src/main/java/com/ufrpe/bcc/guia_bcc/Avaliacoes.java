@@ -1,5 +1,6 @@
 package com.ufrpe.bcc.guia_bcc;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,12 +14,19 @@ import java.util.ArrayList;
 
 import adapters.ListaDeDisciplinasCursadasAdapter;
 import beans.DisciplinaCursada;
+import beans.DisciplinaDTO;
 
+@SuppressLint("ValidFragment")
 public class Avaliacoes extends Fragment {
 
     private static final String nomeInicial ="Avaliacoes";
     SectionsPageAdapter mSpa;
+    private ArrayList<DisciplinaDTO> disciplinaDTOS;
 
+    @SuppressLint("ValidFragment")
+    public  Avaliacoes(ArrayList<DisciplinaDTO> disciplinaDTOS){
+        this.disciplinaDTOS = disciplinaDTOS;
+    }
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable final ViewGroup container , @Nullable final Bundle savedInstanceState){
@@ -26,7 +34,7 @@ public class Avaliacoes extends Fragment {
 
         ListView lvListaDisciplinasGeral = (ListView) myView.findViewById(R.id.lvListaDisciplinasGeral);
 
-        ListaDeDisciplinasCursadasAdapter adapterLista = new ListaDeDisciplinasCursadasAdapter(getCursos(),this,savedInstanceState);
+        ListaDeDisciplinasCursadasAdapter adapterLista = new ListaDeDisciplinasCursadasAdapter(this.disciplinaDTOS,this,savedInstanceState);
 
         lvListaDisciplinasGeral.setAdapter(adapterLista);
 

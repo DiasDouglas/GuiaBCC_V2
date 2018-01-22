@@ -1,5 +1,6 @@
 package adapters;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.ufrpe.bcc.guia_bcc.R;
 import java.util.List;
 
 import beans.DisciplinaCursada;
+import beans.DisciplinaDTO;
 
 /**
  * Created by Fabio on 24/11/2017.
@@ -20,11 +22,11 @@ import beans.DisciplinaCursada;
 
 public class ListaDeDisciplinasCursadasAdapter extends BaseAdapter {
 
-    private List<DisciplinaCursada> listaDisciplinas;
+    private List<DisciplinaDTO> listaDisciplinas;
     private Fragment act;
     private Bundle savedInstanceState;
 
-    public ListaDeDisciplinasCursadasAdapter(List<DisciplinaCursada> listaDisciplinas, Fragment act, Bundle savedInstanceState ){
+    public ListaDeDisciplinasCursadasAdapter(List<DisciplinaDTO> listaDisciplinas, Fragment act, Bundle savedInstanceState ){
         this.listaDisciplinas = listaDisciplinas;
         this.savedInstanceState = savedInstanceState;
         this.act = act;
@@ -50,17 +52,19 @@ public class ListaDeDisciplinasCursadasAdapter extends BaseAdapter {
         /*Implementando conceitos aprendidos na aula sobre list views*/
         //Implementacoes quanto a o convertView ainda serão levados em consideração
         //O formato foi diferente pois estou lidando com um  Fragment e não com uma activity
-        View myView =  act.getLayoutInflater(savedInstanceState).inflate(R.layout.item_lista_disciplina,parent,false);
+        @SuppressLint("RestrictedApi") View myView =  act.getLayoutInflater(savedInstanceState).inflate(R.layout.item_lista_disciplina,parent,false);
 
-        DisciplinaCursada disc = listaDisciplinas.get(position);
+        DisciplinaDTO disc = listaDisciplinas.get(position);
 
         TextView tvNomeDisciplina = (TextView) myView.findViewById(R.id.tvNomeDisciplina);
-        TextView nomeProfessor = (TextView) myView.findViewById(R.id.tvNomeProf);
-        TextView proxAvaliacao = (TextView) myView.findViewById(R.id.proxAvaliacao);
+        TextView qtdItens = (TextView) myView.findViewById(R.id.tvQtdItens);
+        TextView ultimaAtt = (TextView) myView.findViewById(R.id.tvUltimaAtt);
+        TextView tvAvaliacaoGeral = (TextView) myView.findViewById(R.id.tvAvaliacaoGeral);
 
-        tvNomeDisciplina.setText(disc.getNomeDisciplina());
-        nomeProfessor.setText(disc.getNomeProfessor());
-        proxAvaliacao.setText(disc.getInicioPeriodoAvaliacao());
+        tvNomeDisciplina.setText(disc.getNome());
+        qtdItens.setText(disc.getQtdItens());
+        ultimaAtt.setText(disc.getUltimaAtt());
+        tvAvaliacaoGeral.setText(String.valueOf(disc.getAvaliacaoGeral()));
 
         return myView;
     }

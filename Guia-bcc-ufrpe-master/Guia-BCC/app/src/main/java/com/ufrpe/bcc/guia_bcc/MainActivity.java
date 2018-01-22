@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,22 +13,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import beans.Aluno;
 import beans.DadosDoAVA;
-import beans.connections.InvalidEntry;
+import beans.Disciplina;
+import beans.DisciplinaCursada;
+import beans.DisciplinaDTO;
 import beans.connections.Token;
 import beans.Usuario;
 
@@ -48,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private static Aluno novoAluno;
 
     private static Token myToken;
-    private static InvalidEntry myInvalidEntry;
 
     @Override
     public void onStart(){
@@ -66,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
         //=============valores padrão============
         //(Pra quando for testar não precisar digiter usuário e senha toda vez )
-        edtNomeUsuario.setText("usuario");
-        edtSenha.setText("senha");
+        edtNomeUsuario.setText("ismael.cesar");
+        edtSenha.setText("1Smae0caesar");
         //==================================
 
 
@@ -128,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     class ConectarAva extends AsyncTask<Void,Void, Aluno>{
 
         private static final String URL_TOKEN = "http://ava.ufrpe.br/login/token.php";
@@ -136,6 +139,14 @@ public class MainActivity extends AppCompatActivity {
         private static final String SERVICE = "moodle_mobile_app";
         private static final String CORE_SITE_INFO = "core_webservice_get_site_info";
         private DadosDoAVA dadosDoAVA;
+
+
+        private static final String URL_DADOS_EXTRAS_ALUNO = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
+        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplina/";
+        private static final String WSFUNCTIONS = "wsfunction=core_user_get_users_by_id";
+        private static final String WSTOKEN_PREFIXO="wstoken=";
+        private static final String USERIDS_PREFIXO="userids%5B0%5D=";
+        private  ArrayList<DisciplinaDTO> disciplinasParaAvaliar;
 
         private String username;
         private String password;
@@ -174,24 +185,146 @@ public class MainActivity extends AppCompatActivity {
 
                 myToken = gson.fromJson(new InputStreamReader(is), Token.class);
 
-                /**
-                 * Se o token estiver nulo então os dados fornecido pelo usuario vieram inválidos
-                 * */
                 if(  myToken.getToken() != null){
-                    /*this.token = null;
-                    myToken = new Token();
-                    myToken.setToken(token.getToken());*/
                     aluno = this.gettingDataFromAva(url, connection, gson);
+                    ArrayList<DisciplinaCursada> disc = this.gettingStudentDiciplinesFromAva(connection,url);
+                    aluno.setDisciplinasCursadas(disc);
                 }
                 else{
-                    myInvalidEntry = gson.fromJson(new InputStreamReader(is),InvalidEntry.class);
+                    Toast dadosInvalidos = Toast.makeText(MainActivity.this,getString(R.string.dadosUsuarioInvalidos),Toast.LENGTH_SHORT);
+                    dadosInvalidos.show();
                 }
 
+
             }
-            catch(Exception e){
+            catch (ConnectException e){
+                Log.e("Exeption de conexao",getString(R.string.erroConexao));
+             }
+            catch (ProtocolException e){
+                Log.e("Exeption de protocolo",e.getMessage());
+            }
+            catch (MalformedURLException e){
+                Log.e("Exeption de URL",e.getMessage());
+            }
+            catch(IOException e){
                 e.printStackTrace();
             }
+
             return aluno;
+        }
+
+        public ArrayList<DisciplinaCursada> gettingStudentDiciplinesFromAva(HttpURLConnection connection,URL url){
+            ArrayList<DisciplinaCursada> retorno = null;
+
+            try{
+                url = new URL(URL_DADOS_EXTRAS_ALUNO+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
+                        myToken.getToken()+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
+                connection =(HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type","application/json");
+                connection.setDoInput(true);
+                connection.connect();
+
+
+                InputStream is = connection.getInputStream();
+                InputStreamReader ir = new InputStreamReader(is);
+                BufferedReader bf = new BufferedReader(ir);
+
+                String line =  bf.readLine();
+                while(bf.readLine() != null) {
+                    line+= bf.readLine();
+                }
+
+                retorno  = this.gettingDisciplinaFromRequest(connection,url,line);
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            return retorno;
+        }
+
+
+        private ArrayList<DisciplinaCursada> gettingDisciplinaFromRequest(HttpURLConnection conn,URL url,String line){
+
+            ArrayList<DisciplinaCursada> retorno = null;
+            InputStream is = null;
+            InputStreamReader isr = null;
+            BufferedReader buff= null;
+
+            Gson gson = new Gson();
+
+            line = line.substring(1,line.length()-1);
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(line).getAsJsonObject();
+
+            if(obj.get("enrolledcourses") !=  null){
+
+                retorno = new ArrayList<DisciplinaCursada>();
+                disciplinasParaAvaliar = new ArrayList<DisciplinaDTO>();
+
+
+                for(JsonElement j : obj.get("enrolledcourses").getAsJsonArray()){
+                        /*Reutilizando a variável line, pois apartir desse ponto o objeto JSON
+                        * já terá sido criado*/
+                    line = j.getAsJsonObject().get("fullname").toString();
+                    Log.d("String da linha",line.substring(1,7));
+                    if(line.substring(1,7).equals("2017.2")) {
+                        try {
+                            url = new URL(URL_SPRING_REQUEST + j.getAsJsonObject().get("id"));
+                            conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.connect();
+                            is = conn.getInputStream();
+                            isr = new InputStreamReader(is);
+                            buff = new BufferedReader(isr);
+
+                            line = buff.readLine();
+
+
+                            if (line != null) {
+                                JsonObject objeto =  parser.parse(line).getAsJsonObject();
+
+                                DisciplinaCursada disciplina = new DisciplinaCursada();
+                                disciplina.setNomeDisciplina(objeto.get("nomeDisciplina").getAsString());
+                                disciplina.setQtdAlunos(objeto.get("qtdMediaAlunos").getAsInt());
+                                disciplina.setSemestreAtual(objeto.get("ultimoSemestre").getAsString());
+                                Log.d("DisciplinaCursada",disciplina.getNomeDisciplina());
+                                DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+                                disciplinaDTO.setID(objeto.get("id").getAsLong());
+                                disciplinaDTO.setAvaliacaoGeral(objeto.get("avaliacaoGeral").getAsFloat());
+                                disciplinaDTO.setNome(objeto.get("nomeDisciplina").getAsString());
+                                disciplinaDTO.setQtdItens(objeto.get("qtdItens").getAsInt());
+                                disciplinaDTO.setUltimaAtt(objeto.get("ultimaAtt").getAsString());
+                                disciplinasParaAvaliar.add(disciplinaDTO);
+
+                                Log.d("Classe Disciplina",disciplina.getNomeDisciplina());
+
+                                retorno.add(disciplina);
+                            }
+
+                        }catch(ConnectException e ){
+                            Log.e("Erro na conexao",e.getMessage());
+                        }
+                        catch (MalformedURLException e){
+                            Log.e("Erro na URL",e.getMessage());
+                        }
+                        catch(ProtocolException e){
+                            Log.e("Erro de protocolo",e.getMessage());
+                        }
+                        catch (IOException e){
+                            Log.e("Erro de IO",e.getMessage());
+                        }
+
+                    }
+
+                }
+            }
+
+            return retorno;
+
         }
 
         /**
@@ -207,11 +340,8 @@ public class MainActivity extends AppCompatActivity {
                    myIntent.putExtra("aluno_logado", novoAluno);
                    myIntent.putExtra("dados_ava",dadosDoAVA);
                    myIntent.putExtra("token_logado",myToken);
+                   myIntent.putExtra("lista_disciplina_dto",disciplinasParaAvaliar);
                    startActivity(myIntent);
-               }
-               else{
-                   Toast alertaConexao = Toast.makeText(MainActivity.this,getString(R.string.dadosUsuarioInvalidos),Toast.LENGTH_SHORT);
-                   alertaConexao.show();
                }
         }
 
@@ -226,7 +356,8 @@ public class MainActivity extends AppCompatActivity {
          * para utilizar o token retornado no doInBackground para requisitar os dados
          * de usuario e construir o objeto aluno
          */
-        private Aluno gettingDataFromAva(URL url,HttpURLConnection connection, Gson gson)throws Exception{
+        private Aluno gettingDataFromAva(URL url,HttpURLConnection connection, Gson gson)throws ConnectException,MalformedURLException,
+                                                                                        ProtocolException,IOException{
 
               Aluno aluno = null;
 
@@ -283,6 +414,5 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
 
 }

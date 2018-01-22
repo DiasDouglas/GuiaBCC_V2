@@ -1,8 +1,6 @@
 package com.ufrpe.bcc.guia_bcc;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,27 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import adapters.ListaDeDisciplinasCursadasAdapter;
 import beans.Aluno;
 import beans.DadosDoAVA;
 import beans.DisciplinaCursada;
-import beans.connections.CoursesFromJson;
-import beans.connections.CoursesListFromJson;
 import beans.connections.Token;
 
 @SuppressLint("ValidFragment")
@@ -65,7 +48,7 @@ public class Inicio extends Fragment {
         //Verificando se o aluno passado como parâmetro veio como nulo
         if(alunoLogado != null && dadosDoAVA != null) {
             //Por enquanto serão utilizadas as disciplinas no arraylist
-            alunoLogado.setDisciplinasCursadas(this.getCursos());
+            //alunoLogado.setDisciplinasCursadas(this.getCursos());
             tvNomeUsuario.setText(alunoLogado.getNomeAluno());
         }
         else {
@@ -133,124 +116,10 @@ public class Inicio extends Fragment {
 
         if(ivFotoUsuario != null && dadosDoAVA != null){
             //new CarregarFoto(dadosDoAVA.getUserpictureurl()).execute();
-            new CarregarCursos().execute();
-        }
-    }
-
-
-    /**
-     * Esse async task faz uma requisição para
-     * */
-    private class CarregarFoto extends AsyncTask<Void,Void,Bitmap>{
-
-        private String urlImagem;
-
-        CarregarFoto(String urlImagem){
-            this.urlImagem = urlImagem;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... voids) {
-            Bitmap retorno = null;
-
-            try{
-                URL url = new URL(urlImagem);
-                HttpURLConnection connection =(HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-                connection.setDoInput(true);
-                connection.connect();
-
-                InputStream is = connection.getInputStream();
-
-                InputStreamReader reader = new InputStreamReader(is);
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-            return retorno;
-        }
-
-
-        @Override
-        protected void onPostExecute(Bitmap retorno){
 
         }
     }
 
 
-    private class CarregarCursos extends  AsyncTask<Void,Void,CoursesListFromJson>{
-
-        private static final String URL_DADOS_EXTRAS_ALUNO = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
-        private static final String WSFUNCTIONS = "wsfunction=core_user_get_users_by_id";
-        private static final String WSTOKEN_PREFIXO="wstoken=";
-        private static final String USERIDS_PREFIXO="userids%5B0%5D=";
-
-        @Override
-        protected CoursesListFromJson doInBackground(Void... voids) {
-            CoursesListFromJson retorno = null;
-
-            try{
-                URL url = new URL(URL_DADOS_EXTRAS_ALUNO+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
-                        tokenAluno.getToken()+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
-                HttpURLConnection connection =(HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type","application/json");
-                connection.setDoInput(true);
-                connection.connect();
-
-
-                InputStream is = connection.getInputStream();
-                InputStreamReader ir = new InputStreamReader(is);
-                BufferedReader bf = new BufferedReader(ir);
-
-               String line =  bf.readLine();
-               while(bf.readLine() != null) {
-                   line+= bf.readLine();
-               }
-
-               line = line.substring(1,line.length()-1);
-                JsonParser parser = new JsonParser();
-                JsonObject obj = parser.parse(line).getAsJsonObject();
-
-                if(obj.get("enrolledcourses") !=  null){
-
-                    retorno = new CoursesListFromJson();
-
-                    for(JsonElement j : obj.get("enrolledcourses").getAsJsonArray()){
-                        /*Reutilizando a variável line, pois apartir desse ponto o objeto JSON
-                        * já terá sido criado*/
-                           line = j.getAsJsonObject().get("id").toString();
-                           //Verificando se a disciplina é do ano atual
-
-                    }
-                }
-
-                /*
-               Gson gson = new Gson();
-               Object r = gson.fromJson(new InputStreamReader(is),Object.class);
-
-
-               if(r!=null){
-                   retorno = null;
-               }*/
-
-
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-
-            return retorno;
-        }
-
-
-        @Override
-        protected void onPostExecute(CoursesListFromJson cursos){
-
-        }
-    }
 
 }
