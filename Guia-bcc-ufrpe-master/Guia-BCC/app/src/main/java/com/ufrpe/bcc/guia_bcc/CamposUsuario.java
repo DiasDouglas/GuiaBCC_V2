@@ -57,7 +57,7 @@ public class CamposUsuario extends AppCompatActivity {
     //Dados retornados do JSON da requisição
     private Aluno alunoLogado;
     private DadosDoAVA dadosDoAVA;
-    private Token tokenAluno;
+    //private Token tokenAluno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +66,11 @@ public class CamposUsuario extends AppCompatActivity {
 
         alunoLogado  = (Aluno) getIntent().getSerializableExtra("aluno_logado");
         dadosDoAVA = (DadosDoAVA) getIntent().getSerializableExtra("dados_ava");
-        tokenAluno = (Token) getIntent().getSerializableExtra("token_logado");
+        //tokenAluno = (Token) getIntent().getSerializableExtra("token_logado");
 
 
         //Verifica se a instancia de aluno logado na intent é nula
-        if(alunoLogado != null && dadosDoAVA != null && tokenAluno!=null) {
+        if(alunoLogado != null && dadosDoAVA != null /*&& tokenAluno!=null*/) {
             ViewPager myViewPager = (ViewPager) findViewById(R.id.container);
             this.setupViewPager(myViewPager);
 

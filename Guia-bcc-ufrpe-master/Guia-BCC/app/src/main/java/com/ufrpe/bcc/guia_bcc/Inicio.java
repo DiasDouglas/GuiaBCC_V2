@@ -29,7 +29,7 @@ public class Inicio extends Fragment {
 
     private Aluno alunoLogado;
     private DadosDoAVA dadosDoAVA;
-    private Token tokenAluno;
+  //  private Token tokenAluno;
     private ArrayList<DisciplinaDTO> disciplinaDTOS;
 
     @SuppressLint("ValidFragment")
@@ -50,7 +50,7 @@ public class Inicio extends Fragment {
         ivFotoUsuario = (ImageView) myView.findViewById(R.id.ivFotoUsuario);
 
         //Verificando se o aluno passado como parâmetro veio como nulo
-        if(alunoLogado != null && dadosDoAVA != null) {
+        if(alunoLogado != null ) {
             //Por enquanto serão utilizadas as disciplinas no arraylist
             //alunoLogado.setDisciplinasCursadas(this.getCursos());
             tvNomeUsuario.setText(alunoLogado.getNomeAluno());
@@ -91,6 +91,7 @@ public class Inicio extends Fragment {
             throw new NullPointerException("Aluno logado nulo");
     }
 
+    /*
     public Token getTokenAluno() {
         return tokenAluno;
     }
@@ -101,7 +102,7 @@ public class Inicio extends Fragment {
         else
             throw new NullPointerException("Token do aluno, nulo");
     }
-
+    */
     public ArrayList<DisciplinaDTO> getDisciplinaDTOS() {
         return disciplinaDTOS;
     }

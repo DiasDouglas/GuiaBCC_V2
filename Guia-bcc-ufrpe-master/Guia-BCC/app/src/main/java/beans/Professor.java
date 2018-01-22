@@ -32,7 +32,7 @@ public class Professor implements Parcelable {
         this.nome = nome;
     }
 
-    public Professor(Parcel in){
+    private Professor(Parcel in){
         this.setId(in.readLong());
         this.setNome(in.readString());
     }

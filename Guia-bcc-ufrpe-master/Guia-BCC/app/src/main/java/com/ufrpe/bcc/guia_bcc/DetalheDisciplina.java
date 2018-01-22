@@ -1,25 +1,41 @@
 package com.ufrpe.bcc.guia_bcc;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import beans.Disciplina;
+import beans.Professor;
 import beans.ProfessorAnterior;
 
 /**
  * Created by Fabio on 08/12/2017.
+ * Updated by Ismael on 22/01/2018
+ * Adicionando async task para pegar adisciplina do servidor
+ * Mudando atributo disciplinaId para long
  */
 
 public class DetalheDisciplina extends AppCompatActivity {
     public static final String EXTRA_ID_DISCIPLINA = "id_disciplina";
 
-    private Disciplina disciplina;
+    private long disciplinaId;
     TextView mNomeDisciplina;
     TextView mQtdMediaAlunos;
     TextView mUltimoSemestre;
@@ -43,32 +59,87 @@ public class DetalheDisciplina extends AppCompatActivity {
         this.mEsforco = (TextView) findViewById(R.id.tvEsforco);
         this.mBtnProfessores = (Button) findViewById(R.id.btnProfessores);
 
-        //this.disciplina = getIntent().getLongExtra(EXTRA_ID_DISCIPLINA,0));
+        this.disciplinaId = getIntent().getLongExtra(EXTRA_ID_DISCIPLINA,0);
 
-        int qtd = disciplina.getQtdMediaAlunos();
+        //Executando A
+        new AccessDisciplina().execute();
 
-        this.mNomeDisciplina.setText(disciplina.getNomeDisciplina());
-        this.mQtdMediaAlunos.setText(qtd+"");
-        this.mUltimoSemestre.setText(disciplina.getUltimoSemestre());
-        this.mDificuldade.setText(disciplina.getAvaliacaoDificuldade()+"");
-        this.mConteudo.setText(disciplina.getAvaliacaoConteudo()+"");
-        this.mClareza.setText(disciplina.getAvaliacaoClareza()+"");
-        this.mEsforco.setText(disciplina.getAvaliacaoEsforco()+"");
+        //int qtd = disciplinaId.getQtdMediaAlunos();
 
-        mBtnProfessores.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(DetalheDisciplina.this,ListaProfessores.class);
-                intent.putExtra(ListaProfessores.EXTRA_PROFESSORES, disciplina.getProfessoresAnteriores());
-                startActivity(intent);
-            }
-        });
 
     }
+
+    private class AccessDisciplina extends AsyncTask<Void,Void,Disciplina>{
+
+        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplina/";
+
+        @Override
+        protected Disciplina doInBackground(Void... voids) {
+            Disciplina retorno = null;
+
+            try {
+                URL url = new URL(URL_SPRING_REQUEST+ disciplinaId);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                //BufferedReader buff = new BufferedReader(isr);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(isr,Disciplina.class);
+
+
+            }
+            catch (ConnectException e){
+                Log.e("Exeption de conexao",getString(R.string.erroConexao));
+            }
+            catch (ProtocolException e){
+                Log.e("Exeption de protocolo",e.getMessage());
+            }
+            catch (MalformedURLException e){
+                Log.e("Exeption de URL",e.getMessage());
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+
+            return retorno;
+        }
+
+        @Override                   //verificar depis
+        protected void onPostExecute(Disciplina disciplina){
+            if(disciplina != null){
+                DetalheDisciplina.this.mNomeDisciplina.setText(disciplina.getNomeDisciplina());
+                DetalheDisciplina.this.mQtdMediaAlunos.setText(disciplina.getQtdMediaAlunos()+"");
+                DetalheDisciplina.this.mUltimoSemestre.setText(disciplina.getUltimoSemestre());
+                DetalheDisciplina.this.mDificuldade.setText(disciplina.getAvaliacaoDificuldade()+"");
+                DetalheDisciplina.this.mConteudo.setText(disciplina.getAvaliacaoConteudo()+"");
+                DetalheDisciplina.this.mClareza.setText(disciplina.getAvaliacaoClareza()+"");
+                DetalheDisciplina.this.mEsforco.setText(disciplina.getAvaliacaoEsforco()+"");
+
+                final ArrayList<ProfessorAnterior> lista = disciplina.getProfessoresAnteriores();
+
+                mBtnProfessores.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        Intent intent = new Intent(DetalheDisciplina.this,ListaProfessores.class);
+                        intent.putExtra(ListaProfessores.EXTRA_PROFESSORES, lista);
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
+
+    }
+
     /*
     private Disciplina getDisciplina(long ID){
         Disciplina retorno = null;
-        //metodo que vai passar o id que vai vir da tela anterior e vai retornar a disciplina
+        //metodo que vai passar o id que vai vir da tela anterior e vai retornar a disciplinaId
         //depois esses arraylists vão sair e apenas vai fazer uma requisicao ao servidor
 
         ProfessorAnterior aziz = new ProfessorAnterior(1,"Aziz (tio lu para os intimos)", "2017.1", 5, 3, 90f, 60f, 92f, 85f);

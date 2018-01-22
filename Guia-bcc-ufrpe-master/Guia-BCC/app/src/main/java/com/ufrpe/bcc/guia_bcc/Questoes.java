@@ -58,7 +58,7 @@ public class Questoes extends Fragment {
        disciplinas = (ListView) myView.findViewById(R.id.lvListaDisciplinasBanco);
 
        // ListaDeDisciplinasAdapter adapterLista = new ListaDeDisciplinasAdapter(getDisciplinas(),this,savedInstanceState);
-
+        new DisciplinaDTOServidor().execute();
 
         disciplinas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -76,7 +76,6 @@ public class Questoes extends Fragment {
 
         return myView;
     }
-
 
     private class DisciplinaDTOServidor extends AsyncTask<Void,Void,ArrayList<DisciplinaDTO>>{
 
@@ -135,6 +134,7 @@ public class Questoes extends Fragment {
         }
 
     }
+
 
     //Getters and setters
 

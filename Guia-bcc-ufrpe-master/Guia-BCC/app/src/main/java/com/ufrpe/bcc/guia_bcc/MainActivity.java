@@ -1,5 +1,6 @@
 package com.ufrpe.bcc.guia_bcc;
 
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -337,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
                    Intent myIntent = new Intent(MainActivity.this, CamposUsuario.class);
                    myIntent.putExtra("aluno_logado", novoAluno);
                    myIntent.putExtra("dados_ava",dadosDoAVA);
-                   myIntent.putExtra("token_logado",myToken);
+                  //myIntent.putExtra("token_logado",myToken);
                    startActivity(myIntent);
                }
         }
