@@ -79,7 +79,7 @@ public class Questoes extends Fragment {
 
     private class DisciplinaDTOServidor extends AsyncTask<Void,Void,ArrayList<DisciplinaDTO>>{
 
-        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplinaDto/";
+        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplinaDto/";
 
         @Override
         protected ArrayList<DisciplinaDTO> doInBackground(Void... voids) {
