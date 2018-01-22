@@ -13,19 +13,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import beans.Professor;
+import beans.ProfessorAnterior;
 
 /**
  * Created by Fabio on 08/12/2017.
+ * Updated by Ismael on 22/01/2018
+ * Adaptando o método de get professores para quando for retornado um professor
  */
 
 public class ListaDeProfessoresAdapter extends BaseExpandableListAdapter {
 
-    private ArrayList<Professor> listaProfessores;
-    private HashMap<Professor, List<Professor>> listaDetalhesProfessores;
+    private ArrayList<ProfessorAnterior> listaProfessores;
+    private HashMap<ProfessorAnterior, List<ProfessorAnterior>> listaDetalhesProfessores;
     private Context context;
 
-    public ListaDeProfessoresAdapter(ArrayList<Professor> listaProfessores, HashMap<Professor, List<Professor>> listaDetalhesProfessores, Context context) {
+    public ListaDeProfessoresAdapter(ArrayList<ProfessorAnterior> listaProfessores, HashMap<ProfessorAnterior, List<ProfessorAnterior>> listaDetalhesProfessores, Context context) {
         this.listaProfessores = listaProfessores;
         this.listaDetalhesProfessores = listaDetalhesProfessores;
         this.context = context;
@@ -81,7 +83,7 @@ public class ListaDeProfessoresAdapter extends BaseExpandableListAdapter {
         // cria os itens principais (grupos)
         View myView;
         ViewHolderListaProfessor holder;
-        Professor prof = listaProfessores.get(groupPosition);
+        ProfessorAnterior prof = listaProfessores.get(groupPosition);
 
         if(convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
@@ -90,7 +92,7 @@ public class ListaDeProfessoresAdapter extends BaseExpandableListAdapter {
             holder = new ViewHolderListaProfessor(myView);
             myView.setTag(holder);
 
-            holder.mNomeProfessor.setText(prof.getNome());
+            holder.mNomeProfessor.setText(prof.getProfessor().getNome());
             holder.mSemestre.setText(prof.getSemestreLecionado());
         }
         else {
@@ -105,7 +107,7 @@ public class ListaDeProfessoresAdapter extends BaseExpandableListAdapter {
         // cria os subitens (itens dos grupos)
         View myView;
         ViewHolderListaProfessor holder;
-        Professor prof = listaProfessores.get(groupPosition);
+        ProfessorAnterior prof = listaProfessores.get(groupPosition);
 
         if(convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(

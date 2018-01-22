@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ExpandableListView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import adapters.ListaDeProfessoresAdapter;
-import beans.Professor;
+import beans.ProfessorAnterior;
 
 /**
  * Created by Fabio on 13/12/2017.
@@ -27,8 +26,8 @@ public class ListaProfessores extends AppCompatActivity {
 
         ExpandableListView elvProfessores = (ExpandableListView) findViewById(R.id.elvProfessores);
 
-        ArrayList<Professor> professores = getIntent().getParcelableArrayListExtra(EXTRA_PROFESSORES);
-        //ArrayList<Professor> professores = profs1;
+        ArrayList<ProfessorAnterior> professores = getIntent().getParcelableArrayListExtra(EXTRA_PROFESSORES);
+        //ArrayList<ProfessorAnterior> professores = profs1;
 
 
         // cria um adaptador (BaseExpandableListAdapter) com os dados
@@ -37,12 +36,12 @@ public class ListaProfessores extends AppCompatActivity {
         elvProfessores.setAdapter(adapter);
     }
 
-    public HashMap<Professor, List<Professor>> arrumarItens(ArrayList<Professor> profs){
+    public HashMap<ProfessorAnterior, List<ProfessorAnterior>> arrumarItens(ArrayList<ProfessorAnterior> profs){
         //metodo gambiarral (porque nem so de boas praticas vive um homem) para
         //arrumar os professores da forma necessaria para usar o ExpandableListView
-        HashMap<Professor, List<Professor>> listaProfessores = new HashMap<>();
-        for (Professor profAux:profs) {
-            List<Professor> listaAuxiliar = new ArrayList<Professor>();
+        HashMap<ProfessorAnterior, List<ProfessorAnterior>> listaProfessores = new HashMap<>();
+        for (ProfessorAnterior profAux:profs) {
+            List<ProfessorAnterior> listaAuxiliar = new ArrayList<ProfessorAnterior>();
             listaAuxiliar.add(profAux);
             listaProfessores.put(profAux,listaAuxiliar);
             // esse foreach percorre todos os professores e pra cada um cria um arraylist com

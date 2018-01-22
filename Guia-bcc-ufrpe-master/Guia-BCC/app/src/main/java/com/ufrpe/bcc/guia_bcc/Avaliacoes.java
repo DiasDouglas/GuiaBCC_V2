@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import adapters.ListaDeDisciplinasCursadasAdapter;
 import beans.Disciplina;
 import beans.DisciplinaDTO;
-import beans.Professor;
 
 @SuppressLint("ValidFragment")
 public class Avaliacoes extends Fragment {
@@ -60,6 +58,7 @@ public class Avaliacoes extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long id) {
 
                 DisciplinaDTO disciplina = (DisciplinaDTO)adapterView.getItemAtPosition(posicao);
+                new ConectarDisciplinaProfessor(disciplina).execute();
 
             }
         });

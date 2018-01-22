@@ -3,8 +3,6 @@ package beans;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +14,7 @@ public class Disciplina implements Parcelable{
 
     private long ID;
     private String nomeDisciplina;
-    private ArrayList<Professor> professoresAnteriores;
+    private ArrayList<ProfessorAnterior> professoresAnteriores;
     private int qtdMediaAlunos;
     private String ultimoSemestre;//ultimo semestre que foi lecionada
     private float avaliacaoGeral;
@@ -29,7 +27,7 @@ public class Disciplina implements Parcelable{
 
     public Disciplina(){}
 
-    public Disciplina(long ID, String nomeDisciplina, ArrayList<Professor> professoresAnteriores, int qtdMediaAlunos,
+    public Disciplina(long ID, String nomeDisciplina, ArrayList<ProfessorAnterior> professoresAnteriores, int qtdMediaAlunos,
                       String ultimoSemestre, float avaliacaoDificuldade,
                       float avaliacaoClareza, float avaliacaoEsforco, float avaliacaoConteudo,
                       int qtdItens, String ultimaAtt){
@@ -70,11 +68,11 @@ public class Disciplina implements Parcelable{
             throw new IllegalArgumentException("Nome da disciplina inválido.");
     }
 
-    public ArrayList<Professor> getProfessoresAnteriores() {
+    public ArrayList<ProfessorAnterior> getProfessoresAnteriores() {
         return professoresAnteriores;
     }
 
-    public void setProfessoresAnteriores(ArrayList<Professor> professoresAnteriores) {
+    public void setProfessoresAnteriores(ArrayList<ProfessorAnterior> professoresAnteriores) {
         if(professoresAnteriores != null)
             this.professoresAnteriores = professoresAnteriores;
         else
@@ -180,7 +178,7 @@ public class Disciplina implements Parcelable{
     public Disciplina(Parcel source){
         this.setID(source.readLong());
         this.setNomeDisciplina(source.readString());
-        this.setProfessoresAnteriores(source.readArrayList(Professor.class.getClassLoader()));
+        this.setProfessoresAnteriores(source.readArrayList(ProfessorAnterior.class.getClassLoader()));
         this.setQtdMediaAlunos(source.readInt());
         this.setUltimoSemestre(source.readString());
         this.setAvaliacaoGeral(source.readFloat());

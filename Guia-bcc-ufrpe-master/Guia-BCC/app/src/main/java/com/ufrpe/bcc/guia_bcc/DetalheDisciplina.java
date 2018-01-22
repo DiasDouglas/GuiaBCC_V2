@@ -3,20 +3,14 @@ package com.ufrpe.bcc.guia_bcc;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import beans.Disciplina;
-import beans.DisciplinaDTO;
-import beans.Professor;
-import butterknife.BindView;
+import beans.ProfessorAnterior;
 
 /**
  * Created by Fabio on 08/12/2017.
@@ -49,7 +43,7 @@ public class DetalheDisciplina extends AppCompatActivity {
         this.mEsforco = (TextView) findViewById(R.id.tvEsforco);
         this.mBtnProfessores = (Button) findViewById(R.id.btnProfessores);
 
-        this.disciplina = this.getDisciplina(getIntent().getLongExtra(EXTRA_ID_DISCIPLINA,0));
+        //this.disciplina = getIntent().getLongExtra(EXTRA_ID_DISCIPLINA,0));
 
         int qtd = disciplina.getQtdMediaAlunos();
 
@@ -71,23 +65,23 @@ public class DetalheDisciplina extends AppCompatActivity {
         });
 
     }
-
+    /*
     private Disciplina getDisciplina(long ID){
         Disciplina retorno = null;
         //metodo que vai passar o id que vai vir da tela anterior e vai retornar a disciplina
         //depois esses arraylists vão sair e apenas vai fazer uma requisicao ao servidor
 
-        Professor aziz = new Professor(1,"Aziz (tio lu para os intimos)", "2017.1", 5, 3, 90f, 60f, 92f, 85f);
-        Professor vanilson = new Professor(2,"Vanilson (vanvan, homao da porra)", "2017.1", 30, 25, 50f, 95f, 80f, 75f);
-        Professor andreC = new Professor(3,"Andre Camara (por onde anda?)", "2016.2", 30, 25, 65f, 70f, 80f, 75f);
-        Professor obionor = new Professor(4,"Obionor (tio bio, projeto </3)", "2017.1", 40, 30, 62f, 80f, 82f, 78f);
-        Professor jeane = new Professor(5,"Jeane (jeje, nao leu cormem :'( )", "2017.1", 15, 10, 70f, 10f, 70f, 70f);
+        ProfessorAnterior aziz = new ProfessorAnterior(1,"Aziz (tio lu para os intimos)", "2017.1", 5, 3, 90f, 60f, 92f, 85f);
+        ProfessorAnterior vanilson = new ProfessorAnterior(2,"Vanilson (vanvan, homao da porra)", "2017.1", 30, 25, 50f, 95f, 80f, 75f);
+        ProfessorAnterior andreC = new ProfessorAnterior(3,"Andre Camara (por onde anda?)", "2016.2", 30, 25, 65f, 70f, 80f, 75f);
+        ProfessorAnterior obionor = new ProfessorAnterior(4,"Obionor (tio bio, projeto </3)", "2017.1", 40, 30, 62f, 80f, 82f, 78f);
+        ProfessorAnterior jeane = new ProfessorAnterior(5,"Jeane (jeje, nao leu cormem :'( )", "2017.1", 15, 10, 70f, 10f, 70f, 70f);
         //cansei de fazer mais professores
 
-        ArrayList<Professor> profs1 = new ArrayList<>();
-        ArrayList<Professor> profs2 = new ArrayList<>();
-        ArrayList<Professor> profs3 = new ArrayList<>();
-        ArrayList<Professor> profs4 = new ArrayList<>();
+        ArrayList<ProfessorAnterior> profs1 = new ArrayList<>();
+        ArrayList<ProfessorAnterior> profs2 = new ArrayList<>();
+        ArrayList<ProfessorAnterior> profs3 = new ArrayList<>();
+        ArrayList<ProfessorAnterior> profs4 = new ArrayList<>();
         //profs1
         profs1.add(aziz);
         profs1.add(vanilson);
@@ -138,6 +132,6 @@ public class DetalheDisciplina extends AppCompatActivity {
             }
         }
         return retorno;
-    }
+    }*/
 
 }
