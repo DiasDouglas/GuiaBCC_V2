@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         private static final String URL_DADOS_EXTRAS_ALUNO = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
-        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplinaDto/";
+        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplinaDto/";
         private static final String WSFUNCTIONS = "wsfunction=core_user_get_users_by_id";
         private static final String WSTOKEN_PREFIXO="wstoken=";
         private static final String USERIDS_PREFIXO="userids%5B0%5D=";
