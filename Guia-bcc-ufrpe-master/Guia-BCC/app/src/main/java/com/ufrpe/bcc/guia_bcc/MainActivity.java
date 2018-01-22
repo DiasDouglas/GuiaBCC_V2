@@ -128,10 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void alertaConexao(){
-        Toast alertaConexao = Toast.makeText(MainActivity.this,getString(R.string.erroConexao),Toast.LENGTH_SHORT);
-        alertaConexao.show();
-    }
 
     class ConectarAva extends AsyncTask<Void,Void, Aluno>{
 
@@ -194,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             }
             catch(Exception e){
                 e.printStackTrace();
-                alertaConexao();
             }
             return aluno;
         }
@@ -211,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                    Intent myIntent = new Intent(MainActivity.this, CamposUsuario.class);
                    myIntent.putExtra("aluno_logado", novoAluno);
                    myIntent.putExtra("dados_ava",dadosDoAVA);
+                   myIntent.putExtra("token_logado",myToken);
                    startActivity(myIntent);
                }
                else{

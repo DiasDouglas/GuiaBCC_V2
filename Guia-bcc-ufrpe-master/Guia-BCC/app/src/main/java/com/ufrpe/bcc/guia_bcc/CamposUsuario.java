@@ -16,6 +16,8 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
 import beans.Aluno;
+import beans.DadosDoAVA;
+import beans.connections.Token;
 /*
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +33,10 @@ public class CamposUsuario extends AppCompatActivity {
 
 
     SectionsPageAdapter mSpa;
+    //Dados retornados do JSON da requisição
     private Aluno alunoLogado;
+    private DadosDoAVA dadosAluno;
+    private Token tokenAluno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +44,11 @@ public class CamposUsuario extends AppCompatActivity {
         setContentView(R.layout.activity_campos_usuario);
 
         alunoLogado  = (Aluno) getIntent().getSerializableExtra("aluno_logado");
+        dadosAluno = (DadosDoAVA) getIntent().getSerializableExtra("dados_ava");
+        tokenAluno = (Token) getIntent().getSerializableExtra("token_logado");
+
         //Verifica se a instancia de aluno logado na intent é nula
-        if(alunoLogado != null) {
+        if(alunoLogado != null && dadosAluno != null && tokenAluno!=null) {
             ViewPager myViewPager = (ViewPager) findViewById(R.id.container);
             this.setupViewPager(myViewPager);
 
@@ -54,10 +62,9 @@ public class CamposUsuario extends AppCompatActivity {
 
 
     //Método para configurar o view pager para adicionar os fragmentos da TabView
-
     public void setupViewPager(ViewPager vp){
         mSpa = new SectionsPageAdapter(getSupportFragmentManager());
-        mSpa.adicionarFragmento(new Inicio(alunoLogado),"Inicio");
+        mSpa.adicionarFragmento(new Inicio(alunoLogado,dadosAluno,tokenAluno),"Inicio");
         mSpa.adicionarFragmento(new Avaliacoes(),"Avaliacoes");
         mSpa.adicionarFragmento(new Questoes(),"Questoes");
         vp.setAdapter(mSpa);

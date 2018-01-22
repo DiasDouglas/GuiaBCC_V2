@@ -34,14 +34,33 @@
         android:id="@+id/lvCursosTelaInicial"
         />
 
-    <TextView
-        android:id="@+id/tvNomeUsuario"
-        android:textSize="13pt"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
-        android:text="Nomedo usuário" />
+        android:orientation="horizontal"
+        android:layout_marginRight="5pt"
+        android:layout_marginLeft="5pt"
+        android:layout_below="@+id/textView">
+
+        <ImageView
+            android:id="@+id/ivFotoUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@android:color/holo_blue_bright" />
+
+        <TextView
+            android:id="@+id/tvNomeUsuario"
+            android:textSize="13pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="29dp"
+            android:text="Nomedo usuário" />
+
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>
