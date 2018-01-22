@@ -26,13 +26,7 @@ public class Perguntas {
     }
 
     public Pergunta procurarPergunta(int codigo){
-        Pergunta retorno = null;
-        for (Pergunta p: this.lista_perguntas) {
-            if(p.getCodigo_pergunta() == codigo){
-                retorno = p;
-            }
-        }
-        return retorno;
+        return getLista_perguntas().get(codigo - 1);
     }
     
     public void removerPergunta(int codigo){

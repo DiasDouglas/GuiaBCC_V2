@@ -1,8 +1,11 @@
 package com.ufrpe.bcc.guia_bcc;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -10,29 +13,63 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import beans.Pergunta;
 import beans.Perguntas;
 
+/**
+ * Created by Douglas on 24/11/2017.
+ * /**
+ * Edited by Douglas on 21/01/2018.
+ */
+ */
+
 public class PerguntasAvaliacao extends AppCompatActivity {
 
     private RadioGroup radioGroup;
+    static ArrayList<Pergunta> perguntasProf;
+    static ArrayList<Pergunta> perguntasDisc;
+    final Perguntas listaDePerguntas = new Perguntas();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            new CarregaPerguntas().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
         setContentView(R.layout.activity_perguntas_avaliacao);
+
+
 
         Intent anterior = getIntent();
 
         if(anterior.getStringExtra("tipo").equals("avaliar_disciplina")){
             // Pegando o numero da questão
             final int numQuestao = anterior.getIntExtra("num_pergunta", 0);
-
             // Pegando o nome da disciplina e do professor
             String aux;
-            if((anterior.getStringExtra("disciplina") != null) && (anterior.getStringExtra("professor") != null)){
+            if ((anterior.getStringExtra("disciplina") != null) && (anterior.getStringExtra("professor") != null)) {
                 aux = anterior.getStringExtra("disciplina") + "\n" + anterior.getStringExtra("professor");
             } else {
                 aux = anterior.getStringExtra("disciplinaAvaliada");
@@ -40,8 +77,7 @@ public class PerguntasAvaliacao extends AppCompatActivity {
             final String tipoAvaliacao = aux;
 
             // Instanciar perguntas para testes
-            final Perguntas listaDePerguntas = new Perguntas();
-            listaDePerguntas.setLista_perguntas(criarPerguntasDisciplina());
+            listaDePerguntas.setLista_perguntas(perguntasDisc);
 
             if (numQuestao <= listaDePerguntas.getLista_perguntas().size()) {   // Se não chegou ao fim das questões
 
@@ -93,13 +129,13 @@ public class PerguntasAvaliacao extends AppCompatActivity {
                 Intent i = new Intent(PerguntasAvaliacao.this, Agradecimento.class);
                 startActivity(i);
             }
-        } else if(anterior.getStringExtra("tipo").equals("avaliar_professor")) {
+        } else if(anterior.getStringExtra("tipo").equals("avaliar_professor")){
             // Pegando o numero da questão
             final int numQuestao = anterior.getIntExtra("num_pergunta", 0);
 
             // Pegando o nome da disciplina e do professor
             String aux;
-            if((anterior.getStringExtra("disciplina") != null) && (anterior.getStringExtra("professor") != null)){
+            if ((anterior.getStringExtra("disciplina") != null) && (anterior.getStringExtra("professor") != null)) {
                 aux = anterior.getStringExtra("professor") + "\n" + anterior.getStringExtra("disciplina");
             } else {
                 aux = anterior.getStringExtra("professorAvaliado");
@@ -108,7 +144,7 @@ public class PerguntasAvaliacao extends AppCompatActivity {
 
             // Instanciar perguntas para testes
             final Perguntas listaDePerguntas = new Perguntas();
-            listaDePerguntas.setLista_perguntas(criarPerguntasProfessor());
+            listaDePerguntas.setLista_perguntas(perguntasProf);
 
             if (numQuestao <= listaDePerguntas.getLista_perguntas().size()) {   // Se não chegou ao fim das questões
 
@@ -163,57 +199,77 @@ public class PerguntasAvaliacao extends AppCompatActivity {
         }
     }
 
-    public ArrayList<Pergunta> criarPerguntasProfessor() {
-        //As perguntas serão geradas aqui para fins de testes
+    static class CarregaPerguntas extends AsyncTask<Void, Void, ArrayList<Pergunta>> {
 
-        Pergunta p1 = new Pergunta(1, "O professor é de boa? ",
-                "Sim.", "Maizoumenos","Err, não....","Noup.");
-        Pergunta p2 = new Pergunta(2, "Classifique a metodologia do professor: ",
-                "É uma ótima metodologia.","Metodologia boa.", "Ruim.",
-                "Inadequada.");
-        Pergunta p3 = new Pergunta(3, "O professor sempre chega no horário? ",
-                "Sempre.", "Quase sempre.","Quase nunca.","Nunca.");
-        Pergunta p4 = new Pergunta(4, "O professor dá pontos? ",
-                "Com frequência.", "Sim.","Quase nunca.","Não :(");
+        @Override
+        protected ArrayList<Pergunta> doInBackground(Void... voids) {
+            ArrayList<Pergunta> perguntas = new ArrayList<>();
+            try {
+                URL url = new URL("http://192.168.0.102:8080/guiabcc/perguntas");
+                HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+                conexao.setRequestMethod("GET");
+                InputStream fluxoDeDados = conexao.getInputStream();
+                Log.i("", fluxoDeDados.toString());
+                BufferedReader reader = null;
 
-        Perguntas listaDePerguntasProfessor = new Perguntas();
+                try {
+                    reader = new BufferedReader(new InputStreamReader(fluxoDeDados));
+                    StringBuffer sBuffer = new StringBuffer();
+                    String linha = "";
+                    while ((linha = reader.readLine()) != null) {
+                        sBuffer.append(linha);
+                    }
 
-        listaDePerguntasProfessor.adicionarPergunta(p1);
-        listaDePerguntasProfessor.adicionarPergunta(p2);
-        listaDePerguntasProfessor.adicionarPergunta(p3);
-        listaDePerguntasProfessor.adicionarPergunta(p4);
+                    JSONArray arrayJson = new JSONArray(sBuffer.toString());
+                    for (int i = 0; i < arrayJson.length(); i++) {
+                        JSONObject objetoJson = arrayJson.getJSONObject(i);
+                        Pergunta pergunta = new Pergunta();
+                        pergunta.setCodigo_pergunta(objetoJson.getInt("codigoPergunta"));
+                        pergunta.setQuestao(objetoJson.getString("questao"));
+                        pergunta.setResposta_1(objetoJson.getString("resposta1"));
+                        pergunta.setResposta_2(objetoJson.getString("resposta2"));
+                        pergunta.setResposta_3(objetoJson.getString("resposta3"));
+                        pergunta.setResposta_4(objetoJson.getString("resposta4"));
+                        pergunta.setTipo(objetoJson.getInt("tipo"));
+                        pergunta.setVersao(objetoJson.getInt("versao"));
+                        perguntas.add(pergunta);
+                    }
 
-        return listaDePerguntasProfessor.getLista_perguntas();
-    }
+                    perguntasProf = new ArrayList<>();
+                    perguntasDisc = new ArrayList<>();
 
-    public ArrayList<Pergunta> criarPerguntasDisciplina(){
-        //As perguntas serão geradas aqui para fins de testes
+                    for (Pergunta p : perguntas) {
+                        if (p.getTipo() == 0) {
+                            perguntasDisc.add(p);
+                        } else if (p.getTipo() == 1) {
+                            perguntasProf.add(p);
+                        }
+                        Log.d("Pergunta: ", p.getQuestao());
+                    }
 
-        Pergunta p1 = new Pergunta(1, "Classifique a ementa da disciplina: ",
-                "Ótima. A ementa abrange conteúdos relevantes e atualizados.", "Boa",
-                "Ruim. A ementa é incompleta e/ou desatualizada.",
-                "Péssima.");
-        Pergunta p2 = new Pergunta(2, "Classifique os conteúdos abordados na disciplina: ",
-                "Ótimos conteúdos, adequados ao curso e ao aprendizado em geral.",
-                "Bons conteúdos.", "Ruins. Os conteúdos contribuem pouco ao aprendizado.",
-                "Péssimos. Os conteúdos não contribuem em nada com o aprendizado.");
-        Pergunta p3 = new Pergunta(3, "Classifique as referências bibliográficas utilizadas na disciplina: ",
-                "Ótimas referências bibliográficas.", "Boas referências bibliográficas.",
-                "Ruins. As referências não são muito adequadas.",
-                "Péssimas. As referências bibliográficas não contribuem em nada com a disciplina.");
-        Pergunta p4 = new Pergunta(4, "Classifique os materiais de apoio da disciplina: ",
-                "Ótimos materiais de apoio.", "Bons materiais de apoio.",
-                "Ruins. Os materiais de apoio contribuem pouco para o aprendizado.",
-                "Péssimos. Os materiais de apoio não contribuem de forma alguma com a disciplina.");
+                } catch (IOException e) {
+                    Log.e("GUIA BCC", "Erro: " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                Log.e("GUIA BCC", "Erro: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return perguntas;
+        }
 
-        Perguntas listaDePerguntasDisciplina = new Perguntas();
-
-        listaDePerguntasDisciplina.adicionarPergunta(p1);
-        listaDePerguntasDisciplina.adicionarPergunta(p2);
-        listaDePerguntasDisciplina.adicionarPergunta(p3);
-        listaDePerguntasDisciplina.adicionarPergunta(p4);
-
-        return listaDePerguntasDisciplina.getLista_perguntas();
     }
 
 }
