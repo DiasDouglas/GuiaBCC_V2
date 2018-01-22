@@ -1,24 +1,44 @@
 package com.ufrpe.bcc.guia_bcc;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import adapters.ListaDeDisciplinasCursadasAdapter;
-import beans.DisciplinaCursada;
+import beans.Disciplina;
+import beans.DisciplinaDTO;
 
+@SuppressLint("ValidFragment")
 public class Avaliacoes extends Fragment {
 
     private static final String nomeInicial ="Avaliacoes";
     SectionsPageAdapter mSpa;
+    private ArrayList<DisciplinaDTO> disciplinaDTOS;
 
+    @SuppressLint("ValidFragment")
+    public  Avaliacoes(ArrayList<DisciplinaDTO> disciplinaDTOS){
+        this.disciplinaDTOS = disciplinaDTOS;
+    }
 
     @Override
     public View onCreateView(LayoutInflater lif, @Nullable final ViewGroup container , @Nullable final Bundle savedInstanceState){
@@ -26,7 +46,7 @@ public class Avaliacoes extends Fragment {
 
         ListView lvListaDisciplinasGeral = (ListView) myView.findViewById(R.id.lvListaDisciplinasGeral);
 
-        ListaDeDisciplinasCursadasAdapter adapterLista = new ListaDeDisciplinasCursadasAdapter(getCursos(),this,savedInstanceState);
+        ListaDeDisciplinasCursadasAdapter adapterLista = new ListaDeDisciplinasCursadasAdapter(this.disciplinaDTOS,this,savedInstanceState);
 
         lvListaDisciplinasGeral.setAdapter(adapterLista);
 
@@ -36,32 +56,10 @@ public class Avaliacoes extends Fragment {
             // Pra ir pra tela de avaliações
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long id) {
-                /*
-                Intent intent = new Intent(getActivity(), PerguntasAvaliacao.class);
-                intent.putExtra("num_pergunta", 1);
-                DisciplinaCursada disciplina = (DisciplinaCursada)adapterView.getItemAtPosition(posicao);
-                intent.putExtra("avaliado", disciplina.getNomeDisciplina() + "\n" + disciplina.getNomeProfessor());
-                getActivity().startActivity(intent);
-                */
 
+                DisciplinaDTO disciplina = (DisciplinaDTO)adapterView.getItemAtPosition(posicao);
+                new ConectarDisciplinaProfessor(disciplina).execute();
 
-                // Create fragment and give it an argument specifying the article it should show
-                DetalheDisciplinaCursada newFragment = new DetalheDisciplinaCursada();
-                Bundle args = new Bundle();
-                DisciplinaCursada disciplina = (DisciplinaCursada)adapterView.getItemAtPosition(posicao);
-                args.putString("disciplina", disciplina.getNomeDisciplina());
-                args.putString("professor", disciplina.getNomeProfessor());
-                newFragment.setArguments(args);
-
-                android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack so the user can navigate back
-                transaction.replace(R.id.tab_avaliacoes, newFragment);
-                transaction.addToBackStack(null);
-
-                // Commit the transaction
-                transaction.commit();
             }
         });
 
@@ -69,30 +67,84 @@ public class Avaliacoes extends Fragment {
 
     }
 
-    ///Método de  testes para retornar disciplina cursadas pelo aluno
-    public ArrayList<DisciplinaCursada> getCursos(){
-        ArrayList<DisciplinaCursada> lista = new ArrayList<DisciplinaCursada>();
-        lista.add(new DisciplinaCursada("Arquitetura e organização de computadores","Andre Aziz",4,"25/11/2017","26/11/2017", false,"2017.2"));
-        lista.add(new DisciplinaCursada("Matemática Discreta II","Vanilson Burégio",25,"25/11/2017","26/11/2017", false,"2017.2"));
-        lista.add(new DisciplinaCursada("Sistemas Distribuidos","Fernando Aires",15,"25/11/2017","26/11/2017", false,"2017.2"));
-        lista.add(new DisciplinaCursada("Algorítmos e estruturas de dados","Luciano",10,"25/11/2017","26/11/2017", false,"2017.2"));
-        lista.add(new DisciplinaCursada("Engenharia de software","Marcelo Marinho",35,"25/11/2017","26/11/2017", false,"2017.2"));
-        /*
-        deixei com que ele tivesse pagando apenas 5 disciplinas
-        lista.add(new DisciplinaCursada("Matemática Discreta I","Felipe Cordeiro",40,1.1f));
-        lista.add(new DisciplinaCursada("Introdução a programação I","Péricles Miranda",40,10.0f));
-        lista.add(new DisciplinaCursada("Introdução a programação II","Leandro Marques",34,9.5f));
-        lista.add(new DisciplinaCursada("Redes de computadores","Obionor Nóbrega",50,8.5f));
-        lista.add(new DisciplinaCursada("Teoria da computação","Adeniltom Silva",14,4.5f));
-        lista.add(new DisciplinaCursada("Projeto e Análise de Algorítmos","Jeane",16,9.5f));
-        lista.add(new DisciplinaCursada("Circuitos digitais","Abner",60,8.5f));
-        lista.add(new DisciplinaCursada("Iteligência Artificial","Valmir Nogueira",30,4.5f));*/
+    private class ConectarDisciplinaProfessor extends AsyncTask<Void,Void, Disciplina>{
 
-        return lista;
+        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplina/";
+        private static final String URL_SPRING_REQUEST_POSTFIX = "/professores";
+
+        private DisciplinaDTO disciplina;
+
+        ConectarDisciplinaProfessor(DisciplinaDTO id){
+            this.setDisciplinaDTO(id);
+        }
+
+        @Override
+        protected Disciplina doInBackground(Void... voids) {
+            Disciplina retorno = null;
+            try{
+                URL url = new URL(URL_SPRING_REQUEST+this.disciplina.getID());
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                BufferedReader buffLeitor = new BufferedReader(isr);
+
+                Gson gson = new Gson();
+
+                retorno = gson.fromJson(isr,Disciplina.class);
+
+            }
+            catch (ConnectException e){
+                Log.e("Erro ao conectar:",getString(R.string.erroConexao));
+            }
+            catch (MalformedURLException e){
+                Log.e("Erro de URL:",e.getMessage());
+
+            }
+            catch (ProtocolException e){
+                Log.e("Erro de Protocolo:",e.getMessage());
+            }
+            catch (IOException e){
+                Log.e("Erro de IO:",e.getMessage());
+            }
+
+
+            return retorno;
+        }
+
+        //Após executada e requisição, cria um novo fragment
+        @Override
+        protected  void onPostExecute(Disciplina disciplina){
+            // Create fragment and give it an argument specifying the article it should show
+            DetalheDisciplinaCursada newFragment = new DetalheDisciplinaCursada();
+            Bundle args = new Bundle();
+
+            args.putString("disciplina_nome", disciplina.getNomeDisciplina());
+            args.putString("professor_disciplina", disciplina.getProfessoresAnteriores().get(disciplina.getProfessoresAnteriores().size()-1).getProfessor().getNome());
+            args.putParcelable("disciplina",disciplina);
+            newFragment.setArguments(args);
+
+            android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.tab_avaliacoes, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+
+        ///Getters and setters
+
+        public DisciplinaDTO getDisciplina() {
+            return disciplina;
+        }
+
+        public void setDisciplinaDTO(DisciplinaDTO id) {
+            if(id != null)
+                this.disciplina = id;
+            else
+                throw new NullPointerException("Id nulo");
+        }
     }
-
-
-
-
-
 }

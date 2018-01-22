@@ -4,47 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Fabio on 08/12/2017.
+ * Created by Ismael on 22/01/2018.
+ * Classe que representa o objeto professor retornado pelo Endpoint do spring
  */
 
-/*
-essa classe fará parte da classe "DisciplinaCursada" que terá um arrayList de
-Professor pois armazenará os professores que lecinoaram em cada semestre, junto com sua
-avaliação individual
- */
 public class Professor implements Parcelable {
-    private long ID;
+    private long id;
     private String nome;
-    private String semestreLecionado;
-    private int qtdAlunos;
-    private int qtdAlunosAvaliaram;
-    private float avaliacaoGeral;
-    private float avaliacaoDificuldade;
-    private float avaliacaoClareza;
-    private float avaliacaoEsforco;
-    private float avaliacaoConteudo;
 
-    public Professor(long ID, String nome, String semestreLecionado, int qtdAlunos, int qtdAlunosAvaliaram,
-                     float avaliacaoDificuldade, float avaliacaoClareza,
-                     float avaliacaoEsforco, float avaliacaoConteudo) {
-        this.setID(ID);
-        this.nome = nome;
-        this.semestreLecionado = semestreLecionado;
-        this.qtdAlunos = qtdAlunos;
-        this.qtdAlunosAvaliaram = qtdAlunosAvaliaram;
-        this.avaliacaoDificuldade = avaliacaoDificuldade;
-        this.avaliacaoClareza = avaliacaoClareza;
-        this.avaliacaoEsforco = avaliacaoEsforco;
-        this.avaliacaoConteudo = avaliacaoConteudo;
-        this.calcularAvaliacaoGeral();
+    public Professor(){
+
     }
 
-    public long getID() {
-        return ID;
+    public long getId() {
+        return id;
     }
 
-    public void setID(long ID) {
-        this.ID = ID;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -55,184 +32,16 @@ public class Professor implements Parcelable {
         this.nome = nome;
     }
 
-    public String getSemestreLecionado() {
-        return semestreLecionado;
+    private Professor(Parcel in){
+        this.setId(in.readLong());
+        this.setNome(in.readString());
     }
 
-    public void setSemestreLecionado(String semestreLecionado) {
-        this.semestreLecionado = semestreLecionado;
-    }
 
-    public int getQtdAlunos() {
-        return qtdAlunos;
-    }
-
-    public void setQtdAlunos(int qtdAlunos) {
-        this.qtdAlunos = qtdAlunos;
-    }
-
-    public int getQtdAlunosAvaliaram() {
-        return qtdAlunosAvaliaram;
-    }
-
-    public void setQtdAlunosAvaliaram(int qtdAlunosAvaliaram) {
-        this.qtdAlunosAvaliaram = qtdAlunosAvaliaram;
-    }
-
-    public float getAvaliacaoGeral() {
-        return avaliacaoGeral;
-    }
-
-    public void setAvaliacaoGeral(float avaliacaoGeral) {
-        this.avaliacaoGeral = avaliacaoGeral;
-    }
-
-    public void calcularAvaliacaoGeral(){
-        //fazendo uma media apenas a principio, depois a equacao vai mudar
-        this.avaliacaoGeral = (this.avaliacaoClareza+this.avaliacaoConteudo+this.avaliacaoDificuldade+this.avaliacaoEsforco) / 4;
-    }
-
-    public float getAvaliacaoDificuldade() {
-        return avaliacaoDificuldade;
-    }
-
-    public void setAvaliacaoDificuldade(float avaliacaoDificuldade) {
-        this.avaliacaoDificuldade = avaliacaoDificuldade;
-    }
-
-    public float getAvaliacaoClareza() {
-        return avaliacaoClareza;
-    }
-
-    public void setAvaliacaoClareza(float avaliacaoClareza) {
-        this.avaliacaoClareza = avaliacaoClareza;
-    }
-
-    public float getAvaliacaoEsforco() {
-        return avaliacaoEsforco;
-    }
-
-    public void setAvaliacaoEsforco(float avaliacaoEsforco) {
-        this.avaliacaoEsforco = avaliacaoEsforco;
-    }
-
-    public float getAvaliacaoConteudo() {
-        return avaliacaoConteudo;
-    }
-
-    public void setAvaliacaoConteudo(float avaliacaoConteudo) {
-        this.avaliacaoConteudo = avaliacaoConteudo;
-    }
-
-    // os metodos a seguir sao do Parcelable
-    protected Professor(Parcel in) {
-        nome = in.readString();
-        semestreLecionado = in.readString();
-        if (in.readByte() == 0) {
-            qtdAlunos = 0;
-        } else {
-            qtdAlunos = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            qtdAlunosAvaliaram = 0;
-        } else {
-            qtdAlunosAvaliaram = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            avaliacaoGeral = 0;
-        } else {
-            avaliacaoGeral = in.readFloat();
-        }
-        if (in.readByte() == 0) {
-            avaliacaoDificuldade = 0;
-        } else {
-            avaliacaoDificuldade = in.readFloat();
-        }
-        if (in.readByte() == 0) {
-            avaliacaoClareza = 0;
-        } else {
-            avaliacaoClareza = in.readFloat();
-        }
-        if (in.readByte() == 0) {
-            avaliacaoEsforco = 0;
-        } else {
-            avaliacaoEsforco = in.readFloat();
-        }
-        if (in.readByte() == 0) {
-            avaliacaoConteudo = 0;
-        } else {
-            avaliacaoConteudo = in.readFloat();
-        }
-        if (in.readByte() == 0) {
-            ID = 0;
-        } else {
-            ID = in.readLong();
-        }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(nome);
-        dest.writeString(semestreLecionado);
-        if (qtdAlunos == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(qtdAlunos);
-        }
-        if (qtdAlunosAvaliaram == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(qtdAlunosAvaliaram);
-        }
-        if (avaliacaoGeral == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(avaliacaoGeral);
-        }
-        if (avaliacaoDificuldade == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(avaliacaoDificuldade);
-        }
-        if (avaliacaoClareza == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(avaliacaoClareza);
-        }
-        if (avaliacaoEsforco == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(avaliacaoEsforco);
-        }
-        if (avaliacaoConteudo == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(avaliacaoConteudo);
-        }
-        if (ID == 0) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(ID);
-        }
-    }
-
-    public static final Creator<Professor> CREATOR = new Creator<Professor>() {
+    public static final Parcelable.Creator<Professor> CREATOR = new Creator<Professor>() {
         @Override
-        public Professor createFromParcel(Parcel in) {
-            return new Professor(in);
+        public Professor createFromParcel(Parcel source) {
+            return new Professor(source);
         }
 
         @Override
@@ -241,4 +50,27 @@ public class Professor implements Parcelable {
         }
     };
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if(this.getId() != 0){
+            dest.writeByte((byte) 1);
+            dest.writeLong(this.getId());
+        }
+        else{
+            dest.writeByte((byte) 0);
+        }
+        if(this.getNome() != null){
+            dest.writeByte((byte) 1);
+            dest.writeString(this.getNome());
+        }
+        else{
+            dest.writeByte((byte)0);
+        }
+    }
 }

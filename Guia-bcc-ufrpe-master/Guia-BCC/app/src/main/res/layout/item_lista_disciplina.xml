@@ -4,65 +4,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/tvNomeDisciplina"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="2dp"
-        android:text="Nome da disciplina cursada"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
         android:textColor="@color/pureDark"
-        android:textSize="@dimen/lvItemNomeDisciplina" />
+        android:layout_marginTop="31dp"
+        android:textSize="8pt"
+        android:text="Nome da disciplina" />
 
-
-    <TextView
-        android:id="@+id/tvNomeProfessor"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvNomeDisciplina"
-        android:layout_alignStart="@+id/tvNomeDisciplina"
-        android:layout_below="@+id/tvNomeDisciplina"
-        android:layout_marginTop="2dp"
-        android:layout_weight="1"
-        android:text="@string/txtProfessor"
-        android:textSize="@dimen/lvItemNomeProfessor" />
+        android:layout_below="@id/tvNomeDisciplina"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvNotaDisciplina"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvNomeProfessor"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_weight="1"
-        android:text="@string/txtProxAvaliacao"
-        android:textSize="@dimen/lvItemNotaDisciplina" />
+            <TextView
+                android:id="@+id/tvQtdItens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="value" />
 
-    <TextView
-        android:id="@+id/tvNomeProf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvNomeProfessor"
-        android:layout_alignBottom="@+id/tvNomeProfessor"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/tvNomeProfessor"
-        android:layout_toRightOf="@+id/tvNomeProfessor"
-        android:text="Professor X"
-        android:textSize="@dimen/lvItemNomeProfessor" />
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5pt"
+                android:text="@string/txtQtdItensMore" />
 
-    <TextView
-        android:id="@+id/proxAvaliacao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvNotaDisciplina"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/tvNotaDisciplina"
-        android:layout_toRightOf="@+id/tvNotaDisciplina"
-        android:text="TextView"
-        android:textSize="@dimen/lvItemNotaDisciplina" />
+            <TextView
+                android:id="@+id/TextView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10pt"
+                android:layout_weight="1"
+                android:text="@string/txtAvaliacaoGeral" />
+
+            <TextView
+                android:id="@+id/tvAvaliacaoGeral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="value" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvUltimaAttTexto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/txtUltimaAtt" />
+
+            <TextView
+                android:id="@+id/tvUltimaAtt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginLeft="5pt"
+                android:text="@string/txtQtdItensMore" />
+        </LinearLayout>
+    </LinearLayout>
+
 
 </RelativeLayout>

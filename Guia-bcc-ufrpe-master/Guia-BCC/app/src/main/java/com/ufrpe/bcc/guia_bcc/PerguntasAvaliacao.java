@@ -34,7 +34,7 @@ import beans.Perguntas;
  * /**
  * Edited by Douglas on 21/01/2018.
  */
- */
+
 
 public class PerguntasAvaliacao extends AppCompatActivity {
 
@@ -205,7 +205,7 @@ public class PerguntasAvaliacao extends AppCompatActivity {
         protected ArrayList<Pergunta> doInBackground(Void... voids) {
             ArrayList<Pergunta> perguntas = new ArrayList<>();
             try {
-                URL url = new URL("http://192.168.0.102:8080/guiabcc/perguntas");
+                URL url = new URL("http://192.168.15.12:8080/guiabcc/perguntas");
                 HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
                 conexao.setRequestMethod("GET");
                 InputStream fluxoDeDados = conexao.getInputStream();

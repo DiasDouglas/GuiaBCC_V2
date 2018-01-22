@@ -2,6 +2,8 @@ package beans;
 
 /**
  * Created by Douglas on 24/11/2017.
+ * Updated by Ismael on 22/01/2018.
+ * Form dicionados dos atributos tipo e  versão(Eu acho que o meu git não recebeu)
  */
 
 public class Pergunta {
@@ -11,6 +13,12 @@ public class Pergunta {
     private String Resposta_2;
     private String Resposta_3;
     private String Resposta_4;
+    private int tipo;
+    private int versao;
+
+    public Pergunta(){
+
+    }
 
     public Pergunta(int codigo_pergunta, String questao, String Resposta_1, String Resposta_2, String Resposta_3,
                     String Resposta_4){
@@ -88,4 +96,19 @@ public class Pergunta {
         return retorno;
     }
 
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getVersao() {
+        return versao;
+    }
+
+    public void setVersao(int versao) {
+        this.versao = versao;
+    }
 }

@@ -5,6 +5,11 @@
     <string name="txtSenha">Password</string>
     <string name="textoBtnLogin">Login</string>
     <string name="textoBtnEsqueciSenha">Forgot my password</string>
+    <string name="cbLembrarUsuario">remember user</string>
+
+    <!--Textos referentes a tentativa de conexão com o AVA -->
+    <string name="dadosUsuarioInvalidos">invalid username or password</string>
+    <string name="erroConexao">there was a problem while trying to connect</string>
 
     <!-- Textos do dos fragmentos TabLayout  -->
     <!--Strings referentes à view da tela inicial-->
