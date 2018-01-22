@@ -71,7 +71,7 @@ public class DetalheDisciplina extends AppCompatActivity {
 
     private class AccessDisciplina extends AsyncTask<Void,Void,Disciplina>{
 
-        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplina/";
+        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplina/";
 
         @Override
         protected Disciplina doInBackground(Void... voids) {
