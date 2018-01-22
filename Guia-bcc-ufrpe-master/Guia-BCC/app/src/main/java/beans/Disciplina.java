@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Classe básica que representa as disciplinas
  */
 
-public class Disciplina{
+public class Disciplina implements Parcelable{
 
     private long ID;
     private String nomeDisciplina;
@@ -176,4 +176,138 @@ public class Disciplina{
         else
             throw new IllegalArgumentException("Última atualização inválida.");
     }
+
+    public Disciplina(Parcel source){
+        this.setID(source.readLong());
+        this.setNomeDisciplina(source.readString());
+        this.setProfessoresAnteriores(source.readArrayList(Professor.class.getClassLoader()));
+        this.setQtdMediaAlunos(source.readInt());
+        this.setUltimoSemestre(source.readString());
+        this.setAvaliacaoGeral(source.readFloat());
+        this.setAvaliacaoDificuldade(source.readFloat());
+        this.setAvaliacaoClareza(source.readFloat());
+        this.setAvaliacaoEsforco(source.readFloat());
+        this.setAvaliacaoConteudo(source.readFloat());
+        this.setQtdItens(source.readInt());
+        this.setUltimaAtt(source.readString());
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+         if(this.getID() != 0) {
+             dest.writeByte((byte)1);
+             dest.writeLong(this.getID());
+         }
+         else {
+             dest.writeByte((byte)0);
+         }
+
+        if(this.getNomeDisciplina() != null) {
+            dest.writeByte((byte)1);
+            dest.writeString(this.getNomeDisciplina());
+        }
+        else {
+            dest.writeByte((byte)0);
+        }
+
+        if(this.getProfessoresAnteriores() != null) {
+            dest.writeByte((byte)1);
+            dest.writeParcelable((Parcelable) this.getProfessoresAnteriores(), flags);
+        }
+        else{
+            dest.writeByte((byte)0);
+        }
+
+        if(this.getQtdMediaAlunos() != 0) {
+            dest.writeByte((byte)1);
+            dest.writeInt(this.getQtdMediaAlunos());
+        }
+        else{
+            dest.writeByte((byte)0);
+        }
+
+        if(this.getUltimoSemestre() != null) {
+            dest.writeByte((byte)1);
+            dest.writeString(this.getUltimoSemestre());
+        }
+        else{
+            dest.writeByte((byte)0);
+        }
+         if(this.getAvaliacaoGeral() != 0.0) {
+             dest.writeByte((byte)1);
+             dest.writeFloat(this.getAvaliacaoGeral());
+         }
+         else {
+             dest.writeByte((byte)0);
+         }
+
+         if(this.getAvaliacaoDificuldade() != 0.0) {
+             dest.writeByte((byte)1);
+             dest.writeFloat(this.getAvaliacaoDificuldade());
+         }
+         else{
+             dest.writeByte((byte)0);
+         }
+
+         if(this.getAvaliacaoClareza() != 0.0) {
+             dest.writeByte((byte)1);
+             dest.writeFloat(this.getAvaliacaoClareza());
+         }
+         else{
+             dest.writeByte((byte)0);
+         }
+
+        if(this.getAvaliacaoEsforco() != 0.0) {
+            dest.writeByte((byte)1);
+            dest.writeFloat(this.getAvaliacaoEsforco());
+        }
+        else{
+            dest.writeByte((byte)0);
+        }
+
+         if(this.getAvaliacaoConteudo() != 0.0) {
+             dest.writeByte((byte)0);
+             dest.writeFloat(this.getAvaliacaoConteudo());
+         }
+         else{
+             dest.writeByte((byte)0);
+         }
+
+        if(this.getQtdItens() !=0) {
+            dest.writeByte((byte)1);
+            dest.writeInt(this.getQtdItens());
+        }
+        else{
+            dest.writeByte((byte)0);
+        }
+
+        if(this.getUltimaAtt() != null) {
+            dest.writeByte((byte)1);
+            dest.writeString(this.getUltimaAtt());
+        }
+        else{
+            dest.writeByte((byte) 0);
+        }
+
+    }
+
+    public  static final Parcelable.Creator<Disciplina> CREATOR = new Creator<Disciplina>() {
+        @Override
+        public Disciplina createFromParcel(Parcel source) {
+            return new Disciplina(source);
+        }
+
+        @Override
+        public Disciplina[] newArray(int size) {
+            return new Disciplina[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 }
