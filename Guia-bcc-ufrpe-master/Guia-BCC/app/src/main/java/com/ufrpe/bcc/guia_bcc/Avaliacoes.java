@@ -69,7 +69,7 @@ public class Avaliacoes extends Fragment {
 
     private class ConectarDisciplinaProfessor extends AsyncTask<Void,Void, Disciplina>{
 
-        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplina/";
+        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplina/";
         private static final String URL_SPRING_REQUEST_POSTFIX = "/professores";
 
         private DisciplinaDTO disciplina;
