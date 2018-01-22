@@ -33,11 +33,11 @@ public class Inicio extends Fragment {
     private ArrayList<DisciplinaDTO> disciplinaDTOS;
 
     @SuppressLint("ValidFragment")
-    public Inicio(Aluno aluno, DadosDoAVA dadosDoAVA, Token token, ArrayList<DisciplinaDTO> disciplinaDTOS){
+    public Inicio(Aluno aluno){
         this.setAlunoLogado(aluno);
-        this.setDadosDoAVA(dadosDoAVA);
+        /*this.setDadosDoAVA(dadosDoAVA);
         this.setTokenAluno(token);
-        this.setDisciplinaDTOS(disciplinaDTOS);
+        this.setDisciplinaDTOS(disciplinaDTOS);*/
 
     }
 
@@ -56,27 +56,17 @@ public class Inicio extends Fragment {
             tvNomeUsuario.setText(alunoLogado.getNomeAluno());
         }
         else {
-            alunoLogado = new Aluno("Ismael", getCursos());
+            //alunoLogado = new Aluno("Ismael", getCursos());
         }
 
 
         ListView listaDeCurso = (ListView) myView.findViewById(R.id.lvCursosTelaInicial);
 
-        ListaDeDisciplinasCursadasAdapter adapter = new ListaDeDisciplinasCursadasAdapter(this.disciplinaDTOS,this,savedInstanceState);
+        ListaDeDisciplinasCursadasAdapter adapter = new ListaDeDisciplinasCursadasAdapter(alunoLogado.getDisciplinasCursadas(),this,savedInstanceState);
 
         listaDeCurso.setAdapter(adapter);
 
         return myView;
-    }
-
-    ///Método de  testes para retornar disciplina cursadas pelo aluno
-    public ArrayList<DisciplinaCursada> getCursos(){
-        ArrayList<DisciplinaCursada> lista = new ArrayList<DisciplinaCursada>();
-        //supondo que ele tenha apenas essas aulas hoje
-        lista.add(new DisciplinaCursada("Arquitetura e organização de computadores","Andre Aziz",4,"25/11/2017","26/11/2017", false,"2017.2"));
-        lista.add(new DisciplinaCursada("Matemática Discreta II","Vanilson Burégio",25,"25/11/2017","26/11/2017", false,"2017.2"));
-
-        return lista;
     }
 
     public Aluno getAlunoLogado() {

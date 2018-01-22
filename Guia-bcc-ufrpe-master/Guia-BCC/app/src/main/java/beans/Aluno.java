@@ -16,12 +16,12 @@ import java.util.ArrayList;
 public class Aluno implements  Serializable {
 
     private String nomeAluno;
-    private ArrayList<DisciplinaCursada> disciplinasCursadas;
+    private ArrayList<DisciplinaDTO> disciplinasCursadas;
     private Usuario usuario;
 
     public Aluno(){}
 
-    public Aluno(String nomeAluno, ArrayList<DisciplinaCursada> disciplinasCursadas){
+    public Aluno(String nomeAluno, ArrayList<DisciplinaDTO> disciplinasCursadas){
         this.setDisciplinasCursadas(disciplinasCursadas);
         this.setNomeAluno(nomeAluno);
     }
@@ -34,7 +34,7 @@ public class Aluno implements  Serializable {
             throw new NullPointerException("Valor nulo");
     }
 
-    public void setDisciplinasCursadas(ArrayList<DisciplinaCursada> disciplinasCursadas) {
+    public void setDisciplinasCursadas(ArrayList<DisciplinaDTO> disciplinasCursadas) {
         if(disciplinasCursadas != null)
             this.disciplinasCursadas = disciplinasCursadas;
         else
@@ -45,7 +45,7 @@ public class Aluno implements  Serializable {
         this.usuario = usuario;
     }
 
-    public ArrayList<DisciplinaCursada> getDisciplinasCursadas() {
+    public ArrayList<DisciplinaDTO> getDisciplinasCursadas() {
         return disciplinasCursadas;
     }
 

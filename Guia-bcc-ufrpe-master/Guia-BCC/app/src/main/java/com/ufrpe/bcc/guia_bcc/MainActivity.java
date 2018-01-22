@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
         edtNomeUsuario = (EditText) findViewById(R.id.edtNome);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
 
+        //====dados padrão=============
+        edtNomeUsuario.setText("usuario");
+        edtSenha.setText("senha");
+        //=============================
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
 
         cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);
@@ -135,11 +139,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         private static final String URL_DADOS_EXTRAS_ALUNO = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
-        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplina/";
+        private static final String URL_SPRING_REQUEST = "http://192.168.15.12:3080/guiabcc/disciplinaDto/";
         private static final String WSFUNCTIONS = "wsfunction=core_user_get_users_by_id";
         private static final String WSTOKEN_PREFIXO="wstoken=";
         private static final String USERIDS_PREFIXO="userids%5B0%5D=";
-        private  ArrayList<DisciplinaDTO> disciplinasParaAvaliar;
+        //private  ArrayList<DisciplinaDTO> disciplinasParaAvaliar;
 
         private String username;
         private String password;
@@ -166,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 URL url = new URL(URL_TOKEN+"?username="+username+"&"+"password="+password+"&service="+SERVICE);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                //connection.addRequestProperty("Content-Type","multipart/form-data");
                 connection.addRequestProperty("Content-Type","application/json");
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
@@ -180,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(  myToken.getToken() != null){
                     aluno = this.gettingDataFromAva(url, connection, gson);
-                    ArrayList<DisciplinaCursada> disc = this.gettingStudentDiciplinesFromAva(connection,url);
+                    ArrayList<DisciplinaDTO> disc = this.gettingStudentDiciplinesFromAva();
                     aluno.setDisciplinasCursadas(disc);
                 }
                 else{
@@ -188,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
                     dadosInvalidos.show();
                 }
 
+                connection.disconnect();
+                is.close();
 
             }
             catch (ConnectException e){
@@ -202,69 +207,71 @@ public class MainActivity extends AppCompatActivity {
             catch(IOException e){
                 e.printStackTrace();
             }
-
-            return aluno;
-        }
-
-        public ArrayList<DisciplinaCursada> gettingStudentDiciplinesFromAva(HttpURLConnection connection,URL url){
-            ArrayList<DisciplinaCursada> retorno = null;
-
-            try{
-                url = new URL(URL_DADOS_EXTRAS_ALUNO+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
-                        myToken.getToken()+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
-                connection =(HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type","application/json");
-                connection.setDoInput(true);
-                connection.connect();
-
-
-                InputStream is = connection.getInputStream();
-                InputStreamReader ir = new InputStreamReader(is);
-                BufferedReader bf = new BufferedReader(ir);
-
-                String line =  bf.readLine();
-                while(bf.readLine() != null) {
-                    line+= bf.readLine();
-                }
-
-                retorno  = this.gettingDisciplinaFromRequest(connection,url,line);
-
-            }
             catch (Exception e){
                 e.printStackTrace();
             }
 
+            return aluno;
+        }
+
+        public ArrayList<DisciplinaDTO> gettingStudentDiciplinesFromAva()throws Exception{
+            ArrayList<DisciplinaDTO> retorno = null;
+
+
+            URL url = new URL(URL_DADOS_EXTRAS_ALUNO+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
+                    myToken.getToken()+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
+            HttpURLConnection connection =(HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type","application/json");
+            connection.setDoInput(true);
+            connection.connect();
+
+
+            InputStream is = connection.getInputStream();
+            InputStreamReader ir = new InputStreamReader(is);
+            BufferedReader bf = new BufferedReader(ir);
+
+            String line =  bf.readLine();
+            while(bf.readLine() != null) {
+                line+= bf.readLine();
+            }
+
+            retorno  = this.gettingDisciplinaFromRequest(line);
+
+            connection.disconnect();
+            is.close();
+            ir.close();
+            bf.close();
 
             return retorno;
         }
 
 
-        private ArrayList<DisciplinaCursada> gettingDisciplinaFromRequest(HttpURLConnection conn,URL url,String line){
+        private ArrayList<DisciplinaDTO> gettingDisciplinaFromRequest(String jsonStudent)throws IOException{
 
-            ArrayList<DisciplinaCursada> retorno = null;
+            ArrayList<DisciplinaDTO> retorno = null;
             InputStream is = null;
             InputStreamReader isr = null;
             BufferedReader buff= null;
+            URL url = null;
+            HttpURLConnection conn = null;
 
             Gson gson = new Gson();
 
-            line = line.substring(1,line.length()-1);
+            jsonStudent = jsonStudent.substring(1,jsonStudent.length()-1);
             JsonParser parser = new JsonParser();
-            JsonObject obj = parser.parse(line).getAsJsonObject();
+            JsonObject obj = parser.parse(jsonStudent).getAsJsonObject();
 
             if(obj.get("enrolledcourses") !=  null){
 
-                retorno = new ArrayList<DisciplinaCursada>();
-                disciplinasParaAvaliar = new ArrayList<DisciplinaDTO>();
-
+                retorno = new ArrayList<DisciplinaDTO>();
 
                 for(JsonElement j : obj.get("enrolledcourses").getAsJsonArray()){
                         /*Reutilizando a variável line, pois apartir desse ponto o objeto JSON
                         * já terá sido criado*/
-                    line = j.getAsJsonObject().get("fullname").toString();
-                    Log.d("String da linha",line.substring(1,7));
-                    if(line.substring(1,7).equals("2017.2")) {
+                    jsonStudent = j.getAsJsonObject().get("fullname").toString();
+                    Log.d("String da linha",jsonStudent.substring(1,7));
+                    if(jsonStudent.substring(1,7).equals("2017.2")) {
                         try {
                             url = new URL(URL_SPRING_REQUEST + j.getAsJsonObject().get("id"));
                             conn = (HttpURLConnection) url.openConnection();
@@ -274,28 +281,21 @@ public class MainActivity extends AppCompatActivity {
                             isr = new InputStreamReader(is);
                             buff = new BufferedReader(isr);
 
-                            line = buff.readLine();
+                            jsonStudent = buff.readLine();
 
 
-                            if (line != null) {
-                                JsonObject objeto =  parser.parse(line).getAsJsonObject();
+                            if (jsonStudent != null) {
+                                JsonObject objeto =  parser.parse(jsonStudent).getAsJsonObject();
 
-                                DisciplinaCursada disciplina = new DisciplinaCursada();
-                                disciplina.setNomeDisciplina(objeto.get("nomeDisciplina").getAsString());
-                                disciplina.setQtdAlunos(objeto.get("qtdMediaAlunos").getAsInt());
-                                disciplina.setSemestreAtual(objeto.get("ultimoSemestre").getAsString());
-                                Log.d("DisciplinaCursada",disciplina.getNomeDisciplina());
                                 DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
                                 disciplinaDTO.setID(objeto.get("id").getAsLong());
                                 disciplinaDTO.setAvaliacaoGeral(objeto.get("avaliacaoGeral").getAsFloat());
                                 disciplinaDTO.setNome(objeto.get("nomeDisciplina").getAsString());
                                 disciplinaDTO.setQtdItens(objeto.get("qtdItens").getAsInt());
                                 disciplinaDTO.setUltimaAtt(objeto.get("ultimaAtt").getAsString());
-                                disciplinasParaAvaliar.add(disciplinaDTO);
+                                Log.d("Classe Disciplina",disciplinaDTO.getNome());
 
-                                Log.d("Classe Disciplina",disciplina.getNomeDisciplina());
-
-                                retorno.add(disciplina);
+                                retorno.add(disciplinaDTO);
                             }
 
                         }catch(ConnectException e ){
@@ -314,6 +314,11 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+
+                conn.disconnect();
+                is.close();
+                isr.close();
+                buff.close();
             }
 
             return retorno;
@@ -333,7 +338,6 @@ public class MainActivity extends AppCompatActivity {
                    myIntent.putExtra("aluno_logado", novoAluno);
                    myIntent.putExtra("dados_ava",dadosDoAVA);
                    myIntent.putExtra("token_logado",myToken);
-                   myIntent.putExtra("lista_disciplina_dto",disciplinasParaAvaliar);
                    startActivity(myIntent);
                }
         }

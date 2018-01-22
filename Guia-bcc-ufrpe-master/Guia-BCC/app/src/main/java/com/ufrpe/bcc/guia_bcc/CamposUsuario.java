@@ -58,7 +58,6 @@ public class CamposUsuario extends AppCompatActivity {
     private Aluno alunoLogado;
     private DadosDoAVA dadosDoAVA;
     private Token tokenAluno;
-    private ArrayList<DisciplinaDTO> disciplinaDTOS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,7 @@ public class CamposUsuario extends AppCompatActivity {
         alunoLogado  = (Aluno) getIntent().getSerializableExtra("aluno_logado");
         dadosDoAVA = (DadosDoAVA) getIntent().getSerializableExtra("dados_ava");
         tokenAluno = (Token) getIntent().getSerializableExtra("token_logado");
-        disciplinaDTOS = (ArrayList<DisciplinaDTO>) getIntent().getSerializableExtra("lista_disciplina_dto");
+
 
         //Verifica se a instancia de aluno logado na intent é nula
         if(alunoLogado != null && dadosDoAVA != null && tokenAluno!=null) {
@@ -83,19 +82,12 @@ public class CamposUsuario extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-
-
-    }
-
 
     //Método para configurar o view pager para adicionar os fragmentos da TabView
     public void setupViewPager(ViewPager vp){
         mSpa = new SectionsPageAdapter(getSupportFragmentManager());
-        mSpa.adicionarFragmento(new Inicio(alunoLogado, dadosDoAVA,tokenAluno,disciplinaDTOS),"Inicio");
-        mSpa.adicionarFragmento(new Avaliacoes(disciplinaDTOS),"Avaliacoes");
+        mSpa.adicionarFragmento(new Inicio(alunoLogado),"Inicio");
+        mSpa.adicionarFragmento(new Avaliacoes(alunoLogado.getDisciplinasCursadas()),"Avaliacoes");
         mSpa.adicionarFragmento(new Questoes(),"Questoes");
         vp.setAdapter(mSpa);
     }
