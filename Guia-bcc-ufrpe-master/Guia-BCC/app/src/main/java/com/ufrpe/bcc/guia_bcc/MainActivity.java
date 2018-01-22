@@ -68,13 +68,6 @@ public class MainActivity extends AppCompatActivity {
         edtNomeUsuario = (EditText) findViewById(R.id.edtNome);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
 
-        //=============valores padrão============
-        //(Pra quando for testar não precisar digiter usuário e senha toda vez )
-        edtNomeUsuario.setText("ismael.cesar");
-        edtSenha.setText("1Smae0caesar");
-        //==================================
-
-
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
 
         cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);

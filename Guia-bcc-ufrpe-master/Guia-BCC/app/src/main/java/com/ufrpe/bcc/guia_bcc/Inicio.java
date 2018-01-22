@@ -16,6 +16,7 @@ import adapters.ListaDeDisciplinasCursadasAdapter;
 import beans.Aluno;
 import beans.DadosDoAVA;
 import beans.DisciplinaCursada;
+import beans.DisciplinaDTO;
 import beans.connections.Token;
 
 @SuppressLint("ValidFragment")
@@ -29,12 +30,15 @@ public class Inicio extends Fragment {
     private Aluno alunoLogado;
     private DadosDoAVA dadosDoAVA;
     private Token tokenAluno;
+    private ArrayList<DisciplinaDTO> disciplinaDTOS;
 
     @SuppressLint("ValidFragment")
-    public Inicio(Aluno aluno, DadosDoAVA dadosDoAVA,Token token){
+    public Inicio(Aluno aluno, DadosDoAVA dadosDoAVA, Token token, ArrayList<DisciplinaDTO> disciplinaDTOS){
         this.setAlunoLogado(aluno);
         this.setDadosDoAVA(dadosDoAVA);
         this.setTokenAluno(token);
+        this.setDisciplinaDTOS(disciplinaDTOS);
+
     }
 
 
@@ -58,7 +62,7 @@ public class Inicio extends Fragment {
 
         ListView listaDeCurso = (ListView) myView.findViewById(R.id.lvCursosTelaInicial);
 
-        ListaDeDisciplinasCursadasAdapter adapter = new ListaDeDisciplinasCursadasAdapter(alunoLogado.getDisciplinasCursadas(),this,savedInstanceState);
+        ListaDeDisciplinasCursadasAdapter adapter = new ListaDeDisciplinasCursadasAdapter(this.disciplinaDTOS,this,savedInstanceState);
 
         listaDeCurso.setAdapter(adapter);
 
@@ -106,6 +110,14 @@ public class Inicio extends Fragment {
             this.tokenAluno = tokenAluno;
         else
             throw new NullPointerException("Token do aluno, nulo");
+    }
+
+    public ArrayList<DisciplinaDTO> getDisciplinaDTOS() {
+        return disciplinaDTOS;
+    }
+
+    public void setDisciplinaDTOS(ArrayList<DisciplinaDTO> disciplinaDTOS) {
+        this.disciplinaDTOS = disciplinaDTOS;
     }
 
     //Método para carregar a foto do usuário

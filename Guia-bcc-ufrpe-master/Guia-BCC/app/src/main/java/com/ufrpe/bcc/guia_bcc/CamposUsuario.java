@@ -94,7 +94,7 @@ public class CamposUsuario extends AppCompatActivity {
     //Método para configurar o view pager para adicionar os fragmentos da TabView
     public void setupViewPager(ViewPager vp){
         mSpa = new SectionsPageAdapter(getSupportFragmentManager());
-        mSpa.adicionarFragmento(new Inicio(alunoLogado, dadosDoAVA,tokenAluno),"Inicio");
+        mSpa.adicionarFragmento(new Inicio(alunoLogado, dadosDoAVA,tokenAluno,disciplinaDTOS),"Inicio");
         mSpa.adicionarFragmento(new Avaliacoes(disciplinaDTOS),"Avaliacoes");
         mSpa.adicionarFragmento(new Questoes(),"Questoes");
         vp.setAdapter(mSpa);

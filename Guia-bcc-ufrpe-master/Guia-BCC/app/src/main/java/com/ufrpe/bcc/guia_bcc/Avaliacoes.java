@@ -56,9 +56,9 @@ public class Avaliacoes extends Fragment {
                 // Create fragment and give it an argument specifying the article it should show
                 DetalheDisciplinaCursada newFragment = new DetalheDisciplinaCursada();
                 Bundle args = new Bundle();
-                DisciplinaCursada disciplina = (DisciplinaCursada)adapterView.getItemAtPosition(posicao);
-                args.putString("disciplina", disciplina.getNomeDisciplina());
-                args.putString("professor", disciplina.getNomeProfessor());
+                DisciplinaDTO disciplina = (DisciplinaDTO)adapterView.getItemAtPosition(posicao);
+                args.putString("disciplina_nome", disciplina.getNome());
+                args.putLong("disciplina_id", disciplina.getID());
                 newFragment.setArguments(args);
 
                 android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

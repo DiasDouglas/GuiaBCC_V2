@@ -18,6 +18,9 @@ import beans.DisciplinaCursada;
 public class DetalheDisciplinaCursada extends Fragment {
 
     private static final String nomeInicial ="Avaliações";
+    private  View myView;
+    private ViewGroup myViewGroup;
+    private Bundle myBundle;
 
 
     @Override
@@ -29,8 +32,8 @@ public class DetalheDisciplinaCursada extends Fragment {
         Button btnAvaliarProfessor = (Button) myView.findViewById(R.id.btnAvaliarProfessor);
         Button frag_selecionar_avaliacao_btnVoltar = (Button) myView.findViewById(R.id.frag_selecionar_avaliacao_btnVoltar);
 
-        frag_selecionar_avaliacao_nome_professor.setText(getArguments().getString("professor"));
-        frag_selecionar_avaliacao_nome_disciplina.setText(getArguments().getString("disciplina"));
+        frag_selecionar_avaliacao_nome_professor.setText(getArguments().getString("disciplina_nome"));
+        frag_selecionar_avaliacao_nome_disciplina.setText(getArguments().getString("disciplina_nome"));
 
         btnAvaliarDisciplina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +65,11 @@ public class DetalheDisciplinaCursada extends Fragment {
         });
 
         return myView;
+    }
 
-
-
+    @Override
+    public void onStart(){
+        super.onStart();
     }
 
 }

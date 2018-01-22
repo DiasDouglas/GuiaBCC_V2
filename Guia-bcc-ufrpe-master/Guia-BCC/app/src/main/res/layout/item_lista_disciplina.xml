@@ -13,7 +13,7 @@
         android:layout_marginRight="5pt"
         android:textColor="@color/pureDark"
         android:layout_marginTop="31dp"
-        android:textSize="15pt"
+        android:textSize="10pt"
         android:text="Nome da disciplina" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_alignBottom="@+id/tvQtdItens"
         android:layout_alignEnd="@+id/tvNomeDisciplina"
         android:layout_alignRight="@+id/tvNomeDisciplina"
-        android:layout_marginEnd="41dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginRight="41dp"
         android:text="Ultima atualizacao" />
 
