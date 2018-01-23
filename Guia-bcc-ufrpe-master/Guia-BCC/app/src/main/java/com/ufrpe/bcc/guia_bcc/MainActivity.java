@@ -1,6 +1,7 @@
 package com.ufrpe.bcc.guia_bcc;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Pegando valores salvos persistidos no shared preferences
-        SharedPreferences preferences = getSharedPreferences(PREFS_FILE,0);
+        final SharedPreferences preferences = getSharedPreferences(PREFS_FILE,0);
         rememberOption = preferences.getBoolean(PREFS_REMEMBER_USER,false);
 
         if(rememberOption){
@@ -109,9 +110,27 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
 
                 if(!edtNomeUsuario.getText().toString().equals("") && !edtSenha.getText().toString().equals("")){
-                   new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString()).execute();
+                   new ConectarAva(edtNomeUsuario.getText().toString(),edtSenha.getText().toString(),MainActivity.this).execute();
                 }
 
+            }
+        });
+
+
+        cbLembrarUsuario.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked){
+                    rememberOption = false;
+                    SharedPreferences.Editor edt = preferences.edit();
+                    edt.putBoolean(PREFS_REMEMBER_USER, rememberOption);
+                    edt.putString(PREFS_USER_NAME, null);
+                    edt.putString(PREFS_USER_PSW, null);
+                    edt.commit();
+                    Log.d("preferencia removida", preferences.getString(PREFS_USER_NAME, ""));
+                }
             }
         });
 
@@ -151,14 +170,15 @@ public class MainActivity extends AppCompatActivity {
 
         private String username;
         private String password;
-
+        private Context mainActivityContext;
         /**
          *Passando como argumentos do construtor usuario e senha para estabelecer conexão e
          *recuperar o token
          * */
-        public ConectarAva(String username,String password){
+        public ConectarAva(String username,String password,Context mainActivityContext){
             this.setUsername(username);
             this.setPassword(password);
+            this.setMainActivityContext(mainActivityContext);
         }
 
         @Override
@@ -190,29 +210,28 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<DisciplinaDTO> disc = this.gettingStudentDiciplinesFromAva();
                     aluno.setDisciplinasCursadas(disc);
                 }
-                else{
-                    Toast dadosInvalidos = Toast.makeText(MainActivity.this,getString(R.string.dadosUsuarioInvalidos),Toast.LENGTH_SHORT);
-                    dadosInvalidos.show();
-                }
 
                 connection.disconnect();
                 is.close();
 
             }
             catch (ConnectException e){
-                Log.e("Exeption de conexao",getString(R.string.erroConexao));
+                return  this.connectionError(aluno);
              }
             catch (ProtocolException e){
                 Log.e("Exeption de protocolo",e.getMessage());
+                return  this.connectionError(aluno);
             }
             catch (MalformedURLException e){
                 Log.e("Exeption de URL",e.getMessage());
+                return this.connectionError(aluno);
             }
             catch(IOException e){
                 e.printStackTrace();
+                return this.connectionError(aluno);
             }
             catch (Exception e){
-                e.printStackTrace();
+                return this.connectionError(aluno);
             }
 
             return aluno;
@@ -336,36 +355,44 @@ public class MainActivity extends AppCompatActivity {
          * */
         @Override
         protected void onPostExecute(Aluno usuario){
-               if(usuario != null) {
+                if(usuario != null) {
+                    if (!usuario.getNomeAluno().equals("ERROR")) {
+                        if (cbLembrarUsuario.isChecked()) {
+                            rememberOption = true;
+                            SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
+                            SharedPreferences.Editor edt = preferences.edit();
+                            edt.putBoolean(PREFS_REMEMBER_USER, rememberOption);
+                            edt.putString(PREFS_USER_NAME, edtNomeUsuario.getText().toString());
+                            edt.putString(PREFS_USER_PSW, edtSenha.getText().toString());
+                            Log.d("preferencia salva", edtNomeUsuario.getText().toString());
+                            edt.commit();
+                        } else {
+                            rememberOption = false;
+                            SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
+                            SharedPreferences.Editor edt = preferences.edit();
+                            edt.putBoolean(PREFS_REMEMBER_USER, rememberOption);
+                            edt.putString(PREFS_USER_NAME, null);
+                            edt.putString(PREFS_USER_PSW, null);
+                            edt.commit();
+                            Log.d("preferencia removida", preferences.getString(PREFS_USER_NAME, ""));
+                        }
 
-                   if(cbLembrarUsuario.isChecked()){
-                       rememberOption = true;
-                       SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
-                       SharedPreferences.Editor edt = preferences.edit();
-                       edt.putBoolean(PREFS_REMEMBER_USER, rememberOption);
-                       edt.putString(PREFS_USER_NAME, edtNomeUsuario.getText().toString());
-                       edt.putString(PREFS_USER_PSW, edtSenha.getText().toString());
-                       Log.d("preferencia salva",edtNomeUsuario.getText().toString());
-                       edt.commit();
-                   }
-                   else{
-                       rememberOption = false;
-                       SharedPreferences preferences = getSharedPreferences(PREFS_FILE,0);
-                       SharedPreferences.Editor edt = preferences.edit();
-                       edt.putBoolean(PREFS_REMEMBER_USER,rememberOption);
-                       edt.putString(PREFS_USER_NAME,null);
-                       edt.putString(PREFS_USER_PSW,null);
-                       edt.commit();
-                       Log.d("preferencia removida",preferences.getString(PREFS_USER_NAME,""));
-                   }
-
-                   novoAluno = usuario;
-                   Intent myIntent = new Intent(MainActivity.this, CamposUsuario.class);
-                   myIntent.putExtra("aluno_logado", novoAluno);
-                   myIntent.putExtra("dados_ava",dadosDoAVA);
-                  //myIntent.putExtra("token_logado",myToken);
-                   startActivity(myIntent);
-               }
+                        novoAluno = usuario;
+                        Intent myIntent = new Intent(MainActivity.this, CamposUsuario.class);
+                        myIntent.putExtra("aluno_logado", novoAluno);
+                        myIntent.putExtra("dados_ava", dadosDoAVA);
+                        //myIntent.putExtra("token_logado",myToken);
+                        startActivity(myIntent);
+                    }
+                    else {
+                        Toast alertaConexao = Toast.makeText(mainActivityContext,mainActivityContext.getString(R.string.erroConexao),Toast.LENGTH_SHORT);
+                        alertaConexao.show();
+                    }
+                }
+                else{
+                    Toast alertaUsuarioInvalido = Toast.makeText(mainActivityContext,mainActivityContext.getString(R.string.dadosUsuarioInvalidos),Toast.LENGTH_SHORT);
+                    alertaUsuarioInvalido.show();
+                }
         }
 
         /**
@@ -418,6 +445,14 @@ public class MainActivity extends AppCompatActivity {
             return username;
         }
 
+        public Aluno connectionError(Aluno aluno){
+
+            Log.e("Exeption de conexao",getString(R.string.erroConexao));
+            aluno = new Aluno();
+            aluno.setNomeAluno("ERROR");
+            return aluno;
+        }
+
         public void setUsername(String username) {
             if(username != null)
                 this.username = username;
@@ -435,6 +470,14 @@ public class MainActivity extends AppCompatActivity {
             else
                 throw new NullPointerException("Nome de usuario nulo");
 
+        }
+
+        public Context getMainActivityContext() {
+            return mainActivityContext;
+        }
+
+        public void setMainActivityContext(Context mainActivityContext) {
+            this.mainActivityContext = mainActivityContext;
         }
     }
 
