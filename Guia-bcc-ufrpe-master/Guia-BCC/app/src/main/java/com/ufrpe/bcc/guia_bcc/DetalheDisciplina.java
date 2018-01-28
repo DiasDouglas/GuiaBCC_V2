@@ -1,8 +1,10 @@
 package com.ufrpe.bcc.guia_bcc;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +27,9 @@ import beans.API;
 import beans.Disciplina;
 import beans.Professor;
 import beans.ProfessorAnterior;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Fabio on 08/12/2017.
@@ -46,6 +51,9 @@ public class DetalheDisciplina extends AppCompatActivity {
     TextView mEsforco;
     Button mBtnProfessores;
 
+    ArrayList<ProfessorAnterior> lista;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,31 +70,44 @@ public class DetalheDisciplina extends AppCompatActivity {
 
         this.disciplinaId = getIntent().getLongExtra(EXTRA_ID_DISCIPLINA,0);
 
+        lista = new ArrayList<>();
+
         //Executando A
         new AccessDisciplina().execute();
 
         //int qtd = disciplinaId.getQtdMediaAlunos();
 
+        mBtnProfessores.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(DetalheDisciplina.this,ListaProfessores.class);
+                intent.putExtra(ListaProfessores.EXTRA_DISCIPLINA_ID, disciplinaId);
+                startActivity(intent);
+            }
+        });
 
     }
 
     private class AccessDisciplina extends AsyncTask<Void,Void,Disciplina>{
 
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = ProgressDialog.show(DetalheDisciplina.this, "Aviso" , "Aguarde enquanto carregamos os dados.");
+        }
+
         @Override
         protected Disciplina doInBackground(Void... voids) {
             Disciplina retorno = null;
-
+            OkHttpClient client =  new OkHttpClient();
+            Request request =  new Request.Builder().url(API.URL_API_GUIA_BCC + "disciplinaDto/"+ disciplinaId).build();
             try {
-                URL url = new URL(API.URL_API_GUIA_BCC + "disciplina/"+ disciplinaId);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-                //BufferedReader buff = new BufferedReader(isr);
+                Response response = client.newCall(request).execute();
+                String jsonString = response.body().string();
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(isr,Disciplina.class);
-
-
+                retorno = gson.fromJson(jsonString, Disciplina.class);
             }
             catch (ConnectException e){
                 Log.e("Exeption de conexao",getString(R.string.erroConexao));
@@ -103,9 +124,6 @@ public class DetalheDisciplina extends AppCompatActivity {
             catch (Exception e){
                 e.printStackTrace();
             }
-
-
-
             return retorno;
         }
 
@@ -120,16 +138,8 @@ public class DetalheDisciplina extends AppCompatActivity {
                 DetalheDisciplina.this.mClareza.setText(disciplina.getAvaliacaoClareza()+"");
                 DetalheDisciplina.this.mEsforco.setText(disciplina.getAvaliacaoEsforco()+"");
 
-                final ArrayList<ProfessorAnterior> lista = disciplina.getProfessoresAnteriores();
-
-                mBtnProfessores.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v){
-                        Intent intent = new Intent(DetalheDisciplina.this,ListaProfessores.class);
-                        intent.putExtra(ListaProfessores.EXTRA_PROFESSORES, lista);
-                        startActivity(intent);
-                    }
-                });
+                lista = disciplina.getProfessoresAnteriores();
+                dialog.dismiss();
             }
         }
 

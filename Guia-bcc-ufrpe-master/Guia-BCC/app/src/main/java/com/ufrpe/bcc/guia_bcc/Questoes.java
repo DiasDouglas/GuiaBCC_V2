@@ -7,6 +7,7 @@ package com.ufrpe.bcc.guia_bcc;
  * Foram adicionados Getters e Setters
  */
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -80,6 +81,13 @@ public class Questoes extends Fragment {
 
     private class DisciplinaDTOServidor extends AsyncTask<Void,Void,ArrayList<DisciplinaDTO>>{
 
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = ProgressDialog.show(getActivity(), "Aviso" , "Aguarde enquanto carregamos os dados.");
+        }
+
         @Override
         protected ArrayList<DisciplinaDTO> doInBackground(Void... voids) {
             ArrayList<DisciplinaDTO> retorno = null;
@@ -129,7 +137,7 @@ public class Questoes extends Fragment {
         protected void onPostExecute(ArrayList<DisciplinaDTO> conjunto){
             ListaDeDisciplinasAdapter adapterLista = new ListaDeDisciplinasAdapter(conjunto,Questoes.this,Questoes.this.getSavedInstanceState());
             Questoes.this.disciplinas.setAdapter(adapterLista);
-
+            dialog.dismiss();
         }
 
     }
