@@ -16,7 +16,7 @@ ProfessorAnterior pois armazenará os professores que lecinoaram em cada semestr
 avaliação individual
  */
 public class ProfessorAnterior implements Parcelable {
-    private Professor professor;
+    private String nome;
     private String semestreLecionado;
     private int qtdAlunos;
     private int qtdAlunosAvaliaram;
@@ -26,7 +26,7 @@ public class ProfessorAnterior implements Parcelable {
     private float avaliacaoEsforco;
     private float avaliacaoConteudo;
 
-    public ProfessorAnterior(Professor professor, String semestreLecionado, int qtdAlunos, int qtdAlunosAvaliaram,
+    public ProfessorAnterior(String professor, String semestreLecionado, int qtdAlunos, int qtdAlunosAvaliaram,
                              float avaliacaoDificuldade, float avaliacaoClareza,
                              float avaliacaoEsforco, float avaliacaoConteudo) {
         this.setProfessor(professor);
@@ -40,12 +40,12 @@ public class ProfessorAnterior implements Parcelable {
         this.calcularAvaliacaoGeral();
     }
 
-    public Professor getProfessor() {
-        return professor;
+    public String getProfessor() {
+        return nome;
     }
 
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
+    public void setProfessor(String professor) {
+        this.nome = professor;
     }
 
     public String getSemestreLecionado() {
@@ -119,7 +119,7 @@ public class ProfessorAnterior implements Parcelable {
 
     // os metodos a seguir sao do Parcelable
     protected ProfessorAnterior(Parcel in) {
-        professor = in.readParcelable(Professor.class.getClassLoader());
+        nome = in.readParcelable(Professor.class.getClassLoader());
         semestreLecionado = in.readString();
         if (in.readByte() == 0) {
             qtdAlunos = 0;
@@ -171,7 +171,7 @@ public class ProfessorAnterior implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.getProfessor(),flags);
+        dest.writeString(nome);
         dest.writeString(semestreLecionado);
         if (qtdAlunos == 0) {
             dest.writeByte((byte) 0);

@@ -92,7 +92,7 @@ public class ListaDeProfessoresAdapter extends BaseExpandableListAdapter {
             holder = new ViewHolderListaProfessor(myView);
             myView.setTag(holder);
 
-            holder.mNomeProfessor.setText(prof.getProfessor().getNome());
+            holder.mNomeProfessor.setText(prof.getProfessor());
             holder.mSemestre.setText(prof.getSemestreLecionado());
         }
         else {

@@ -117,7 +117,7 @@ public class Avaliacoes extends Fragment {
             Bundle args = new Bundle();
 
             args.putString("disciplina_nome", disciplina.getNomeDisciplina());
-            args.putString("professor_disciplina", disciplina.getProfessoresAnteriores().get(disciplina.getProfessoresAnteriores().size()-1).getProfessor().getNome());
+            args.putString("professor_disciplina", disciplina.getProfessoresAnteriores().get(disciplina.getProfessoresAnteriores().size()-1).getProfessor());
             args.putParcelable("disciplina",disciplina);
             newFragment.setArguments(args);
 

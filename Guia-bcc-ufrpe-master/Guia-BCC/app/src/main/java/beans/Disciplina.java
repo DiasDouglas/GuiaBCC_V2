@@ -76,7 +76,7 @@ public class Disciplina implements Parcelable{
         if(professoresAnteriores != null)
             this.professoresAnteriores = professoresAnteriores;
         else
-            throw new IllegalArgumentException("Nomes dos professores inválidos.");
+            throw new IllegalArgumentException("Professores inválidos.");
     }
 
     public int getQtdMediaAlunos() {
