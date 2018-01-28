@@ -68,7 +68,7 @@
     <string name="txtQtdMediaAlunos">Mean quantity of students:</string>
     <string name="txtUltimoSemestre">Last semester taught:</string>
     <string name="txtAvaliacaoProfessores">See individual appraisal of professors</string>
-    <string name="palavraAvaliacao">Tests</string>
+    <string name="palavraAvaliacao">Rating</string>
     <string name="palavraClareza">Clarity</string>
     <string name="palavraDificuldade">Dificulty</string>
     <string name="palavraEsforco">Effort</string>
