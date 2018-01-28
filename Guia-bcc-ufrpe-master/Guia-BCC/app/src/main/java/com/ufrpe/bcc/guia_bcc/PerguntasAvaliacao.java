@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import beans.API;
 import beans.Pergunta;
 import beans.Perguntas;
 
@@ -205,7 +206,7 @@ public class PerguntasAvaliacao extends AppCompatActivity {
         protected ArrayList<Pergunta> doInBackground(Void... voids) {
             ArrayList<Pergunta> perguntas = new ArrayList<>();
             try {
-                URL url = new URL("http://192.168.15.12:8080/guiabcc/perguntas");
+                URL url = new URL(API.URL_API_GUIA_BCC+"perguntas");
                 HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
                 conexao.setRequestMethod("GET");
                 InputStream fluxoDeDados = conexao.getInputStream();

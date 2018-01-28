@@ -21,6 +21,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import beans.API;
 import beans.Disciplina;
 import beans.Professor;
 import beans.ProfessorAnterior;
@@ -71,14 +72,12 @@ public class DetalheDisciplina extends AppCompatActivity {
 
     private class AccessDisciplina extends AsyncTask<Void,Void,Disciplina>{
 
-        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplina/";
-
         @Override
         protected Disciplina doInBackground(Void... voids) {
             Disciplina retorno = null;
 
             try {
-                URL url = new URL(URL_SPRING_REQUEST+ disciplinaId);
+                URL url = new URL(API.URL_API_GUIA_BCC + "disciplina/"+ disciplinaId);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());

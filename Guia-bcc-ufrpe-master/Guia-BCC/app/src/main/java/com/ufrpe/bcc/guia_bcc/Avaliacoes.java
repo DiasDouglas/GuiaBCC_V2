@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import adapters.ListaDeDisciplinasCursadasAdapter;
+import beans.API;
 import beans.Disciplina;
 import beans.DisciplinaDTO;
 
@@ -69,9 +70,6 @@ public class Avaliacoes extends Fragment {
 
     private class ConectarDisciplinaProfessor extends AsyncTask<Void,Void, Disciplina>{
 
-        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplina/";
-        private static final String URL_SPRING_REQUEST_POSTFIX = "/professores";
-
         private DisciplinaDTO disciplina;
 
         ConectarDisciplinaProfessor(DisciplinaDTO id){
@@ -82,7 +80,7 @@ public class Avaliacoes extends Fragment {
         protected Disciplina doInBackground(Void... voids) {
             Disciplina retorno = null;
             try{
-                URL url = new URL(URL_SPRING_REQUEST+this.disciplina.getID());
+                URL url = new URL(API.URL_API_GUIA_BCC + "disciplina/" +this.disciplina.getID());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());

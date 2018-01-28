@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import beans.API;
 import beans.Aluno;
 import beans.DadosDoAVA;
 import beans.Disciplina;
@@ -154,15 +155,10 @@ public class MainActivity extends AppCompatActivity {
 
     class ConectarAva extends AsyncTask<Void,Void, Aluno>{
 
-        private static final String URL_TOKEN = "http://ava.ufrpe.br/login/token.php";
-        private static final String URL_TO_CONNECT = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
         private static final String SERVICE = "moodle_mobile_app";
         private static final String CORE_SITE_INFO = "core_webservice_get_site_info";
         private DadosDoAVA dadosDoAVA;
 
-
-        private static final String URL_DADOS_EXTRAS_ALUNO = "http://ava.ufrpe.br/webservice/rest/server.php?moodlewsrestformat=json";
-        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplinaDto/";
         private static final String WSFUNCTIONS = "wsfunction=core_user_get_users_by_id";
         private static final String WSTOKEN_PREFIXO="wstoken=";
         private static final String USERIDS_PREFIXO="userids%5B0%5D=";
@@ -191,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                  * O usuário a senha e o serviço tem de ser passados como parâmetros da URL,
                  *doutra forma não funcionará
                  * */
-                URL url = new URL(URL_TOKEN+"?username="+username+"&"+"password="+password+"&service="+SERVICE);
+                URL url = new URL(API.URL_API_AVA_TOKEN+"?username="+username+"&"+"password="+password+"&service="+SERVICE);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.addRequestProperty("Content-Type","application/json");
@@ -241,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<DisciplinaDTO> retorno = null;
 
 
-            URL url = new URL(URL_DADOS_EXTRAS_ALUNO+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
+            URL url = new URL(API.URL_API_AVA_TO_CONNECT+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
                     myToken.getToken()+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
             HttpURLConnection connection =(HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
@@ -296,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("String da linha",jsonStudent.substring(1,7));
                     if(jsonStudent.substring(1,7).equals("2017.2")) {
                         try {
-                            url = new URL(URL_SPRING_REQUEST + j.getAsJsonObject().get("id"));
+                            url = new URL(API.URL_API_AVA_TO_CONNECT + j.getAsJsonObject().get("id"));
                             conn = (HttpURLConnection) url.openConnection();
                             conn.setRequestMethod("GET");
                             conn.connect();
@@ -412,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
               Aluno aluno = null;
 
               if(myToken.getToken() != null) {
-                  url = new URL(URL_TO_CONNECT+"&wsfunction="+CORE_SITE_INFO+"&wstoken="+myToken.getToken());
+                  url = new URL(API.URL_API_AVA_TO_CONNECT+"&wsfunction="+CORE_SITE_INFO+"&wstoken="+myToken.getToken());
                   connection = (HttpURLConnection) url.openConnection();
                   connection.setRequestMethod("POST");
                   connection.addRequestProperty("Content-Type","application/json");

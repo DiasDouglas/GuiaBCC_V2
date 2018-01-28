@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import adapters.ListaDeDisciplinasAdapter;
+import beans.API;
 import beans.Disciplina;
 import beans.DisciplinaCursada;
 import beans.DisciplinaDTO;
@@ -79,14 +80,12 @@ public class Questoes extends Fragment {
 
     private class DisciplinaDTOServidor extends AsyncTask<Void,Void,ArrayList<DisciplinaDTO>>{
 
-        private static final String URL_SPRING_REQUEST = "http://IP.DA.MAQUINA.AQUI:PORTA/guiabcc/disciplinaDto/";
-
         @Override
         protected ArrayList<DisciplinaDTO> doInBackground(Void... voids) {
             ArrayList<DisciplinaDTO> retorno = null;
 
             try{
-                URL url = new URL(URL_SPRING_REQUEST);
+                URL url = new URL(API.URL_API_GUIA_BCC+"disciplinaDto/");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());
