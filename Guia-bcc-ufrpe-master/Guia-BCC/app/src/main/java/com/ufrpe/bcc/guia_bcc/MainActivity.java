@@ -216,7 +216,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if(  myToken.getToken() != null){
                     aluno = this.gettingDataFromAva(url, connection, gson);
-                    ArrayList<DisciplinaDTO> disc = this.gettingStudentDiciplinesFromAva();
+                    /*As disciplinas são pegas a partir de um método diferente, pois elas não vem
+                    * junto com o Token do usuário
+                    * */
+                    ArrayList<DisciplinaDTO> disc = this.gettingStudentDiciplinesFromAva(myToken.getToken());
                     aluno.setDisciplinasCursadas(disc);
                 }
 
@@ -226,34 +229,42 @@ public class MainActivity extends AppCompatActivity {
             }
             catch (ConnectException e){
                 e.printStackTrace();
+                dialog.hide();
                 return  this.connectionError(aluno);
              }
             catch (ProtocolException e){
                 Log.e("Exeption de protocolo",e.getMessage());
+                dialog.hide();
                 return  this.connectionError(aluno);
             }
             catch (MalformedURLException e){
                 Log.e("Exeption de URL",e.getMessage());
+                dialog.hide();
                 return this.connectionError(aluno);
             }
             catch(IOException e){
                 e.printStackTrace();
+                dialog.hide();
                 return this.connectionError(aluno);
             }
             catch (Exception e){
+                dialog.hide();
                 return this.connectionError(aluno);
             }
 
             return aluno;
         }
 
-        public ArrayList<DisciplinaDTO> gettingStudentDiciplinesFromAva()throws ConnectException,
+        /**O método faz uma requisição para pegar uma lista das disciplinas cursadas pelo usuário em
+         * formato de JSON. Onde a requisição é feita a partir de um token passado como parâmetro
+         * */
+        public ArrayList<DisciplinaDTO> gettingStudentDiciplinesFromAva(String token)throws ConnectException,
                                                                         ProtocolException,IOException{
             ArrayList<DisciplinaDTO> retorno = null;
 
 
             URL url = new URL(API.URL_API_AVA_TO_CONNECT+"&"+WSFUNCTIONS+"&"+WSTOKEN_PREFIXO+
-                    myToken.getToken()+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
+                    token+"&"+USERIDS_PREFIXO+dadosDoAVA.getUserid());
             HttpURLConnection connection =(HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type","application/json");
@@ -272,6 +283,13 @@ public class MainActivity extends AppCompatActivity {
                 line+= bf.readLine();
             }
 
+            /**A chamada a seguir pega a string Json retronada pelo BufferedReader
+             * E passa como parâmetro para o método para o gettingDisciplinaFromRequest
+             *
+             * MOTIVAÇÃO:Optei por pegar as disciplinas do servidor spring num método diferente,
+             * pois se ficassse tudo num único método a legibilidade e o raciocínio da lógica ficaria
+             * ainda mais difícil de serem entendidos
+             * */
             retorno  = this.gettingDisciplinaFromRequest(line);
 
             connection.disconnect();
@@ -289,7 +307,6 @@ public class MainActivity extends AppCompatActivity {
          * */
         private ArrayList<DisciplinaDTO> gettingDisciplinaFromRequest(String jsonStudent)throws ConnectException,
                                                                                         ProtocolException,IOException{
-
             ArrayList<DisciplinaDTO> retorno = null;
             InputStream is = null;
             InputStreamReader isr = null;
@@ -310,11 +327,8 @@ public class MainActivity extends AppCompatActivity {
              da coordenação*/
             boolean pulo = false;
             for(JsonElement j : obj){
-                    /*Reutilizando a variável line, pois apartir desse ponto o objeto JSON
-                    * já terá sido criado*/
+
                if(pulo) {
-                   //linhaDeValoresLidos = j.getAsJsonObject().get("i").toString();
-                   //Log.d("String da linha", jsonStudent.substring(1, 7));
                    url = new URL(API.URL_API_GUIA_BCC+"disciplina/" + j.getAsJsonObject().get("id"));
                    conn = (HttpURLConnection) url.openConnection();
                    conn.setRequestMethod("GET");
@@ -332,10 +346,10 @@ public class MainActivity extends AppCompatActivity {
                    JsonObject objetoJson = null;
                    if(linhaDeValoresLidos != null)
                        objetoJson = (JsonObject) parser.parse(linhaDeValoresLidos);
-                   String semestre  = j.getAsJsonObject().get("shortname").getAsString().substring(0,6);
                    /**
                     * Separando o valor do semestre a partir do short name
                     * */
+                   String semestre  = j.getAsJsonObject().get("shortname").getAsString().substring(0,6);
 
                    /**
                     * Se o objeto Json vier como nulo então cadastrar
@@ -354,16 +368,6 @@ public class MainActivity extends AppCompatActivity {
                        newConn.connect();
 
                        OutputStream os = newConn.getOutputStream();
-
-                        /*
-                       Disciplina disc = new Disciplina();
-                       disc.setID(j.getAsJsonObject().get("id").getAsInt());
-                       disc.setNomeDisciplina(nomeCurso.substring(8,nomeCurso.length()-5));
-                       disc.setUltimoSemestre(nomeCurso.substring(0,6));
-                       disc.setUltimaAtt(nomeCurso.substring(0,4));
-                       //Transformando objeto em Json
-                       String resultado = gson.toJson(disc);
-                        os.write(resultado.getBytes());*/
 
                        os.write(("{\"id\":"+j.getAsJsonObject().get("id").getAsInt()+","+
                                   "\"nomeDisciplina\":\""+nomeCurso.substring(8,nomeCurso.length()-5)+"\","+
@@ -399,18 +403,6 @@ public class MainActivity extends AppCompatActivity {
                        newConn.disconnect();
                    }
                    else {
-                      /*
-                       if (jsonStudent.substring(1, 7).equals("2017.2")) {
-                       url = new URL(API.URL_API_AVA_TO_CONNECT + j.getAsJsonObject().get("id"));
-                       conn = (HttpURLConnection) url.openConnection();
-                       conn.setRequestMethod("GET");
-                       conn.connect();
-                       is = conn.getInputStream();
-                       isr = new InputStreamReader(is);
-                       buff = new BufferedReader(isr);
-
-                       jsonStudent = buff.readLine();
-                       */
                       /**
                         *É pego a partir do short name da disciplina o semestre, e então é verificado
                        * se a disciplina é do semestre atual, caso positivo , é criado um objeto
