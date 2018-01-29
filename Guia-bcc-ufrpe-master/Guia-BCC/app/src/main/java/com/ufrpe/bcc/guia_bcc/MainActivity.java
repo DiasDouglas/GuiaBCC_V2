@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -25,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -82,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
         edtNomeUsuario = (EditText) findViewById(R.id.edtNome);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
 
+        //Valores padrão
+        //edtNomeUsuario.setText("usuario");
+        //edtSenha.setText("senha");
+        //====================
 
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
         cbLembrarUsuario = (CheckBox) findViewById(R.id.cbLembrarUsuario);
@@ -159,10 +165,10 @@ public class MainActivity extends AppCompatActivity {
         private static final String CORE_SITE_INFO = "core_webservice_get_site_info";
         private DadosDoAVA dadosDoAVA;
 
-        private static final String WSFUNCTIONS = "wsfunction=core_user_get_users_by_id";
+        private static final String WSFUNCTIONS = "wsfunction=core_enrol_get_users_courses";
         private static final String WSTOKEN_PREFIXO="wstoken=";
-        private static final String USERIDS_PREFIXO="userids%5B0%5D=";
-        //private  ArrayList<DisciplinaDTO> disciplinasParaAvaliar;
+        private static final String USERIDS_PREFIXO="userid=";
+        //private  ArrayList<DisciplinaDTO> disciplinasParaAvaliar; B0%5D
 
         private String username;
         private String password;
@@ -212,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             catch (ConnectException e){
+                e.printStackTrace();
                 return  this.connectionError(aluno);
              }
             catch (ProtocolException e){
@@ -243,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type","application/json");
             connection.setDoInput(true);
+            connection.setDoOutput(true);
             connection.connect();
 
 
@@ -250,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
             InputStreamReader ir = new InputStreamReader(is);
             BufferedReader bf = new BufferedReader(ir);
 
+            //Ao ler o inputstream será retornado um JsonArray
             String line =  bf.readLine();
             while(bf.readLine() != null) {
                 line+= bf.readLine();
@@ -265,7 +274,11 @@ public class MainActivity extends AppCompatActivity {
             return retorno;
         }
 
-
+        /**O método a seguir pega uma string em Json, o qual representa um JsonArray com todas
+         * as disciplinas cursadas pelo estudante, onde é feito um parse da string e tranformada
+         * em um objeto JsonArray, então é iterado sobre os itens do array para criação dos objetos
+         * disciplina DTO
+         * */
         private ArrayList<DisciplinaDTO> gettingDisciplinaFromRequest(String jsonStudent)throws IOException{
 
             ArrayList<DisciplinaDTO> retorno = null;
@@ -275,70 +288,156 @@ public class MainActivity extends AppCompatActivity {
             URL url = null;
             HttpURLConnection conn = null;
 
+            String linhaDeValoresLidos = "";
+
             Gson gson = new Gson();
 
-            jsonStudent = jsonStudent.substring(1,jsonStudent.length()-1);
+            //jsonStudent = jsonStudent.substring(1,jsonStudent.length()-1);
             JsonParser parser = new JsonParser();
-            JsonObject obj = parser.parse(jsonStudent).getAsJsonObject();
+            JsonArray obj = parser.parse(jsonStudent).getAsJsonArray();
 
-            if(obj.get("enrolledcourses") !=  null){
+            //Como a string json retorna um objeto J
+            //JsonObject obj = jsonArray.get(0).getAsJsonObject();
+            retorno = new ArrayList<DisciplinaDTO>();
+            /*Gambiarra: contador para pular o primeiro item do JsonArray pois se trata do ID
+             da coordenação*/
+            boolean pulo = false;
+            for(JsonElement j : obj){
+                    /*Reutilizando a variável line, pois apartir desse ponto o objeto JSON
+                    * já terá sido criado*/
+               if(pulo) {
+                   //linhaDeValoresLidos = j.getAsJsonObject().get("i").toString();
+                   //Log.d("String da linha", jsonStudent.substring(1, 7));
 
-                retorno = new ArrayList<DisciplinaDTO>();
+                   try {
+                       url = new URL(API.URL_API_GUIA_BCC+"disciplina/" + j.getAsJsonObject().get("id"));
+                       conn = (HttpURLConnection) url.openConnection();
+                       conn.setRequestMethod("GET");
+                       conn.connect();
+                       is = conn.getInputStream();
+                       isr = new InputStreamReader(is);
+                       buff = new BufferedReader(isr);
 
-                for(JsonElement j : obj.get("enrolledcourses").getAsJsonArray()){
-                        /*Reutilizando a variável line, pois apartir desse ponto o objeto JSON
-                        * já terá sido criado*/
-                    jsonStudent = j.getAsJsonObject().get("fullname").toString();
-                    Log.d("String da linha",jsonStudent.substring(1,7));
-                    if(jsonStudent.substring(1,7).equals("2017.2")) {
-                        try {
-                            url = new URL(API.URL_API_AVA_TO_CONNECT + j.getAsJsonObject().get("id"));
-                            conn = (HttpURLConnection) url.openConnection();
-                            conn.setRequestMethod("GET");
-                            conn.connect();
-                            is = conn.getInputStream();
-                            isr = new InputStreamReader(is);
-                            buff = new BufferedReader(isr);
+                       //Pegando o inputstream da API e armazenando da string
+                       linhaDeValoresLidos = buff.readLine();
+                       while(buff.readLine() != null) {
+                           linhaDeValoresLidos+= buff.readLine();
+                       }
+                       //Dando um parsing da string retornada
+                       JsonObject objetoJson = null;
+                       if(linhaDeValoresLidos != null)
+                           objetoJson = (JsonObject) parser.parse(linhaDeValoresLidos);
+                       String semestre  = j.getAsJsonObject().get("shortname").getAsString().substring(0,6);
+                       /**
+                        * Separando o valor do semestre a partir do short name
+                        * */
 
-                            jsonStudent = buff.readLine();
+                       /**
+                        * Se o objeto Json vier como nulo então cadastrar
+                        * então a disciplina não consta no banco de dados
+                        * então ela é cadastrada com valores default
+                        */
+                       if(objetoJson == null){
+                           //Pegando o nome da disciplina para separado por uma substring
+                           String nomeCurso = j.getAsJsonObject().get("fullname").getAsString();
+                           URL newUrl = new URL(API.URL_API_GUIA_BCC+"disciplina");
+                           HttpURLConnection newConn = (HttpURLConnection) url.openConnection();
+                           newConn.setRequestMethod("POST");
+                           newConn.setRequestProperty("Content-Type","application/json");
+                           newConn.setDoOutput(true);
+                           newConn.setDoInput(true);
+                           newConn.connect();
 
+                           OutputStream os = newConn.getOutputStream();
 
-                            if (jsonStudent != null) {
-                                JsonObject objeto =  parser.parse(jsonStudent).getAsJsonObject();
+                           Disciplina disc = new Disciplina();
+                           disc.setID(j.getAsJsonObject().get("id").getAsInt());
+                           disc.setNomeDisciplina(nomeCurso.substring(8,nomeCurso.length()-5));
+                           disc.setUltimoSemestre(nomeCurso.substring(0,6));
+                           disc.setUltimaAtt(nomeCurso.substring(0,4));
+                           //Transformando objeto em Json
+                           String resultado = gson.toJson(disc);
+                            os.write(resultado.getBytes());
+                           /*
+                           os.write(("{\"id\":"+j.getAsJsonObject().get("id").getAsInt()+","+
+                                      "\"nomeDisciplina\":\""+nomeCurso.substring(8,nomeCurso.length()-5)+"\","+
+                                      "\"professoresAnteriores\":[],"+
+                                      "\"qtdMediaAlunos\":"+0+","+
+                                      "\"ultimoSemestre\":\""+nomeCurso.substring(0,6)+"\","+
+                                      "\"avaliacaoGeral\":"+0.0+","+
+                                      "\"avaliacaoDificuldade\":"+0.0+","+
+                                      "\"avaliacaoClareza\":"+0.0+","+
+                                      "\"avaliacaoEsforco\":"+0.0+","+
+                                      "\"avaliacaoConteudo\":"+0.0+","+
+                                      "\"qtdItens\":"+0+","+
+                                      "\"ultimaAtt\":\""+nomeCurso.substring(0,3)+"\"}").getBytes());
+                            */
 
-                                DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
-                                disciplinaDTO.setID(objeto.get("id").getAsLong());
-                                disciplinaDTO.setAvaliacaoGeral(objeto.get("avaliacaoGeral").getAsFloat());
-                                disciplinaDTO.setNome(objeto.get("nomeDisciplina").getAsString());
-                                disciplinaDTO.setQtdItens(objeto.get("qtdItens").getAsInt());
-                                disciplinaDTO.setUltimaAtt(objeto.get("ultimaAtt").getAsString());
-                                Log.d("Classe Disciplina",disciplinaDTO.getNome());
+                           if(semestre.equals("2017.2")) {
+                               DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+                               disciplinaDTO.setID(j.getAsJsonObject().get("id").getAsLong());
+                               //disciplinaDTO.setAvaliacaoGeral(objetoJson.get("avaliacaoGeral").getAsFloat());
+                               disciplinaDTO.setNome(nomeCurso.substring(8,nomeCurso.length()-5));
+                               //disciplinaDTO.setQtdItens(objetoJson.get("qtdItens").getAsInt());
+                              // disciplinaDTO.setUltimaAtt(objetoJson.get("ultimaAtt").getAsString());
+                               Log.d("Classe Disciplina", disciplinaDTO.getNome());
+                               retorno.add(disciplinaDTO);
+                           }
 
-                                retorno.add(disciplinaDTO);
-                            }
+                           os.flush();
+                           os.close();
+                           newConn.disconnect();
+                       }
+                       else {
+                          /*
+                           if (jsonStudent.substring(1, 7).equals("2017.2")) {
+                           url = new URL(API.URL_API_AVA_TO_CONNECT + j.getAsJsonObject().get("id"));
+                           conn = (HttpURLConnection) url.openConnection();
+                           conn.setRequestMethod("GET");
+                           conn.connect();
+                           is = conn.getInputStream();
+                           isr = new InputStreamReader(is);
+                           buff = new BufferedReader(isr);
 
-                        }catch(ConnectException e ){
-                            Log.e("Erro na conexao",e.getMessage());
-                        }
-                        catch (MalformedURLException e){
-                            Log.e("Erro na URL",e.getMessage());
-                        }
-                        catch(ProtocolException e){
-                            Log.e("Erro de protocolo",e.getMessage());
-                        }
-                        catch (IOException e){
-                            Log.e("Erro de IO",e.getMessage());
-                        }
-
-                    }
-
-                }
-
-                conn.disconnect();
-                is.close();
-                isr.close();
-                buff.close();
+                           jsonStudent = buff.readLine();
+                           */
+                          /**
+                            *É pego a partir do short name da disciplina o semestre, e então é verificado
+                           * se a disciplina é do semestre atual, caso positivo , é criado um objeto
+                           * DisciplinaDTO
+                            */
+                           //String semestre  = j.getAsJsonObject().get("shortname").getAsString().substring(0,6);
+                            if(semestre.equals("2017.2")) {
+                                  DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+                                  disciplinaDTO.setID(objetoJson.get("id").getAsLong());
+                                  disciplinaDTO.setAvaliacaoGeral(objetoJson.get("avaliacaoGeral").getAsFloat());
+                                  disciplinaDTO.setNome(objetoJson.get("nomeDisciplina").getAsString());
+                                  disciplinaDTO.setQtdItens(objetoJson.get("qtdItens").getAsInt());
+                                  disciplinaDTO.setUltimaAtt(objetoJson.get("ultimaAtt").getAsString());
+                                  Log.d("Classe Disciplina", disciplinaDTO.getNome());
+                                  retorno.add(disciplinaDTO);
+                              }
+                       }
+                   } catch (ConnectException e) {
+                       Log.e("Erro na conexao", e.getMessage());
+                   } catch (MalformedURLException e) {
+                       Log.e("Erro na URL", e.getMessage());
+                   } catch (ProtocolException e) {
+                       Log.e("Erro de protocolo", e.getMessage());
+                   } catch (IOException e) {
+                       Log.e("Erro de IO", e.getMessage());
+                   }
+               }
+               else {
+                   pulo = true;
+               }
             }
+
+            conn.disconnect();
+            is.close();
+            isr.close();
+            buff.close();
+
 
             return retorno;
 
