@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute(){
-            dialog = ProgressDialog.show(mainActivityContext, "Aviso" , "Aguarde enquanto carregamos os dados.");
+            dialog = ProgressDialog.show(mainActivityContext, getString(R.string.avisoDialogoDeProgresso) , getString(R.string.mensagemDialogoDeProgresso));
         }
 
         @Override
