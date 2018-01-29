@@ -20,7 +20,7 @@ import com.ufrpe.br.guiabcc.repository.DisciplinaRepository;
 import com.ufrpe.br.guiabcc.repository.ProfessorRepository;
 
 @RestController
-@RequestMapping("guiabcc")
+@RequestMapping("/guiabcc")
 public class DisciplinaController {
 	
 	@Autowired
