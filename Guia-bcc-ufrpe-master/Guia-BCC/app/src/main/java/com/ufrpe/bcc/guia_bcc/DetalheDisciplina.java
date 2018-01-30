@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -50,6 +51,8 @@ public class DetalheDisciplina extends AppCompatActivity {
     TextView mClareza;
     TextView mEsforco;
     Button mBtnProfessores;
+    Button mBtnBanco;
+    private Disciplina disciplinaDetalhada;
 
     ArrayList<ProfessorAnterior> lista;
 
@@ -67,6 +70,7 @@ public class DetalheDisciplina extends AppCompatActivity {
         this.mClareza = (TextView) findViewById(R.id.tvClareza);
         this.mEsforco = (TextView) findViewById(R.id.tvEsforco);
         this.mBtnProfessores = (Button) findViewById(R.id.btnProfessores);
+        this.mBtnBanco = (Button) findViewById(R.id.btnBanco);
 
         this.disciplinaId = getIntent().getLongExtra(EXTRA_ID_DISCIPLINA,0);
 
@@ -80,9 +84,28 @@ public class DetalheDisciplina extends AppCompatActivity {
         mBtnProfessores.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(DetalheDisciplina.this,ListaProfessores.class);
-                intent.putExtra(ListaProfessores.EXTRA_DISCIPLINA_ID, disciplinaId);
-                startActivity(intent);
+                if(disciplinaDetalhada.getProfessoresAnteriores().size() > 0) {
+                    Intent intent = new Intent(DetalheDisciplina.this, ListaProfessores.class);
+                    intent.putExtra(ListaProfessores.EXTRA_DISCIPLINA_ID, disciplinaId);
+                    startActivity(intent);
+                }else{
+                    Toast semProfessores = Toast.makeText(getApplicationContext(),"Não existem professores cadastrados para essa disciplina", Toast.LENGTH_SHORT);
+                    semProfessores.show();
+                }
+            }
+        });
+
+        mBtnBanco.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(!disciplinaDetalhada.getUrlBancoDa().equals("")) {
+                    Intent intent = new Intent(DetalheDisciplina.this, WebViewDropbox.class);
+                    intent.putExtra(WebViewDropbox.EXTRA_URL_DROPBOX, disciplinaDetalhada.getUrlBancoDa());
+                    startActivity(intent);
+                }else{
+                    Toast semBanco = Toast.makeText(getApplicationContext(),"Não existem arquivos cadastrados para essa disciplina", Toast.LENGTH_SHORT);
+                    semBanco.show();
+                }
             }
         });
 
@@ -137,7 +160,7 @@ public class DetalheDisciplina extends AppCompatActivity {
                 DetalheDisciplina.this.mConteudo.setText(disciplina.getAvaliacaoConteudo()+"");
                 DetalheDisciplina.this.mClareza.setText(disciplina.getAvaliacaoClareza()+"");
                 DetalheDisciplina.this.mEsforco.setText(disciplina.getAvaliacaoEsforco()+"");
-
+                disciplinaDetalhada = disciplina;
                 lista = disciplina.getProfessoresAnteriores();
                 dialog.dismiss();
             }
