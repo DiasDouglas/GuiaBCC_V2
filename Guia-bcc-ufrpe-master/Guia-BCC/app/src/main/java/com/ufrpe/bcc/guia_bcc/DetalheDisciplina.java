@@ -84,21 +84,17 @@ public class DetalheDisciplina extends AppCompatActivity {
         mBtnProfessores.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(disciplinaDetalhada.getProfessoresAnteriores().size() > 0) {
-                    Intent intent = new Intent(DetalheDisciplina.this, ListaProfessores.class);
-                    intent.putExtra(ListaProfessores.EXTRA_DISCIPLINA_ID, disciplinaId);
-                    startActivity(intent);
-                }else{
-                    Toast semProfessores = Toast.makeText(getApplicationContext(),"Não existem professores cadastrados para essa disciplina", Toast.LENGTH_SHORT);
-                    semProfessores.show();
-                }
+            Intent intent = new Intent(DetalheDisciplina.this, ListaProfessores.class);
+            intent.putExtra(ListaProfessores.EXTRA_DISCIPLINA_ID, disciplinaId);
+            startActivity(intent);
+
             }
         });
 
         mBtnBanco.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(!disciplinaDetalhada.getUrlBancoDa().equals("")) {
+                if(disciplinaDetalhada.getUrlBancoDa() != null && !disciplinaDetalhada.getUrlBancoDa().equals("")) {
                     Intent intent = new Intent(DetalheDisciplina.this, WebViewDropbox.class);
                     intent.putExtra(WebViewDropbox.EXTRA_URL_DROPBOX, disciplinaDetalhada.getUrlBancoDa());
                     startActivity(intent);

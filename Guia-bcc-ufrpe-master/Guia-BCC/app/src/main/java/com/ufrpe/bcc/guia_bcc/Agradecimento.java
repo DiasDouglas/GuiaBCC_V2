@@ -17,7 +17,7 @@ public class Agradecimento extends AppCompatActivity {
         btn_finalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Agradecimento.this, CamposUsuario.class);
+                Intent i = new Intent(getApplicationContext(), CamposUsuario.class);
                 startActivity(i);
             }
         });

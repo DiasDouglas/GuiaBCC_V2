@@ -17,7 +17,7 @@ public class Pergunta {
 	private String resposta2;
 	private String resposta3;
 	private String resposta4;
-	private int tipo;
+	private Integer tipo;
 	private Integer versao;
 	
 	public Pergunta() {
@@ -25,7 +25,7 @@ public class Pergunta {
 	}
 	
 	public Pergunta(Integer codigoPergunta, String questao, String resposta1, String resposta2, String resposta3,
-			String resposta4, int tipo, Integer versao) {
+			String resposta4, Integer tipo, Integer versao) {
 		super();
 		this.codigoPergunta = codigoPergunta;
 		this.questao = questao;
@@ -74,11 +74,11 @@ public class Pergunta {
 		this.resposta4 = resposta4;
 	}
 
-	public int getTipo() {
+	public Integer getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(int tipo) {
+	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
 	}
 

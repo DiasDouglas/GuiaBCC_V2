@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -47,7 +48,7 @@ public class ListaProfessores extends AppCompatActivity {
 
         disciplinaID = getIntent().getLongExtra(EXTRA_DISCIPLINA_ID, 0);
 
-
+        Log.i("ListaProfessor", "chegou");
         new GetProfessores().execute();
     }
 
@@ -106,8 +107,11 @@ public class ListaProfessores extends AppCompatActivity {
             adapter = new ListaDeProfessoresAdapter(profs, arrumarItens(profs), ListaProfessores.this);
             // define o apadtador do ExpandableListView
             elvProfessores.setAdapter(adapter);
-
             dialog.dismiss();
+            if(profs.size() == 0){
+                Toast semProfessores = Toast.makeText(getApplicationContext(),"Não existem professores cadastrados para essa disciplina", Toast.LENGTH_SHORT);
+                semProfessores.show();
+            }
         }
     }
 }

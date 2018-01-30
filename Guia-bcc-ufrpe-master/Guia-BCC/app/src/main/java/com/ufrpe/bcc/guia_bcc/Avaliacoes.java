@@ -80,11 +80,13 @@ public class Avaliacoes extends Fragment {
         protected Disciplina doInBackground(Void... voids) {
             Disciplina retorno = null;
             try{
-                URL url = new URL(API.URL_API_GUIA_BCC + "disciplina/" +this.disciplina.getID());
+                Log.e("Entrou no DoInBack:","Entrou no DoInBack:");
+                URL url = new URL(API.URL_API_GUIA_BCC + "disciplinaDto/" +this.disciplina.getID());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());
                 BufferedReader buffLeitor = new BufferedReader(isr);
+                Log.e("Entrou no DoInBack:","Entrou no DoInBack:");
 
                 Gson gson = new Gson();
 
@@ -112,22 +114,23 @@ public class Avaliacoes extends Fragment {
         //Após executada e requisição, cria um novo fragment
         @Override
         protected  void onPostExecute(Disciplina disciplina){
+            Log.e("Entrou no onPost:","Entrou no onPost:");
             // Create fragment and give it an argument specifying the article it should show
             DetalheDisciplinaCursada newFragment = new DetalheDisciplinaCursada();
             Bundle args = new Bundle();
 
             args.putString("disciplina_nome", disciplina.getNomeDisciplina());
-            args.putString("professor_disciplina", disciplina.getProfessoresAnteriores().get(disciplina.getProfessoresAnteriores().size()-1).getProfessor());
+           // args.putString("professor_disciplina", disciplina.getProfessoresAnteriores().get(disciplina.getProfessoresAnteriores().size()-1).getProfessor());
             args.putParcelable("disciplina",disciplina);
             newFragment.setArguments(args);
-
+            Log.e("Entrou no onPost:","Entrou no onPost:");
             android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.tab_avaliacoes, newFragment);
             transaction.addToBackStack(null);
-
+            Log.e("Entrou no onPost:","Entrou no onPost:");
             // Commit the transaction
             transaction.commit();
         }

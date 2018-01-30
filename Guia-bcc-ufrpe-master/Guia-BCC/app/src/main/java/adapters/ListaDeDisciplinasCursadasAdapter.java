@@ -1,8 +1,10 @@
 package adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -65,17 +67,17 @@ public class ListaDeDisciplinasCursadasAdapter extends BaseAdapter {
         if(convertView == null) {
             myView =  act.getLayoutInflater(savedInstanceState).inflate(R.layout.item_lista_disciplina,parent,false);
             holder = new ViewHolder(myView);
-
-            holder.tvNomeDisciplina.setText(disc.getNome());
-            holder.qtdItens.setText(String.valueOf(disc.getQtdItens()));
-            holder.ultimaAtt.setText(disc.getUltimaAtt());
-          holder.tvAvaliacaoGeral.setText(String.valueOf(disc.getAvaliacaoGeral()));
-
+            myView.setTag(holder);
         }
         else {
             myView = convertView;
             holder = (ViewHolder) myView.getTag();
         }
+
+        holder.tvNomeDisciplina.setText(disc.getNome());
+        holder.qtdItens.setText(String.valueOf(disc.getQtdItens()));
+        holder.ultimaAtt.setText(disc.getUltimaAtt());
+        holder.tvAvaliacaoGeral.setText(String.valueOf(disc.getAvaliacaoGeral()));
 
         return myView;
     }
