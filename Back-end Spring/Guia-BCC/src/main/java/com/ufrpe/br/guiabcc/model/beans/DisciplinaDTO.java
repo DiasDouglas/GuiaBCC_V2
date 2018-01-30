@@ -13,6 +13,7 @@ public class DisciplinaDTO {
     private float avaliacaoConteudo;
     private int qtdItens;
     private String ultimaAtt;
+    private String urlBancoDa;
     
     public DisciplinaDTO() {
     	
@@ -30,6 +31,7 @@ public class DisciplinaDTO {
     	this.avaliacaoConteudo = disc.getAvaliacaoConteudo();
     	this.qtdItens = disc.getQtdItens();
     	this.ultimaAtt = disc.getUltimaAtt();
+    	this.urlBancoDa = disc.getUrlBancoDa();
     }
     
 	public long getId() {
@@ -97,5 +99,13 @@ public class DisciplinaDTO {
 	}
 	public void setUltimaAtt(String ultimaAtt) {
 		this.ultimaAtt = ultimaAtt;
+	}
+
+	public String getUrlBancoDa() {
+		return urlBancoDa;
+	}
+
+	public void setUrlBancoDa(String urlBancoDa) {
+		this.urlBancoDa = urlBancoDa;
 	}
 }
