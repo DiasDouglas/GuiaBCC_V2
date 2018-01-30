@@ -3,6 +3,7 @@ package adapters;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -61,7 +62,7 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
         View myView;
         ViewHolder holder;
         DisciplinaDTO disc = listaDisciplinas.get(position);
-
+        Log.i("Disciplina:", disc.getNome());
         if(convertView == null){
             myView  = this.act.getLayoutInflater(this.savedInstanceState).inflate(R.layout.item_lista_questoes,parent,false);
             holder = new ViewHolder(myView);
@@ -74,6 +75,10 @@ public class ListaDeDisciplinasAdapter extends BaseAdapter {
         else {
             myView = convertView;
             holder = (ViewHolder) myView.getTag();
+
+            holder.nomeDisciplina.setText(disc.getNome());
+            holder.qtdItens.setText(disc.getQtdItens() + "");
+            holder.dataUltimaAtt.setText(disc.getUltimaAtt());
         }
 
         float avGeral = disc.getAvaliacaoGeral();
