@@ -43,6 +43,7 @@ import beans.DadosDoAVA;
 import beans.Disciplina;
 import beans.DisciplinaCursada;
 import beans.DisciplinaDTO;
+import beans.URLDropbox;
 import beans.connections.Token;
 import beans.Usuario;
 
@@ -229,27 +230,22 @@ public class MainActivity extends AppCompatActivity {
             }
             catch (ConnectException e){
                 e.printStackTrace();
-                dialog.hide();
                 return  this.connectionError(aluno);
              }
             catch (ProtocolException e){
                 Log.e("Exeption de protocolo",e.getMessage());
-                dialog.hide();
                 return  this.connectionError(aluno);
             }
             catch (MalformedURLException e){
                 Log.e("Exeption de URL",e.getMessage());
-                dialog.hide();
                 return this.connectionError(aluno);
             }
             catch(IOException e){
                 e.printStackTrace();
-                dialog.hide();
                 return this.connectionError(aluno);
             }
             catch (Exception e){
-                dialog.hide();
-                return this.connectionError(aluno);
+               return this.connectionError(aluno);
             }
 
             return aluno;
@@ -370,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                        OutputStream os = newConn.getOutputStream();
 
                        os.write(("{\"id\":"+j.getAsJsonObject().get("id").getAsInt()+","+
-                                  "\"nomeDisciplina\":\""+nomeCurso.substring(8,nomeCurso.length()-5)+"\","+
+                                  "\"nomeDisciplina\":\""+nomeCurso.substring(9,nomeCurso.length()-6)+"\","+
                                   "\"professoresAnteriores\":[],"+
                                   "\"qtdMediaAlunos\":"+0+","+
                                   "\"ultimoSemestre\":\""+nomeCurso.substring(0,6)+"\","+
@@ -380,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
                                   "\"avaliacaoEsforco\":"+0.0+","+
                                   "\"avaliacaoConteudo\":"+0.0+","+
                                   "\"qtdItens\":"+0+","+
-                                  "\"ultimaAtt\":\""+nomeCurso.substring(0,3)+"\"}").getBytes());
+                                  "\"ultimaAtt\":\""+nomeCurso.substring(0,4)+"\"}").getBytes());
 
                        //Criando InputStream para pegar a resposta dessa requisição
                        InputStream newIs  = newConn.getInputStream();
@@ -390,10 +386,7 @@ public class MainActivity extends AppCompatActivity {
                        if(semestre.equals("2017.2")) {
                            DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
                            disciplinaDTO.setID(j.getAsJsonObject().get("id").getAsLong());
-                           //disciplinaDTO.setAvaliacaoGeral(objetoJson.get("avaliacaoGeral").getAsFloat());
                            disciplinaDTO.setNome(nomeCurso.substring(8,nomeCurso.length()-5));
-                           //disciplinaDTO.setQtdItens(objetoJson.get("qtdItens").getAsInt());
-                          // disciplinaDTO.setUltimaAtt(objetoJson.get("ultimaAtt").getAsString());
                            Log.d("Classe Disciplina", disciplinaDTO.getNome());
                            retorno.add(disciplinaDTO);
                        }
@@ -403,14 +396,23 @@ public class MainActivity extends AppCompatActivity {
                        newConn.disconnect();
                    }
                    else {
+                       //Setando a url do dropbox na disciplina
+
                       /**
                         *É pego a partir do short name da disciplina o semestre, e então é verificado
                        * se a disciplina é do semestre atual, caso positivo , é criado um objeto
                        * DisciplinaDTO
                         */
-                       //String semestre  = j.getAsJsonObject().get("shortname").getAsString().substring(0,6);
+                       String nomeCurso = j.getAsJsonObject().get("fullname").getAsString();
+                       nomeCurso = nomeCurso.substring(9,nomeCurso.length()-6);
+
+                       DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
+
+                       if(objetoJson.get("urlBancoDa") != null && !URLDropbox.getUrl(nomeCurso).equals("")){
+                           disciplinaDTO.setUrlBancoDa(URLDropbox.getUrl(nomeCurso));
+                       }
+
                         if(semestre.equals("2017.2")) {
-                              DisciplinaDTO disciplinaDTO = new DisciplinaDTO();
                               disciplinaDTO.setID(objetoJson.get("id").getAsLong());
                               disciplinaDTO.setAvaliacaoGeral(objetoJson.get("avaliacaoGeral").getAsFloat());
                               disciplinaDTO.setNome(objetoJson.get("nomeDisciplina").getAsString());
@@ -473,11 +475,13 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(myIntent);
                     }
                     else {
+                        this.dialog.hide();
                         Toast alertaConexao = Toast.makeText(mainActivityContext,mainActivityContext.getString(R.string.erroConexao),Toast.LENGTH_SHORT);
                         alertaConexao.show();
                     }
                 }
                 else{
+                    this.dialog.hide();
                     Toast alertaUsuarioInvalido = Toast.makeText(mainActivityContext,mainActivityContext.getString(R.string.dadosUsuarioInvalidos),Toast.LENGTH_SHORT);
                     alertaUsuarioInvalido.show();
                 }

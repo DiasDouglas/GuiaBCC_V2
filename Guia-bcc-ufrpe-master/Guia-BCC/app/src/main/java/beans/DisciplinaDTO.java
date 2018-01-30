@@ -13,6 +13,7 @@ public class DisciplinaDTO implements Serializable {
     private float avaliacaoGeral;
     private int qtdItens;
     private String ultimaAtt;
+    private String urlBancoDa;
 
     public DisciplinaDTO() {
     }
@@ -63,5 +64,13 @@ public class DisciplinaDTO implements Serializable {
 
     public void setUltimaAtt(String ultimaAtt) {
         this.ultimaAtt = ultimaAtt;
+    }
+
+    public String getUrlBancoDa() {
+        return urlBancoDa;
+    }
+
+    public void setUrlBancoDa(String urlBancoDa) {
+        this.urlBancoDa = urlBancoDa;
     }
 }
