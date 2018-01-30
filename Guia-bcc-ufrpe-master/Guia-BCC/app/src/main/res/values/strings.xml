@@ -11,6 +11,10 @@
     <string name="dadosUsuarioInvalidos">invalid username or password</string>
     <string name="erroConexao">there was a problem while trying to connect</string>
 
+    <!--Strings referentes a os diálogos de progresso-->
+    <string name="avisoDialogoDeProgresso">WARNING:</string>
+    <string name="mensagemDialogoDeProgresso">Wait until the data is loaded.</string>
+
     <!-- Textos do dos fragmentos TabLayout  -->
     <!--Strings referentes à view da tela inicial-->
     <string name="boas_vindas"> Welcome </string>

@@ -85,7 +85,7 @@ public class Questoes extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(getActivity(), "Aviso" , "Aguarde enquanto carregamos os dados.");
+            dialog = ProgressDialog.show(getActivity(), getActivity().getString(R.string.avisoDialogoDeProgresso) , getActivity().getString(R.string.mensagemDialogoDeProgresso));
         }
 
         @Override

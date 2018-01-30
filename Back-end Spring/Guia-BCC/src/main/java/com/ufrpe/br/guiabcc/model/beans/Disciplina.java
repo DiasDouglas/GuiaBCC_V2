@@ -15,8 +15,7 @@ import lombok.Data;
 @Entity
 public class Disciplina {
 	
-	@Id
-	@GeneratedValue
+	@Id	//@GeneratedValue
 	private long id;
     private String nomeDisciplina;
     @OneToMany(mappedBy = "disciplina", cascade = CascadeType.ALL, orphanRemoval = true)
