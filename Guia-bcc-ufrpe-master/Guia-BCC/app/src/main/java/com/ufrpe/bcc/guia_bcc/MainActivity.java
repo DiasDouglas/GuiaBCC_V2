@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
                        newConn.connect();
 
                        OutputStream os = newConn.getOutputStream();
-
+                        String urlCurso = "\""+URLDropbox.getUrl(nomeCurso.substring(9,nomeCurso.length()-6))+"\"";
                        os.write(("{\"id\":"+j.getAsJsonObject().get("id").getAsInt()+","+
                                   "\"nomeDisciplina\":\""+nomeCurso.substring(9,nomeCurso.length()-6)+"\","+
                                   "\"professoresAnteriores\":[],"+
@@ -375,8 +375,10 @@ public class MainActivity extends AppCompatActivity {
                                   "\"avaliacaoClareza\":"+0.0+","+
                                   "\"avaliacaoEsforco\":"+0.0+","+
                                   "\"avaliacaoConteudo\":"+0.0+","+
-                                  "\"qtdItens\":"+0+","+
-                                  "\"ultimaAtt\":\""+nomeCurso.substring(0,4)+"\"}").getBytes());
+                                 "\"qtdItens\":"+0+","+
+                                  "\"ultimaAtt\":\""+nomeCurso.substring(0,4)+"\","+
+                                  "\"urlBancoDa\":"+urlCurso
+                                   +"}").getBytes());
 
                        //Criando InputStream para pegar a resposta dessa requisição
                        InputStream newIs  = newConn.getInputStream();
@@ -472,6 +474,7 @@ public class MainActivity extends AppCompatActivity {
                         myIntent.putExtra("aluno_logado", novoAluno);
                         myIntent.putExtra("dados_ava", dadosDoAVA);
                         //myIntent.putExtra("token_logado",myToken);
+                        this.dialog.hide();
                         startActivity(myIntent);
                     }
                     else {
