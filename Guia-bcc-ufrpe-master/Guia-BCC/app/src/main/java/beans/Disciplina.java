@@ -24,13 +24,14 @@ public class Disciplina implements Parcelable{
     private float avaliacaoConteudo;
     private int qtdItens;
     private String ultimaAtt;
+    private String urlBancoDa;
 
     public Disciplina(){}
 
     public Disciplina(long ID, String nomeDisciplina, ArrayList<ProfessorAnterior> professoresAnteriores, int qtdMediaAlunos,
                       String ultimoSemestre, float avaliacaoDificuldade,
                       float avaliacaoClareza, float avaliacaoEsforco, float avaliacaoConteudo,
-                      int qtdItens, String ultimaAtt){
+                      int qtdItens, String ultimaAtt, String urlBancoDa){
         this.setID(ID);
         this.setAvaliacaoClareza(avaliacaoClareza);
         this.setAvaliacaoConteudo(avaliacaoConteudo);
@@ -43,6 +44,7 @@ public class Disciplina implements Parcelable{
         this.setQtdItens(qtdItens);
         this.calcularAvaliacaoGeral();
         this.setQtdMediaAlunos(qtdMediaAlunos);
+        this.setUrlBancoDa(urlBancoDa);
     }
 
     public long getID() {
@@ -175,6 +177,14 @@ public class Disciplina implements Parcelable{
             throw new IllegalArgumentException("Última atualização inválida.");
     }
 
+    public void setUrlBancoDa(String urlBancoDa){
+        this.urlBancoDa = urlBancoDa;
+    }
+
+    public String getUrlBancoDa(){
+        return this.urlBancoDa;
+    }
+
     public Disciplina(Parcel source){
         this.setID(source.readLong());
         this.setNomeDisciplina(source.readString());
@@ -188,6 +198,7 @@ public class Disciplina implements Parcelable{
         this.setAvaliacaoConteudo(source.readFloat());
         this.setQtdItens(source.readInt());
         this.setUltimaAtt(source.readString());
+        this.setUrlBancoDa(source.readString());
     }
 
 
@@ -283,6 +294,14 @@ public class Disciplina implements Parcelable{
         if(this.getUltimaAtt() != null) {
             dest.writeByte((byte)1);
             dest.writeString(this.getUltimaAtt());
+        }
+        else{
+            dest.writeByte((byte) 0);
+        }
+
+        if(this.getUrlBancoDa() != null) {
+            dest.writeByte((byte)1);
+            dest.writeString(this.getUrlBancoDa());
         }
         else{
             dest.writeByte((byte) 0);

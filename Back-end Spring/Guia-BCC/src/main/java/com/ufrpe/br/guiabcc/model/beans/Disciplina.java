@@ -29,6 +29,7 @@ public class Disciplina {
     private float avaliacaoConteudo;
     private int qtdItens;
     private String ultimaAtt;
+    private String urlBancoDa;
     
     public Disciplina() {
     	
@@ -109,6 +110,14 @@ public class Disciplina {
 	
 	public void addProfessores(List<DisciplinaProfessor> newProfessores) {
 		this.professoresAnteriores.addAll(newProfessores);
+	}
+
+	public String getUrlBancoDa() {
+		return urlBancoDa;
+	}
+
+	public void setUrlBancoDa(String urlBancoDa) {
+		this.urlBancoDa = urlBancoDa;
 	}
     
     
