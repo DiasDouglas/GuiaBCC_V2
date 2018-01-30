@@ -20,7 +20,7 @@ import com.ufrpe.br.guiabcc.repository.DisciplinaRepository;
 import com.ufrpe.br.guiabcc.repository.ProfessorRepository;
 
 @RestController
-@RequestMapping("guiabcc")
+@RequestMapping("/guiabcc")
 public class DisciplinaController {
 	
 	@Autowired
@@ -107,7 +107,7 @@ public class DisciplinaController {
 	//front-end
 	@GetMapping(path = "/disciplinaDto")
 	public List<DisciplinaDTO> listAllDisciplinaDTO(){
-		List<Disciplina> discs = disciplinaRepository.findAll();
+		List<Disciplina> discs = disciplinaRepository.findAllByOrderByNomeDisciplina();
 		List<DisciplinaDTO> discsDTO = new ArrayList<>();
 		for (Disciplina disciplina : discs) {
 			discsDTO.add(new DisciplinaDTO(disciplina));
