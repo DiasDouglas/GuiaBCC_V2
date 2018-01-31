@@ -123,6 +123,7 @@ public class PerguntasAvaliacao extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent i = new Intent(PerguntasAvaliacao.this, CamposUsuario.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                     }
                 });
