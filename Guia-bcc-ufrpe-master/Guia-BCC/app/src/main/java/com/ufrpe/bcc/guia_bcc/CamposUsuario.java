@@ -1,6 +1,6 @@
 package com.ufrpe.bcc.guia_bcc;
 
-import android.os.AsyncTask;
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 /*
 import android.support.design.widget.FloatingActionButton;
@@ -16,29 +16,15 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import beans.Aluno;
 import beans.DadosDoAVA;
-import beans.Disciplina;
-import beans.DisciplinaCursada;
-import beans.DisciplinaDTO;
-import beans.connections.Token;
 /*
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +38,8 @@ import android.widget.TextView;
 
 public class CamposUsuario extends AppCompatActivity {
 
+    private static final String STUDENT_FILE ="objetos_aluno";
+    private static final String DATA_FROM_AVA_FILE ="objetos_dadosDoAVA";
 
     SectionsPageAdapter mSpa;
     //Dados retornados do JSON da requisição
@@ -64,8 +52,16 @@ public class CamposUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campos_usuario);
 
-        alunoLogado  = (Aluno) getIntent().getSerializableExtra("aluno_logado");
-        dadosDoAVA = (DadosDoAVA) getIntent().getSerializableExtra("dados_ava");
+        //Primeiramente é verificado se o aluno está salvo no arquivo
+        alunoLogado = this.getStudentFromFile();
+        dadosDoAVA = this.getStudentDataFromFile();
+
+        if(alunoLogado == null && dadosDoAVA == null) {
+            alunoLogado = (Aluno) getIntent().getSerializableExtra("aluno_logado");
+            dadosDoAVA = (DadosDoAVA) getIntent().getSerializableExtra("dados_ava");
+            this.saveExtrasIntoFiles(alunoLogado,dadosDoAVA);
+        }
+
         //tokenAluno = (Token) getIntent().getSerializableExtra("token_logado");
 
 
@@ -83,6 +79,114 @@ public class CamposUsuario extends AppCompatActivity {
     }
 
 
+    /**
+     * No método on stop os obejtos aluno logado e dados do AVa são salvos num arquivo para leitura
+     * posterior
+     * */
+    public void saveExtrasIntoFiles(Aluno alunoLogado, DadosDoAVA dadosDoAVA){
+        super.onStop();
+
+        try {
+
+            FileOutputStream fosAluno = openFileOutput(STUDENT_FILE,Context.MODE_PRIVATE);
+            FileOutputStream fosDadosDoAVA = openFileOutput(DATA_FROM_AVA_FILE,Context.MODE_PRIVATE);
+
+            ObjectOutputStream osAluno = new ObjectOutputStream(fosAluno);
+            ObjectOutputStream osDadosDoAVA = new ObjectOutputStream(fosDadosDoAVA);
+            if(alunoLogado != null && dadosDoAVA != null){
+                osAluno.writeObject(alunoLogado);
+                osDadosDoAVA.writeObject(dadosDoAVA);
+            }
+            else{
+                throw new NullPointerException("Objeto DadosDoAVA ou Aluno nulos");
+            }
+
+            osAluno.close();
+            osDadosDoAVA.close();
+            fosAluno.close();
+            fosDadosDoAVA.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * O método getStudentFromFile() lê um estudante do arquivo e o retorna
+     * */
+    private Aluno getStudentFromFile(){
+        Aluno retorno = null;
+        try {
+
+            FileInputStream fisAluno = openFileInput(STUDENT_FILE);
+            ObjectInputStream osAluno = new ObjectInputStream(fisAluno);
+
+            retorno = (Aluno) osAluno.readObject();
+
+            osAluno.close();
+            fisAluno.close();
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("Arquivo não encontrado",e.getMessage());
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return retorno;
+    }
+
+    /**
+     * O método getStudentDataFromFile() lê um Dados do ava do arquivo e o retorna
+     * */
+    private DadosDoAVA getStudentDataFromFile(){
+        DadosDoAVA retorno = null;
+        try {
+
+            FileInputStream fisDadosDoAVA = openFileInput(DATA_FROM_AVA_FILE);
+            ObjectInputStream osDadosDoAVA = new ObjectInputStream(fisDadosDoAVA);
+
+            retorno = (DadosDoAVA) osDadosDoAVA.readObject();
+
+            osDadosDoAVA.close();
+            fisDadosDoAVA.close();
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("Arquivo não encontrado",e.getMessage());
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return retorno;
+    }
+
+    /**
+     * Caso o usuário opte por voltar para a tela de login, os dados do arquivo são
+     * deletados
+     * */
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+            deleteFile(STUDENT_FILE);
+            deleteFile(DATA_FROM_AVA_FILE);
+            //osAluno.writeObject(null);
+            //osDadosDoAVA.writeObject(null);
+
+    }
 
     //Método para configurar o view pager para adicionar os fragmentos da TabView
     public void setupViewPager(ViewPager vp){
